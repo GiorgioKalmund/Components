@@ -24,12 +24,15 @@ namespace Components.Runtime.Components
                     .FontSize(HeaderHeight - 5)
                     .VAlignCenter()
                     .OverflowMode(TextOverflowModes.Ellipsis)
+                    .BringToBack()
                 ;
 
             _windowResizer = ComponentBuilder.N<WindowResizer>(transform)
                 .Pivot(PivotPosition.LowerRight, true)
                 .Size(30, 30)
                 .Build(this)
+                .Color(UnityEngine.Color.gray1)
+                .Cast<WindowResizer>()
                 ;
         }
 
@@ -37,6 +40,30 @@ namespace Components.Runtime.Components
         {
             Title = title;
             return this;
+        }
+        
+        public override void HandleFocus()
+        {
+            base.HandleFocus();
+            this.BringToFront();
+            Header.Alpha(1f);
+        }
+
+        public override void HandleUnfocus()
+        {
+            Header.Alpha(0.4f);
+        }
+
+        protected override void Minimize()
+        {
+            base.Minimize();
+            _windowResizer.SetActive(false);
+        }
+        
+        protected override void Maximize()
+        {
+            base.Maximize();
+            _windowResizer.SetActive(true);
         }
 
         public override void RenderHeader()

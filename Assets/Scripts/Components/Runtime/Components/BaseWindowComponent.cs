@@ -23,44 +23,83 @@ namespace Components.Runtime.Components
             get => _activeWindow;
             set
             {
-                _activeWindow?.Unfocus();
+                _activeWindow?.HandleUnfocus();
                 _activeWindow = value;
-                _activeWindow?.Focus();
+                _activeWindow?.HandleFocus();
             }
         }
+
+        public bool Focused => ActiveWindow == this;
         
         // Mask
         private RectMask2D _rectMask2D;
         
         // -- Subcomponents -- // 
+        private ButtonComponent _minimizeMaximizeButton;
         protected ImageComponent Header;
         protected ImageComponent Content;
+        
+        // -- Dragging -- // 
+        protected bool AllowDragging = true;
+        
+        // -- Minimize / Maximize -- //
+        private Vector2 _maximizedSize;
         
         public override void Awake()
         {
             base.Awake();
-            this.Alpha(0.4f).Color(UnityEngine.Color.black, true);
-            ActiveWindow = this;
             this.Pivot(PivotPosition.UpperLeft, true);
             
             Header = ComponentBuilder.N<ImageComponent>(transform, "Header")
                     .Pivot(PivotPosition.UpperLeft, true)
-                    .Alpha(0.4f)
-                    .Color(UnityEngine.Color.black, true)
+                    .Color(UnityEngine.Color.gray3, true)
+                ;
+
+            _minimizeMaximizeButton = ComponentBuilder.N<ButtonComponent>(Header, "MinimizeMaximize")
+                .Pivot(PivotPosition.MiddleRight, true)
+                .Function(ToggleMinimizeMaximize)
                 ;
             
             Content = ComponentBuilder.N<ImageComponent>(transform, "Content")
                     .Pivot(PivotPosition.LowerCenter, true)
                     .Alpha(0.0f)
-                    .Color(UnityEngine.Color.white, true)
                 ;
             
             _rectMask2D = Content.gameObject.GetOrAddComponent<RectMask2D>();
+            
+            ActiveWindow = this;
         }
         
         private void Start()
         {
             Render();
+        }
+
+        public void ToggleMinimizeMaximize()
+        {
+            if (!Focused)
+            {
+                ActiveWindow = this;
+                return;
+            }
+            if (_maximizedSize.magnitude > 0)
+                Maximize();
+            else 
+                Minimize();
+        }
+
+        protected virtual void Minimize()
+        {
+            _maximizedSize = GetRect().sizeDelta;
+            this.Height(HeaderHeight);
+            Content.SetActive(false);
+        }
+        protected virtual void Maximize()
+        {
+            if (_maximizedSize.magnitude > 0)
+                this.Height(_maximizedSize.y);
+            _maximizedSize = Vector2.zero;
+            Content.SetActive(true);
         }
 
         public BaseWindowComponent RecalculateSizes()
@@ -79,6 +118,9 @@ namespace Components.Runtime.Components
 
         public void OnDrag(PointerEventData eventData)
         {
+            if (!AllowDragging)
+                return;
+            
             var pos = GetRect().anchoredPosition;
             Vector2 wantToBePos = (pos + eventData.delta);
             Vector2 willBePos = pos;
@@ -95,16 +137,9 @@ namespace Components.Runtime.Components
             GetRect().anchoredPosition = willBePos;
         }
 
-        public virtual void Focus()
-        {
-            this.BringToFront();
-            Alpha(1f);
-        }
+        public virtual void HandleFocus() { }
 
-        public virtual void Unfocus()
-        {
-            Alpha(0.3f);
-        }
+        public virtual void HandleUnfocus() { }
 
         public BaseWindowComponent ContentPadding(float padding)
         {
@@ -127,6 +162,7 @@ namespace Components.Runtime.Components
         public virtual void RenderHeader()
         {
             Header.Size(this.GetWidth(), HeaderHeight);
+            _minimizeMaximizeButton.Size(HeaderHeight, HeaderHeight);
         }
         public virtual void RenderContent()
         {

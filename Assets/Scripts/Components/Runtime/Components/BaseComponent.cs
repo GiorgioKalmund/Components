@@ -71,7 +71,7 @@ namespace Components.Runtime.Components
         }
         
         // Casting between types
-        public static V Cast<T,V>(this T renderable)  where T : BaseComponent where V : T 
+        public static V Cast<V>(this BaseComponent renderable)  where V : BaseComponent
         {
             return (V)(object)renderable;
         }
@@ -285,6 +285,13 @@ namespace Components.Runtime.Components
         public static T BringToBack<T>(this T renderable) where T : BaseComponent
         {
             renderable.GetRect().SetAsFirstSibling();
+            return renderable;
+        }
+        
+        // Gameobject 
+        public static T SetActive<T>(this T renderable, bool active) where T : BaseComponent
+        {
+            renderable.gameObject.SetActive(active);
             return renderable;
         }
         

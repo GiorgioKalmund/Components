@@ -9,23 +9,30 @@ namespace Components.Runtime.Testing
         {
             WindowComponent window1 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
                     .Build("Window 1")
-                    .Color(Color.magenta)
                     .Size(500, 300)
-                    .Cast<ImageComponent, WindowComponent>()
-                    .Offset(250, 0)
+                    .Cast<WindowComponent>()
+                    .Offset(250, -250)
                 ;
             
             
             WindowComponent window2 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
+                    .Build("Window 1")
+                    .Size(500, 300)
+                    .Cast<WindowComponent>()
+                    .Offset(500, -500)
+                ;
+            
+            WindowComponent window3 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
                     .Build("Window 2")
                     .ContentPadding(5)
-                    .Color(Color.green)
                     .Size(500, 300)
-                    .Cast<ImageComponent, WindowComponent>()
+                    .Cast<WindowComponent>()
+                    .Offset(750, -750)
                 ;
 
-            var a = ComponentBuilder.N<ImageComponent>("Hello!")
-                    .Color(Color.red)
+            var a = ComponentBuilder.N<ButtonComponent>("Hello!")
+                    .Size(300, 100)
+                    .Color(Color.gray)
                 ;
 
             window2.AddContent(a);

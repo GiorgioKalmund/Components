@@ -31,6 +31,11 @@ namespace Components.Runtime.Components
             return Sprite(texture2D.ToSprite());
         }
         
+        public ImageComponent Sprite(string path)
+        {
+            return Sprite(ImageService.GetSprite(path));
+        }
+        
         public ImageComponent Color(Color color, bool keepPreviousAlphaValue = false) 
         {
             if (keepPreviousAlphaValue)
@@ -69,6 +74,12 @@ namespace Components.Runtime.Components
         public Image GetImage()
         {
             return _image;
+        }
+
+        public ImageComponent RaycastTarget(bool target)
+        {
+            _image.raycastTarget = target;
+            return this;
         }
     }
 

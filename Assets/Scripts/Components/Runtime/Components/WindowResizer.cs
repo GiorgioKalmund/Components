@@ -7,7 +7,7 @@ namespace Components.Runtime.Components
     public class WindowResizer : ImageComponent, IDragHandler 
     {
         private WindowComponent _window;
-
+        
         public WindowResizer Build(WindowComponent window)
         {
             _window = window;
