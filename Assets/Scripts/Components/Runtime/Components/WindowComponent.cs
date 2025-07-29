@@ -20,12 +20,12 @@ namespace Components.Runtime.Components
             base.Awake();
             DisplayName = "WindowComponent";
 
-            _headerText = ComponentBuilder.N<TextComponent>(Header)
-                    .Pivot(PivotPosition.UpperLeft, true)
+            _headerText = ComponentBuilder.N<TextComponent>(HeaderTools)
+                    .Pivot(PivotPosition.MiddleLeft)
+                    .AnchoredTo(PivotPosition.MiddleRight)
                     .FontSize(HeaderHeight - 5)
                     .VAlignCenter()
                     .OverflowMode(TextOverflowModes.Ellipsis)
-                    .BringToBack()
                 ;
 
             _windowResizer = ComponentBuilder.N<WindowResizer>(transform)
@@ -36,12 +36,28 @@ namespace Components.Runtime.Components
                 .Cast<WindowResizer>()
                 ;
 
-            Sprite("backdrop_1").ImageType(Image.Type.Tiled).PixelsPerUnitMultiplier(0.33f);
+            Content.Alpha(1).Sprite("backdrop_1").ImageType(Image.Type.Tiled).PixelsPerUnitMultiplier(0.33f);
+            Color(UnityEngine.Color.gray6);
+        }
+
+        public override void Start()
+        {
+            base.Start();
+            DisplayName = "WindowComponent";
         }
 
         public WindowComponent Build(string title)
         {
             Title = title;
+            return this;
+        }
+        
+        
+        public WindowComponent Build(string title, Color windowColor, Color headerColor)
+        {
+            Build(title);
+            Color(windowColor);
+            Header.Color(headerColor);
             return this;
         }
         
@@ -72,7 +88,8 @@ namespace Components.Runtime.Components
         public override void RenderHeader()
         {
             base.RenderHeader();
-            _headerText.Text(Title).Size(this.GetWidth() - HeaderHeight, HeaderHeight);
+            _headerText.Text(Title).Size(this.GetWidth() - HeaderHeight, HeaderHeight)
+                .Padding(PaddingSide.Horizontal, 10);
         }
 
         public Vector2 GetMinimumWindowSize()

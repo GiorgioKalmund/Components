@@ -1,3 +1,4 @@
+using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,6 +18,11 @@ namespace Components.Runtime.Components
             _textMesh = gameObject.GetOrAddComponent<TextMeshProUGUI>();
             DisplayName = NamePrefix;
             this.Size(_defaultSize);
+        }
+
+        public virtual void Start()
+        {
+            DisplayName = "TextComponent";
         }
 
         public TextComponent Text(string text)

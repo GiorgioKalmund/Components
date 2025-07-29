@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
@@ -7,7 +8,13 @@ namespace Components.Runtime.Components
     public class WindowResizer : ImageComponent, IDragHandler 
     {
         private WindowComponent _window;
-        
+
+        public override void Start()
+        {
+            base.Start();
+            DisplayName = "WindowResizer";
+        }
+
         public WindowResizer Build(WindowComponent window)
         {
             _window = window;

@@ -22,7 +22,7 @@ namespace Components.Runtime.Testing
                 ;
             
             WindowComponent window3 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
-                    .Build("Window 2")
+                    .Build("Window 2", Color.green, Color.blue)
                     .ContentPadding(5)
                     .Size(500, 300)
                     .Cast<WindowComponent>()

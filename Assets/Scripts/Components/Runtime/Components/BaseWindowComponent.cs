@@ -12,6 +12,7 @@ namespace Components.Runtime.Components
         protected static float CanvasWidth;
         protected static float CanvasHeight;
         protected float HeaderHeight = 30f;
+        protected float HeaderToolsWidth = 30f;
         // -- Border offset to allow for margins around the screen -- //
         private float _borderOffset = 0f;
         private float _contentPadding = 0f;
@@ -38,6 +39,7 @@ namespace Components.Runtime.Components
         private ButtonComponent _minimizeMaximizeButton;
         protected ImageComponent Header;
         protected ImageComponent Content;
+        protected ImageComponent HeaderTools;
         
         // -- Dragging -- // 
         protected bool AllowDragging = true;
@@ -55,8 +57,12 @@ namespace Components.Runtime.Components
                     .Color(UnityEngine.Color.gray3, true)
                 ;
 
-            _minimizeMaximizeButton = ComponentBuilder.N<ButtonComponent>(Header, "MinimizeMaximize")
-                .Pivot(PivotPosition.MiddleRight, true)
+            HeaderTools = ComponentBuilder.N<ImageComponent>(Header, "Header Tools")
+                    .Pivot(PivotPosition.MiddleLeft, true)
+                ;
+
+            _minimizeMaximizeButton = ComponentBuilder.N<ButtonComponent>(HeaderTools, "MinimizeMaximize")
+                .Pivot(PivotPosition.MiddleLeft, true)
                 .Create("-", ToggleMinimizeMaximize)
                 ;
             
@@ -70,9 +76,11 @@ namespace Components.Runtime.Components
             ActiveWindow = this;
         }
         
-        private void Start()
+        public override void Start()
         {
+            base.Start();
             Render();
+            DisplayName = "BaseWindowComponent";
         }
 
         public void ToggleMinimizeMaximize()
@@ -165,7 +173,8 @@ namespace Components.Runtime.Components
         public virtual void RenderHeader()
         {
             Header.Size(this.GetWidth(), HeaderHeight);
-            _minimizeMaximizeButton.Size(HeaderHeight, HeaderHeight);
+            HeaderTools.Size(HeaderToolsWidth, HeaderHeight);
+            _minimizeMaximizeButton.Size(30f, HeaderHeight);
         }
         public virtual void RenderContent()
         {

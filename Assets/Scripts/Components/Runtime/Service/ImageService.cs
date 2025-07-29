@@ -15,7 +15,7 @@ public class ImageService
         Texture2D texture = Resources.Load<Texture2D>(path);
         if (!texture)
         {
-            Debug.LogWarning("No image found for: " + path);
+            //Debug.LogWarning("No image found for: " + path);
             texture = Resources.Load<Texture2D>(MissingTextureLocation);
         }
         texture.filterMode = filterMode;

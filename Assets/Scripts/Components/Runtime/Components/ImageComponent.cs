@@ -18,6 +18,11 @@ namespace Components.Runtime.Components
             this.Size(DefaultSize);
         }
 
+        public virtual void Start()
+        {
+            DisplayName = "ImageComponent";
+        }
+
         public ImageComponent Sprite(Sprite sprite) 
         {
             _image.sprite = sprite;

@@ -8,6 +8,8 @@ namespace Components.Runtime.Components
     public abstract class BaseComponent : MonoBehaviour
     {
         private RectTransform _rect;
+        public bool paddingApplied = false;
+        public bool posApplied = false;
 
         private string _displayName = "";
         public string DisplayName
@@ -112,9 +114,15 @@ namespace Components.Runtime.Components
             renderable.GetRect().anchoredPosition3D = anchoredPosition;
             return renderable;
         }
-        public static T Pos<T>(this T renderable, Vector2 anchoredPosition) where T : BaseComponent
+        public static T Pos<T>(this T renderable, Vector2 anchoredPosition, bool force = false) where T : BaseComponent
         {
+            if (renderable.paddingApplied && !force)
+            {
+                Debug.LogError("Padding has already been applied to " + renderable.DisplayName+". Cannot apply additional Pos!");
+                return renderable;
+            }
             renderable.GetRect().anchoredPosition = anchoredPosition;
+            renderable.posApplied= !force;
             return renderable;
         }
         public static T Pos<T>(this T renderable, float x, float y) where T : BaseComponent
@@ -159,6 +167,34 @@ namespace Components.Runtime.Components
         public static T OffsetMax<T>(this T renderable, float x, float y) where T : BaseComponent
         {
             return OffsetMax(renderable, new Vector2(x, y));
+        }
+        
+        // Padding
+        public static T Padding<T>(this T renderable, PaddingSide side, float padding) where T : BaseComponent
+        {
+            if (renderable.posApplied)
+            {
+                Debug.LogError("Pos has already been applied to " + renderable.DisplayName+". Cannot apply additional Padding!");
+                return renderable;
+            }
+            Vector2 paddingVector = side switch
+            {
+                PaddingSide.Leading or PaddingSide.Horizontal or PaddingSide.Bottom => new Vector2(padding, renderable.GetPos().y),
+                PaddingSide.Trailing or PaddingSide.Top or PaddingSide.Vertical => new Vector2(renderable.GetPos().x, -padding),
+                _ => Vector2.zero
+            };
+            
+            if (side.HasFlag(PaddingSide.Leading))
+                renderable.AddWidth(-padding);
+            if (side.HasFlag(PaddingSide.Trailing))
+                renderable.AddWidth(-padding);
+            if (side.HasFlag(PaddingSide.Top))
+                renderable.AddHeight(-padding);
+            if (side.HasFlag(PaddingSide.Bottom))
+                renderable.AddHeight(-padding);
+            
+            renderable.paddingApplied= true;
+            return Pos(renderable, paddingVector, true);
         }
         
         // Sizing
