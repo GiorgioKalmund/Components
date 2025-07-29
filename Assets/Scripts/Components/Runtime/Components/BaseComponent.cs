@@ -31,8 +31,16 @@ namespace Components.Runtime.Components
         public RectTransform GetRect()
         {
             if (!_rect)
+            {
                 Debug.LogWarning(gameObject.name  +": RectTransform is null! Did you forget to call 'base.Awake()' somewhere?");
+                return gameObject.GetComponent<RectTransform>();
+            }
             return _rect;
+        }
+
+        public virtual BaseComponent HandleSizeChanged(float x, float y)
+        {
+            return this;
         }
 
         private void OnValidate()
@@ -167,6 +175,7 @@ namespace Components.Runtime.Components
         public static T Size<T>(this T renderable, Vector2 sizeDelta) where T : BaseComponent
         {
             renderable.GetRect().sizeDelta = sizeDelta;
+            renderable.HandleSizeChanged(sizeDelta.x, sizeDelta.y);
             return renderable;
         }
         public static T Size<T>(this T renderable, float width, float height) where T : BaseComponent
@@ -175,8 +184,8 @@ namespace Components.Runtime.Components
         }
         public static T SizeAdd<T>(this T renderable, Vector2 sizeDelta) where T : BaseComponent
         {
-            renderable.GetRect().sizeDelta += sizeDelta;
-            return renderable;
+            var newSize = renderable.GetRect().sizeDelta + sizeDelta;
+            return Size(renderable, newSize);
         }
         public static T Width<T>(this T renderable, float width) where T : BaseComponent
         {

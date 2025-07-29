@@ -56,7 +56,7 @@ namespace Components.Runtime.Components
         
         public TextComponent VAlignCenter()
         {
-            return VAlignment(VerticalAlignmentOptions.Middle);
+            return VAlignment(VerticalAlignmentOptions.Geometry);
         }
         
         public TextComponent OverflowMode(TextOverflowModes overflowModes)

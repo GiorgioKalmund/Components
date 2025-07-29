@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Components.Runtime.Components
 {
@@ -31,9 +32,11 @@ namespace Components.Runtime.Components
                 .Pivot(PivotPosition.LowerRight, true)
                 .Size(30, 30)
                 .Build(this)
-                .Color(UnityEngine.Color.gray1)
+                .Sprite("resizer")
                 .Cast<WindowResizer>()
                 ;
+
+            Sprite("backdrop_1").ImageType(Image.Type.Tiled).PixelsPerUnitMultiplier(0.33f);
         }
 
         public WindowComponent Build(string title)
@@ -69,7 +72,7 @@ namespace Components.Runtime.Components
         public override void RenderHeader()
         {
             base.RenderHeader();
-            _headerText.Text(Title).Size(this.GetWidth(), HeaderHeight);
+            _headerText.Text(Title).Size(this.GetWidth() - HeaderHeight, HeaderHeight);
         }
 
         public Vector2 GetMinimumWindowSize()

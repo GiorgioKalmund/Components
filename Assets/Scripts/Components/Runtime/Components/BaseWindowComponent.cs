@@ -57,7 +57,7 @@ namespace Components.Runtime.Components
 
             _minimizeMaximizeButton = ComponentBuilder.N<ButtonComponent>(Header, "MinimizeMaximize")
                 .Pivot(PivotPosition.MiddleRight, true)
-                .Function(ToggleMinimizeMaximize)
+                .Create("-", ToggleMinimizeMaximize)
                 ;
             
             Content = ComponentBuilder.N<ImageComponent>(transform, "Content")
@@ -77,6 +77,7 @@ namespace Components.Runtime.Components
 
         public void ToggleMinimizeMaximize()
         {
+            // If the window isn't focus, we first focus it and on a second click, we act accordingly
             if (!Focused)
             {
                 ActiveWindow = this;
@@ -93,6 +94,7 @@ namespace Components.Runtime.Components
             _maximizedSize = GetRect().sizeDelta;
             this.Height(HeaderHeight);
             Content.SetActive(false);
+            _minimizeMaximizeButton.Text("+");
         }
         protected virtual void Maximize()
         {
@@ -100,6 +102,7 @@ namespace Components.Runtime.Components
                 this.Height(_maximizedSize.y);
             _maximizedSize = Vector2.zero;
             Content.SetActive(true);
+            _minimizeMaximizeButton.Text("-");
         }
 
         public BaseWindowComponent RecalculateSizes()

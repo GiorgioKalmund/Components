@@ -14,9 +14,8 @@ namespace Components.Runtime.Testing
                     .Offset(250, -250)
                 ;
             
-            
             WindowComponent window2 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
-                    .Build("Window 1")
+                    .Build("Window 1 Sint voluptate enim dolor incididunt consectetur occaecat incididunt consectetur aute id exercitation. Do non aliquip ea do deserunt cupidatat velit sit pariatur sit pariatur veniam magna anim.")
                     .Size(500, 300)
                     .Cast<WindowComponent>()
                     .Offset(500, -500)
@@ -35,7 +34,7 @@ namespace Components.Runtime.Testing
                     .Color(Color.gray)
                 ;
 
-            window2.AddContent(a);
+            window1.AddContent(a);
         }
     }
 }

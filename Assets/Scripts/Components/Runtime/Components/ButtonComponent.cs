@@ -14,6 +14,7 @@ namespace Components.Runtime.Components
 
         // -- Subcomponents -- // 
         protected ImageComponent ForegroundImage;
+        protected TextComponent ButtonText;
         
         public override void Awake()
         {
@@ -25,6 +26,30 @@ namespace Components.Runtime.Components
                     .RaycastTarget(false)
                     .Sprite("a")
                 ;
+
+            ButtonText = ComponentBuilder.N<TextComponent>(transform)
+                    .AlignCenter()
+                    .VAlignCenter()
+                    .Color(UnityEngine.Color.gray1)
+                ;
+        }
+
+        public ButtonComponent Create(string text, UnityAction action = null, Sprite foreground = null)
+        {
+            Text(text);
+            if (action != null)
+                Function(action);
+            if (foreground)
+                ForegroundImage.Sprite(foreground);
+            ForegroundImage.Alpha(foreground ? 1 : 0);
+            
+            return this;
+        }
+
+        public ButtonComponent Text(string text)
+        {
+            ButtonText.Text(text);
+            return this;
         }
 
         public ButtonComponent Function(UnityAction action)
@@ -45,10 +70,14 @@ namespace Components.Runtime.Components
             return this;
         }
 
-        public ButtonComponent Size(float x, float y)
+        public override BaseComponent HandleSizeChanged(float x, float y)
         {
-            this.Size(new Vector2(x, y));
-            ForegroundImage.Size(x, y);
+            //Debug.Log("Size Changed to "+ x + "x" + y);
+            base.HandleSizeChanged(x, y);
+            if (ForegroundImage)
+                ForegroundImage.Size(x, y);
+            if (ButtonText)
+                ButtonText.Size(x, y);
             return this;
         }
     }
