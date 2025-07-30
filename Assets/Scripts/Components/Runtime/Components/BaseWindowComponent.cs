@@ -8,7 +8,7 @@ using UnityEngine.UI;
 
 namespace Components.Runtime.Components
 {
-    public class BaseWindowComponent : BaseComponent, IPointerDownHandler, IFocusable, IDragHandler, IRenderable
+    public class BaseWindowComponent : BaseComponent, IPointerDownHandler, IFocusable, IBeginDragHandler, IDragHandler, IRenderable
     {
         // -- Canvas sizes stored to avoid duplicate calculations -- //
         protected static float CanvasWidth;
@@ -62,7 +62,7 @@ namespace Components.Runtime.Components
             this.Pivot(PivotPosition.UpperLeft, true);
 
             // ===== WINDOW BASE-- Parent of all subcomponents to allow hiding == //
-            WindowBase = ComponentBuilder.N<ImageComponent>(transform, "Active Layer");
+            WindowBase = ComponentBuilder.N<ImageComponent>(transform, "Window Base");
             // ==================================================================== //
             
             Header = ComponentBuilder.N<ImageComponent>(WindowBase, "Header")
@@ -91,10 +91,7 @@ namespace Components.Runtime.Components
                 .Cast<ButtonComponent>()
                 ;
             
-            Content = ComponentBuilder.N<ImageComponent>(WindowBase, "Content")
-                    .Pivot(PivotPosition.LowerCenter, true)
-                    .Alpha(0.0f)
-                ;
+            Content = ComponentBuilder.N<ImageComponent>(WindowBase, "Content").Pivot(PivotPosition.LowerCenter, true);
             
             _rectMask2D = Content.gameObject.GetOrAddComponent<RectMask2D>();
             
@@ -106,7 +103,7 @@ namespace Components.Runtime.Components
             _toggleInputAction = action;
             return this;
         }
-
+        
         private void OnEnable()
         {
             _toggleInputAction?.Enable();
@@ -162,14 +159,14 @@ namespace Components.Runtime.Components
                 Collapse();
         }
 
-        protected virtual void Collapse()
+        public virtual void Collapse()
         {
             _maximizedSize = GetRect().sizeDelta;
             this.Height(HeaderHeight);
             Content.SetActive(false);
             _minimizeMaximizeButton.Text(">");
         }
-        protected virtual void Expand()
+        public virtual void Expand()
         {
             if (_maximizedSize.magnitude > 0)
                 this.Height(_maximizedSize.y);
@@ -187,7 +184,13 @@ namespace Components.Runtime.Components
         
         public void OnPointerDown(PointerEventData eventData)
         {
-            this.BringToFront();
+            ActiveWindow = this;
+            RecalculateSizes();
+        }
+        
+        
+        public void OnBeginDrag(PointerEventData eventData)
+        {
             ActiveWindow = this;
             RecalculateSizes();
         }
@@ -213,9 +216,16 @@ namespace Components.Runtime.Components
             GetRect().anchoredPosition = willBePos;
         }
 
-        public virtual void HandleFocus() { }
+        public virtual void HandleFocus()
+        {
+            this.BringToFront();
+            Header.Alpha(1f);
+        }
 
-        public virtual void HandleUnfocus() { }
+        public virtual void HandleUnfocus()
+        {
+            Header.Alpha(0.4f);
+        }
 
         public BaseWindowComponent ContentPadding(float padding)
         {
@@ -252,6 +262,51 @@ namespace Components.Runtime.Components
         {
             base.HandleSizeChanged(x, y);
             WindowBase?.Size(x, y);
+            return this;
+        }
+
+        public BaseWindowComponent StartHidden(bool hidden = true)
+        {
+            _startOfHidden = hidden;
+            return this;
+        }
+
+        public BaseWindowComponent NoHeader()
+        {
+            HeaderHeight = 0;
+            Header.SetActive(false);
+            return this;
+        }
+
+        public BaseWindowComponent SetBase(Sprite sprite)
+        {
+            WindowBase.Sprite(sprite);
+            return this;
+        }
+        
+        public BaseWindowComponent SetBase(Color color)
+        {
+            WindowBase.Sprite((Sprite)null);
+            WindowBase.Color(color);
+            return this;
+        }
+        
+        public BaseWindowComponent SetContent(Sprite sprite)
+        {
+            Content.Sprite(sprite);
+            return this;
+        }
+        
+        public BaseWindowComponent SetContent(Color color)
+        {
+            Content.Sprite((Sprite)null);
+            Content.Color(color);
+            return this;
+        }
+        
+        public BaseWindowComponent SetHeaderColor(Color color)
+        {
+            Header.Color(color);
             return this;
         }
     }

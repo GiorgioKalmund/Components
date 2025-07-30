@@ -13,34 +13,46 @@ namespace Components.Runtime.Testing
         {
             _input = new ComponentControls();
             
-            ResizableWindowComponent window1 = ComponentBuilder.N<WindowComponent>("W1", GUIService.GetCanvas().GetTransform())
-                    .Build(_input.UI.ShowWindow, "Window 1")
+            var window1= ComponentBuilder.N<BaseWindowComponent>("W1", GUIService.GetCanvas().GetTransform())
+                    .Build(_input.UI.ShowWindow)
+                    .SetContent(Color.orange)
+                    .ContentPadding(10)
+                    .SetBase(Color.red)
+                    .SetHeaderColor(Color.blue)
                     .Size(500, 300)
-                    .Cast<WindowComponent>()
-                    .Offset(250, -250)
+                    .Offset(0, 0)
                 ;
             
-            ResizableWindowComponent window2 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
+            var window11 = ComponentBuilder.N<BaseWindowComponent>("W2", GUIService.GetCanvas().GetTransform())
+                    .Build(_input.UI.ShowWindow)
+                    .SetContent(Color.red)
+                    .ContentPadding(20)
+                    .Size(500, 300)
+                    .NoHeader()
+                    .Offset(500, 0)
+                ;
+            
+            var window2 = ComponentBuilder.N<ResizableWindowComponent>(GUIService.GetCanvas().GetTransform())
                     .Build("Window 1 Sint voluptate enim dolor incididunt consectetur occaecat incididunt consectetur aute id exercitation. Do non aliquip ea do deserunt cupidatat velit sit pariatur sit pariatur veniam magna anim.")
                     .Size(500, 300)
                     .ContentPadding(5)
-                    .Cast<WindowComponent>()
-                    .Offset(500, -500)
+                    .Cast<ResizableWindowComponent>()
+                    .Offset(0, -300)
                 ;
             
-            ResizableWindowComponent window3 = ComponentBuilder.N<ResizableWindowComponent>(GUIService.GetCanvas().GetTransform())
+            var window3 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
                     .Build("Window 2", Color.green, Color.blue)
                     .ContentPadding(5)
                     .Size(500, 300)
-                    .Cast<ResizableWindowComponent>()
-                    .Offset(750, -750)
+                    .Cast<WindowComponent>()
+                    .Offset(500, -300)
                 ;
 
             var a = ComponentBuilder.N<ButtonComponent>("Hello!")
-                    .Size(300, 100)
-                    .Color(Color.gray)
-                    .Sprite("missing")
+                    .Size(100, 100)
+                    .Text("Yo", Color.black)
                 ;
+            a.Function(() => window3.ToggleCollapse());
 
             window1.AddContent(a);
         }

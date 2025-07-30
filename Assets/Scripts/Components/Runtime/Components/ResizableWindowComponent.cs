@@ -58,26 +58,14 @@ namespace Components.Runtime.Components
         {
             return Build(null ,title, windowColor, headerColor);
         }
-        
-        public override void HandleFocus()
-        {
-            base.HandleFocus();
-            this.BringToFront();
-            Header.Alpha(1f);
-        }
 
-        public override void HandleUnfocus()
-        {
-            Header.Alpha(0.4f);
-        }
-
-        protected override void Collapse()
+        public override void Collapse()
         {
             base.Collapse();
             _windowResizer.SetActive(false);
         }
         
-        protected override void Expand()
+        public override void Expand()
         {
             base.Expand();
             _windowResizer.SetActive(true);

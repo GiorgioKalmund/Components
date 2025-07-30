@@ -23,12 +23,12 @@ namespace Components.Runtime.Components
 
             ButtonElement = gameObject.GetOrAddComponent<Button>();
 
-            ForegroundImage = ComponentBuilder.N<ImageComponent>(transform)
+            ForegroundImage = ComponentBuilder.N<ImageComponent>(transform, "Foreground-Hint")
                     .RaycastTarget(false)
-                    .Sprite("a")
+                    .Alpha(0)
                 ;
 
-            ButtonText = ComponentBuilder.N<TextComponent>(transform)
+            ButtonText = ComponentBuilder.N<TextComponent>(transform, "Text")
                     .AlignCenter()
                     .VAlignCenter()
                     .Color(UnityEngine.Color.gray1)
@@ -47,15 +47,18 @@ namespace Components.Runtime.Components
             if (action != null)
                 Function(action);
             if (foreground)
-                ForegroundImage.Sprite(foreground);
-            ForegroundImage.Alpha(foreground ? 1 : 0);
+            {
+                ForegroundImage.Sprite(foreground).Alpha(1);
+            }
             
             return this;
         }
 
-        public ButtonComponent Text(string text)
+        public ButtonComponent Text(string text, Color? color = null)
         {
             ButtonText.Text(text);
+            if (color.HasValue)
+                ButtonText.Color(color.Value);
             return this;
         }
 
@@ -90,6 +93,14 @@ namespace Components.Runtime.Components
                 ForegroundImage.Size(x, y);
             if (ButtonText)
                 ButtonText.Size(x, y);
+            return this;
+        }
+
+        public ButtonComponent HighlightedColor(Color color)
+        {
+            var colors = ButtonElement.colors;
+            colors.highlightedColor = color;
+            ButtonElement.colors = colors;
             return this;
         }
     }

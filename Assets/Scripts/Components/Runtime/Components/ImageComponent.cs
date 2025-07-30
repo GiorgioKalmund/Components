@@ -27,7 +27,7 @@ namespace Components.Runtime.Components
         {
             _image.sprite = sprite;
             // Only set if not already set from somewhere else
-            this.SafeDisplayName(NamePrefix + ": " + sprite.name);
+            this.SafeDisplayName(NamePrefix + ": " + sprite?.name);
             return this;
         }
         public ImageComponent Sprite(Texture2D texture2D)
