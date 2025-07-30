@@ -59,6 +59,11 @@ namespace Components.Runtime.Components
             return this;
         }
 
+        public TextComponent TextComponent()
+        {
+            return ButtonText;
+        }
+
         public ButtonComponent Function(UnityAction action)
         {
             ButtonElement.onClick.AddListener(action);

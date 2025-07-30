@@ -1,12 +1,14 @@
 using System;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Components.Runtime.Components
 {
-    public class BaseWindowComponent : ImageComponent, IPointerDownHandler, IFocusable, IDragHandler, IRenderable
+    public class BaseWindowComponent : BaseComponent, IPointerDownHandler, IFocusable, IDragHandler, IRenderable
     {
         // -- Canvas sizes stored to avoid duplicate calculations -- //
         protected static float CanvasWidth;
@@ -29,17 +31,24 @@ namespace Components.Runtime.Components
                 _activeWindow?.HandleFocus();
             }
         }
-
         public bool Focused => ActiveWindow == this;
+        
+        // Key for showing / hiding the window, initial state -- //
+        private InputAction _toggleInputAction;
+        private bool _startOfHidden;
+        public bool Hidden => !WindowBase?.gameObject.activeSelf ?? true;
         
         // Mask
         private RectMask2D _rectMask2D;
         
-        // -- Subcomponents -- // 
+        // -- Subcomponents -- //
+        protected ImageComponent WindowBase;
         private ButtonComponent _minimizeMaximizeButton;
         protected ImageComponent Header;
         protected ImageComponent Content;
         protected ImageComponent HeaderTools;
+        private TextComponent _headerText;
+        protected string Title = "";
         
         // -- Dragging -- // 
         protected bool AllowDragging = true;
@@ -51,22 +60,38 @@ namespace Components.Runtime.Components
         {
             base.Awake();
             this.Pivot(PivotPosition.UpperLeft, true);
+
+            // ===== WINDOW BASE-- Parent of all subcomponents to allow hiding == //
+            WindowBase = ComponentBuilder.N<ImageComponent>(transform, "Active Layer");
+            // ==================================================================== //
             
-            Header = ComponentBuilder.N<ImageComponent>(transform, "Header")
+            Header = ComponentBuilder.N<ImageComponent>(WindowBase, "Header")
                     .Pivot(PivotPosition.UpperLeft, true)
                     .Color(UnityEngine.Color.gray3, true)
                 ;
 
             HeaderTools = ComponentBuilder.N<ImageComponent>(Header, "Header Tools")
                     .Pivot(PivotPosition.MiddleLeft, true)
+                    .Alpha(0)
+                ;
+            
+            _headerText = ComponentBuilder.N<TextComponent>(HeaderTools)
+                    .Pivot(PivotPosition.MiddleLeft)
+                    .AnchoredTo(PivotPosition.MiddleRight)
+                    .FontSize(HeaderHeight - 5)
+                    .VAlignCenter()
+                    .OverflowMode(TextOverflowModes.Ellipsis)
                 ;
 
             _minimizeMaximizeButton = ComponentBuilder.N<ButtonComponent>(HeaderTools, "MinimizeMaximize")
                 .Pivot(PivotPosition.MiddleLeft, true)
-                .Create("-", ToggleMinimizeMaximize)
+                .Create("x", ToggleCollapse)
+                .Color(UnityEngine.Color.gray8)
+                .Alpha(0.7f)
+                .Cast<ButtonComponent>()
                 ;
             
-            Content = ComponentBuilder.N<ImageComponent>(transform, "Content")
+            Content = ComponentBuilder.N<ImageComponent>(WindowBase, "Content")
                     .Pivot(PivotPosition.LowerCenter, true)
                     .Alpha(0.0f)
                 ;
@@ -75,15 +100,55 @@ namespace Components.Runtime.Components
             
             ActiveWindow = this;
         }
-        
-        public override void Start()
+
+        public virtual BaseWindowComponent Build(InputAction action)
         {
-            base.Start();
-            Render();
-            DisplayName = "BaseWindowComponent";
+            _toggleInputAction = action;
+            return this;
         }
 
-        public void ToggleMinimizeMaximize()
+        private void OnEnable()
+        {
+            _toggleInputAction?.Enable();
+        }
+
+        public virtual void Start()
+        {
+            Render();
+            Expand();
+            DisplayName = "BaseWindowComponent";
+            
+            if (_startOfHidden)
+                Minimize();
+            
+            if (_toggleInputAction != null)
+                _toggleInputAction.performed += HandleOpenAndMinimize;
+        }
+
+        private void OnDisable()
+        {
+            _toggleInputAction?.Disable();
+        }
+
+        // To make support other subcomponent showing & hiding appropriately, please make sure to never parent to 'transform', but always to 'WindowBase'!
+        private void HandleOpenAndMinimize(InputAction.CallbackContext callback)
+        {
+            if (Hidden)
+                Open();
+            else 
+                Minimize();
+        }
+        public void Open()
+        {
+            WindowBase.SetActive(true);
+            this.BringToFront();
+        }
+        public void Minimize()
+        {
+            WindowBase.SetActive(false);
+        }
+
+        public void ToggleCollapse()
         {
             // If the window isn't focus, we first focus it and on a second click, we act accordingly
             if (!Focused)
@@ -92,25 +157,25 @@ namespace Components.Runtime.Components
                 return;
             }
             if (_maximizedSize.magnitude > 0)
-                Maximize();
+                Expand();
             else 
-                Minimize();
+                Collapse();
         }
 
-        protected virtual void Minimize()
+        protected virtual void Collapse()
         {
             _maximizedSize = GetRect().sizeDelta;
             this.Height(HeaderHeight);
             Content.SetActive(false);
-            _minimizeMaximizeButton.Text("+");
+            _minimizeMaximizeButton.Text(">");
         }
-        protected virtual void Maximize()
+        protected virtual void Expand()
         {
             if (_maximizedSize.magnitude > 0)
                 this.Height(_maximizedSize.y);
             _maximizedSize = Vector2.zero;
             Content.SetActive(true);
-            _minimizeMaximizeButton.Text("-");
+            _minimizeMaximizeButton.Text("v");
         }
 
         public BaseWindowComponent RecalculateSizes()
@@ -174,11 +239,20 @@ namespace Components.Runtime.Components
         {
             Header.Size(this.GetWidth(), HeaderHeight);
             HeaderTools.Size(HeaderToolsWidth, HeaderHeight);
+            _headerText.Text(Title).Size(this.GetWidth() - HeaderHeight, HeaderHeight)
+                .Padding(PaddingSide.Horizontal, 10);
             _minimizeMaximizeButton.Size(30f, HeaderHeight);
         }
         public virtual void RenderContent()
         {
             Content.Size(this.GetWidth() - 2 * _contentPadding, this.GetHeight() - HeaderHeight - 2 * _contentPadding).Pos(0, _contentPadding);
+        }
+
+        public override BaseComponent HandleSizeChanged(float x, float y)
+        {
+            base.HandleSizeChanged(x, y);
+            WindowBase?.Size(x, y);
+            return this;
         }
     }
 }

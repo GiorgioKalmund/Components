@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Components.Runtime.Components
 {
-    public abstract class BaseComponent : MonoBehaviour
+    public class BaseComponent : MonoBehaviour
     {
         private RectTransform _rect;
         public bool paddingApplied = false;
@@ -47,13 +47,14 @@ namespace Components.Runtime.Components
 
         private void OnValidate()
         {
-            if (!string.IsNullOrEmpty(_displayName))
-                gameObject.name = _displayName;
+            this.SafeDisplayName(_displayName);
         }
     }
     
     static class ComponentBuilder
     {
+        public static string DefaultName => "Component";
+        
         // Object creation
         private static GameObject CreateEmptyGameObjectWithParent(Transform parent, bool worldPositionStays)
         {
@@ -64,15 +65,15 @@ namespace Components.Runtime.Components
             return toReturn;
         }
 
-        public static T N<T>(BaseComponent parent, string name = "Renderable", bool worldPositionStays = false) where T : BaseComponent
+        public static T N<T>(BaseComponent parent, string name = "", bool worldPositionStays = false) where T : BaseComponent
         {
             return N<T>(name, parent.gameObject.transform, worldPositionStays);
         }
-        public static T N<T>(Transform parent, string name = "Renderable", bool worldPositionStays = false) where T : BaseComponent
+        public static T N<T>(Transform parent, string name = "", bool worldPositionStays = false) where T : BaseComponent
         {
             return N<T>(name, parent, worldPositionStays);
         }
-        public static T N<T>(string name = "Renderable", Transform parent = null, bool worldPositionStays = false)  where T : BaseComponent 
+        public static T N<T>(string name = "", Transform parent = null, bool worldPositionStays = false)  where T : BaseComponent 
         {
             GameObject toReturn = CreateEmptyGameObjectWithParent(parent, worldPositionStays);
             var t = toReturn.AddComponent<T>();
@@ -90,6 +91,12 @@ namespace Components.Runtime.Components
         public static T DisplayName<T>(this T renderable, string displayName) where T : BaseComponent
         {
             renderable.DisplayName = displayName;
+            return renderable;
+        }
+        public static T SafeDisplayName<T>(this T renderable, string displayName) where T : BaseComponent
+        {
+            if (string.IsNullOrEmpty(renderable.DisplayName))
+                renderable.DisplayName(displayName);
             return renderable;
         }
         

@@ -7,7 +7,7 @@ namespace Components.Runtime.Components
 {
     public class WindowResizer : ImageComponent, IDragHandler 
     {
-        private WindowComponent _window;
+        private ResizableWindowComponent _resizableWindow;
 
         public override void Start()
         {
@@ -15,22 +15,22 @@ namespace Components.Runtime.Components
             DisplayName = "WindowResizer";
         }
 
-        public WindowResizer Build(WindowComponent window)
+        public WindowResizer Build(ResizableWindowComponent resizableWindow)
         {
-            _window = window;
+            _resizableWindow = resizableWindow;
             return this;
         }
         
         public void OnDrag(PointerEventData eventData)
         {
-            var size = _window.GetRect().sizeDelta;
+            var size = _resizableWindow.GetRect().sizeDelta;
             float newWidth = size.x + eventData.delta.x;
             float newHeight = size.y - eventData.delta.y;
             
             //Debug.Log($"{newWidth}x{newHeight} + {size}");
 
-            Vector2 newSize = new Vector2(Mathf.Min(GUIService.GetCanvasWidth(), Mathf.Max(newWidth, _window.GetMinimumWindowSize().x)), Mathf.Min(GUIService.GetCanvasHeight(), Mathf.Max(newHeight, _window.GetMinimumWindowSize().y)));
-            _window.Size(newSize).Render();
+            Vector2 newSize = new Vector2(Mathf.Min(GUIService.GetCanvasWidth(), Mathf.Max(newWidth, _resizableWindow.GetMinimumWindowSize().x)), Mathf.Min(GUIService.GetCanvasHeight(), Mathf.Max(newHeight, _resizableWindow.GetMinimumWindowSize().y)));
+            _resizableWindow.Size(newSize).Render();
         }
     }
 }

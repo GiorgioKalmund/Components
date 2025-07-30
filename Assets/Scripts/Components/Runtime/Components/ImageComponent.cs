@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.VisualScripting;
@@ -14,21 +15,19 @@ namespace Components.Runtime.Components
         {
             base.Awake();
             _image = gameObject.GetOrAddComponent<Image>();
-            DisplayName = NamePrefix;
             this.Size(DefaultSize);
         }
 
         public virtual void Start()
         {
-            DisplayName = "ImageComponent";
+            this.SafeDisplayName(NamePrefix);
         }
 
         public ImageComponent Sprite(Sprite sprite) 
         {
             _image.sprite = sprite;
             // Only set if not already set from somewhere else
-            if (string.IsNullOrEmpty(DisplayName))
-                DisplayName = NamePrefix + ": " + sprite.name;
+            this.SafeDisplayName(NamePrefix + ": " + sprite.name);
             return this;
         }
         public ImageComponent Sprite(Texture2D texture2D)
