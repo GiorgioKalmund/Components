@@ -85,7 +85,7 @@ namespace Components.Runtime.Components
 
             _minimizeMaximizeButton = ComponentBuilder.N<ButtonComponent>(HeaderTools, "MinimizeMaximize")
                 .Pivot(PivotPosition.MiddleLeft, true)
-                .Create("x", ToggleCollapse)
+                .Create("x", () => ToggleCollapse())
                 .Color(UnityEngine.Color.gray8)
                 .Alpha(0.7f)
                 .Cast<ButtonComponent>()
@@ -145,10 +145,10 @@ namespace Components.Runtime.Components
             WindowBase.SetActive(false);
         }
 
-        public void ToggleCollapse()
+        public void ToggleCollapse(bool force = false)
         {
             // If the window isn't focus, we first focus it and on a second click, we act accordingly
-            if (!Focused)
+            if (!Focused && !force)
             {
                 ActiveWindow = this;
                 return;

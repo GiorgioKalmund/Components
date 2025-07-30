@@ -52,7 +52,7 @@ namespace Components.Runtime.Testing
                     .Size(100, 100)
                     .Text("Yo", Color.black)
                 ;
-            a.Function(() => window3.ToggleCollapse());
+            a.Function(() => window3.ToggleCollapse(true));
 
             window1.AddContent(a);
         }
