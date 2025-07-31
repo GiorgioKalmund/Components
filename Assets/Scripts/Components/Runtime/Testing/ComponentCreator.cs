@@ -11,6 +11,8 @@ namespace Components.Runtime.Testing
         private ComponentControls _input;
         public void Awake()
         {
+            TextComponent.GlobalFont(Resources.Load<TMPro.TMP_FontAsset>("Font/Main"));
+            
             _input = new ComponentControls();
             
             var window1= ComponentBuilder.N<BaseWindowComponent>("W1", GUIService.GetCanvas().GetTransform())
@@ -54,15 +56,16 @@ namespace Components.Runtime.Testing
                     .Size(100, 100)
                     .Text("Yo", Color.black)
                 ;
-            
+            a.TextComponent().Bold();
             
             var b = ComponentBuilder.N<ButtonComponent>("B,A,Sports!")
                     .Size(300, 100)
                     .Text("End Game", Color.black)
                 ;
+            b.TextComponent().Underline();
 
             var popup = ComponentBuilder.N<PopupComponent>(GUIService.GetCanvas().GetTransform(), "Popup")
-                    .Build(GUIService.GetCanvas(), 1f)
+                    .Build(GUIService.GetCanvas())
                     .DontCloseOnBackGroundTap()
                     .AddContent(b)
                 ;

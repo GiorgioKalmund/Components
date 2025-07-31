@@ -1,4 +1,3 @@
-using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -14,6 +13,7 @@ namespace Components.Runtime.Components
         protected static float CanvasWidth;
         protected static float CanvasHeight;
         protected float HeaderHeight = 30f;
+        protected float MinimumWindowShowingHeight = 30f;
         protected float HeaderToolsWidth = 30f;
         // -- Border offset to allow for margins around the screen -- //
         private float _borderOffset = 0f;
@@ -208,7 +208,7 @@ namespace Components.Runtime.Components
             {
                 willBePos.x = wantToBePos.x;
             }
-            if (wantToBePos.y < _borderOffset && wantToBePos.y > -CanvasHeight + HeaderHeight + _borderOffset)
+            if (wantToBePos.y < _borderOffset && wantToBePos.y > -CanvasHeight + MinimumWindowShowingHeight + _borderOffset)
             {
                 willBePos.y = wantToBePos.y;
             }

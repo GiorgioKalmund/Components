@@ -1,7 +1,7 @@
-using System;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using FontStyles = TMPro.FontStyles;
 
 namespace Components.Runtime.Components
 {
@@ -10,7 +10,13 @@ namespace Components.Runtime.Components
         private TextMeshProUGUI _textMesh;
         protected static string NamePrefix = "TextComponent";
         private readonly Vector2 _defaultSize = new Vector2(100, 100);
-        
+
+        private static TMP_FontAsset _globalFont;
+
+        public static void GlobalFont(TMP_FontAsset asset)
+        {
+            _globalFont = asset;
+        }
         
         public override void Awake()
         {
@@ -18,6 +24,8 @@ namespace Components.Runtime.Components
             _textMesh = gameObject.GetOrAddComponent<TextMeshProUGUI>();
             DisplayName = NamePrefix;
             this.Size(_defaultSize);
+
+            Font(_globalFont);
         }
 
         public virtual void Start()
@@ -28,6 +36,12 @@ namespace Components.Runtime.Components
         public TextComponent Text(string text)
         {
             _textMesh.text = text;
+            return this;
+        }
+        
+        public TextComponent Text(int text)
+        {
+            _textMesh.text = text.ToString();
             return this;
         }
       
@@ -70,6 +84,16 @@ namespace Components.Runtime.Components
             _textMesh.overflowMode = overflowModes;
             return this;
         }
+
+        public TextComponent FontStyle(TMPro.FontStyles style)
+        {
+            _textMesh.fontStyle = style;
+            return this;
+        }
+
+        public TextComponent Bold() { return FontStyle(FontStyles.Bold); }
+        public TextComponent Italic() { return FontStyle(FontStyles.Italic); }
+        public TextComponent Underline() { return FontStyle(FontStyles.Underline); }
 
         // Duplicate to ImageComponent implementation, maybe find some consolidated space?
         public TextComponent Color(Color color, bool keepPreviousAlphaValue = false) 
