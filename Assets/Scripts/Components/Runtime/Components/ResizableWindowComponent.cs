@@ -71,6 +71,17 @@ namespace Components.Runtime.Components
             _windowResizer.SetActive(true);
         }
 
+        public ResizableWindowComponent MinimumSize(Vector2 minSize)
+        {
+            MinimumWindowSize = minSize;
+            return this;
+        }
+
+        public ResizableWindowComponent MinimumSize(float x, float y)
+        {
+            return MinimumSize(new Vector2(x, y));
+        }
+
         public Vector2 GetMinimumWindowSize()
         {
             return MinimumWindowSize;

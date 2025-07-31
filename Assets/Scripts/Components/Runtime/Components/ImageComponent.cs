@@ -39,6 +39,11 @@ namespace Components.Runtime.Components
         {
             return Sprite(ImageService.GetSprite(path));
         }
+
+        public ImageComponent ClearSprite()
+        {
+            return Sprite((Sprite)null);
+        }
         
         public ImageComponent Color(Color color, bool keepPreviousAlphaValue = false) 
         {

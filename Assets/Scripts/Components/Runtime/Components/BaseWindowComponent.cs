@@ -299,7 +299,7 @@ namespace Components.Runtime.Components
         
         public BaseWindowComponent SetContent(Color color)
         {
-            Content.Sprite((Sprite)null);
+            Content.ClearSprite();
             Content.Color(color);
             return this;
         }
