@@ -54,7 +54,22 @@ namespace Components.Runtime.Testing
                     .Size(100, 100)
                     .Text("Yo", Color.black)
                 ;
-            a.Function(() => window3.ToggleCollapse(true));
+            
+            
+            var b = ComponentBuilder.N<ButtonComponent>("B,A,Sports!")
+                    .Size(300, 100)
+                    .Text("End Game", Color.black)
+                ;
+
+            var popup = ComponentBuilder.N<PopupComponent>(GUIService.GetCanvas().GetTransform(), "Popup")
+                    .Build(GUIService.GetCanvas(), 1f)
+                    .DontCloseOnBackGroundTap()
+                    .AddContent(b)
+                ;
+            
+            
+            a.Function(() => popup.OpenPopup());
+            b.Function(() => popup.ClosePopup());
 
             window1.AddContent(a);
         }

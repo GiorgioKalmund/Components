@@ -103,5 +103,33 @@ namespace Components.Runtime.Components
             ButtonElement.colors = colors;
             return this;
         }
+        
+        public ButtonComponent PressedColor(Color color)
+        {
+            var colors = ButtonElement.colors;
+            colors.pressedColor = color;
+            ButtonElement.colors = colors;
+            return this;
+        }
+        
+        public ButtonComponent DisabledColor(Color color)
+        {
+            var colors = ButtonElement.colors;
+            colors.disabledColor = color;
+            ButtonElement.colors = colors;
+            return this;
+        }
+
+        public ButtonComponent Lock()
+        {
+            ButtonElement.interactable = false;
+            return this;
+        }
+
+        public ButtonComponent Unlock()
+        {
+            ButtonElement.interactable = true;
+            return this;
+        }
     }
 }

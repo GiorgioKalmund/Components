@@ -247,16 +247,30 @@ namespace Components.Runtime.Components
         {
             return Size(renderable, renderable.GetWidth() + extraWidth, renderable.GetHeight());
         }
+        public static T FullScreen<T>(this T renderable, Canvas canvas) where T : BaseComponent
+        {
+            if (canvas)
+            {
+                RectTransform canvasRect = canvas.GetComponent<RectTransform>();
+                return Size(renderable, canvasRect.sizeDelta);
+            }
+            Debug.LogError(renderable.DisplayName +": Cannot go fullscreen, as no canvas is linked to the object. Please supply a valid canvas to the Fullscreen() function!");
+            return renderable;
+        }
         
         // Scaling
         public static T Scale<T>(this T renderable, float widthScaleFactor, float heightScaleFactor) where T : BaseComponent
         {
             return Size(renderable, renderable.GetWidth()  * widthScaleFactor, renderable.GetHeight() * heightScaleFactor);
         }
+        public static T LocalScale<T>(this T renderable, Vector2 localScale) where T : BaseComponent
+        {
+            renderable.GetRect().localScale = localScale;
+            return renderable;
+        }
         public static T LocalScale<T>(this T renderable, float widthScaleFactor, float heightScaleFactor) where T : BaseComponent
         {
-            renderable.GetRect().localScale = new Vector3(widthScaleFactor, heightScaleFactor, 0);
-            return renderable;
+            return LocalScale(renderable, new Vector2(widthScaleFactor, heightScaleFactor));
         }
         
         // Pivots
