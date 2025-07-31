@@ -8,7 +8,7 @@ namespace Components.Runtime.Components
     public class TextComponent : BaseComponent
     {
         private TextMeshProUGUI _textMesh;
-        protected static string NamePrefix = "TextComponent";
+        protected static readonly string NamePrefix = "TextComponent";
         private readonly Vector2 _defaultSize = new Vector2(100, 100);
 
         private static TMP_FontAsset _globalFont;
@@ -30,7 +30,7 @@ namespace Components.Runtime.Components
 
         public virtual void Start()
         {
-            DisplayName = "TextComponent";
+            DisplayName = NamePrefix;
         }
 
         public TextComponent Text(string text)
@@ -41,8 +41,7 @@ namespace Components.Runtime.Components
         
         public TextComponent Text(int text)
         {
-            _textMesh.text = text.ToString();
-            return this;
+            return Text(text.ToString());
         }
       
         public TextComponent Font(TMP_FontAsset font)

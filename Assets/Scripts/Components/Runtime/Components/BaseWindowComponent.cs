@@ -85,7 +85,7 @@ namespace Components.Runtime.Components
 
             _minimizeMaximizeButton = ComponentBuilder.N<ButtonComponent>(HeaderTools, "MinimizeMaximize")
                 .Pivot(PivotPosition.MiddleLeft, true)
-                .Create("x", () => ToggleCollapse())
+                .Create(action:() => ToggleCollapse())
                 .Color(UnityEngine.Color.gray8)
                 .Alpha(0.7f)
                 .Cast<ButtonComponent>()

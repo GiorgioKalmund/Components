@@ -1,4 +1,5 @@
 using System;
+using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
@@ -41,7 +42,7 @@ namespace Components.Runtime.Components
             DisplayName = "ButtonComponent";
         }
 
-        public ButtonComponent Create(string text, UnityAction action = null, Sprite foreground = null)
+        public ButtonComponent Create(string text = "", UnityAction action = null, Sprite foreground = null)
         {
             Text(text);
             if (action != null)
