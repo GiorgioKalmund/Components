@@ -1,7 +1,5 @@
-using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using UnityEngine.UI;
 
 namespace Components.Runtime.Components
 {
@@ -13,6 +11,7 @@ namespace Components.Runtime.Components
 
 
         protected Vector2 MinimumWindowSize = new Vector2(100, 100);
+        private bool _allowResize = true;
 
         public override void Awake()
         {
@@ -36,7 +35,7 @@ namespace Components.Runtime.Components
         
         public ResizableWindowComponent Build(InputAction action, string title)
         {
-            Build(action);
+            base.Build(action);
             Title = title;
             return this;
         }
@@ -62,13 +61,13 @@ namespace Components.Runtime.Components
         public override void Collapse()
         {
             base.Collapse();
-            _windowResizer.SetActive(false);
+            _windowResizer.SetActive(!_allowResize);
         }
         
         public override void Expand()
         {
             base.Expand();
-            _windowResizer.SetActive(true);
+            _windowResizer.SetActive(_allowResize);
         }
 
         public ResizableWindowComponent MinimumSize(Vector2 minSize)
@@ -85,6 +84,13 @@ namespace Components.Runtime.Components
         public Vector2 GetMinimumWindowSize()
         {
             return MinimumWindowSize;
+        }
+
+        public ResizableWindowComponent NoResize()
+        {
+            _allowResize = false;
+            _windowResizer.SetActive(false);
+            return this;
         }
     }
 }

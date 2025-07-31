@@ -34,8 +34,10 @@ namespace Components.Runtime.Testing
             
             var window2 = ComponentBuilder.N<ResizableWindowComponent>(GUIService.GetCanvas().GetTransform())
                     .Build("Window 1 Sint voluptate enim dolor incididunt consectetur occaecat incididunt consectetur aute id exercitation. Do non aliquip ea do deserunt cupidatat velit sit pariatur sit pariatur veniam magna anim.")
+                    .MinimumSize(300, 300)
+                    .SetBase(Color.gray)
                     .Size(500, 300)
-                    .ContentPadding(5)
+                    .ContentPadding(7)
                     .Cast<ResizableWindowComponent>()
                     .Offset(0, -300)
                 ;
