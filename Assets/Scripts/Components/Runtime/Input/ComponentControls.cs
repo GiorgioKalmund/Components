@@ -665,6 +665,15 @@ namespace Components.Runtime.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Debug"",
+                    ""type"": ""Button"",
+                    ""id"": ""b633f83b-5fad-4065-be74-d4e8935a77c8"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1096,6 +1105,17 @@ namespace Components.Runtime.Input
                     ""action"": ""ShowWindow"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""4451d5f7-82a0-4b14-b1d4-61a9f2b4159f"",
+                    ""path"": ""<Keyboard>/d"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Debug"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1187,6 +1207,7 @@ namespace Components.Runtime.Input
             m_UI_TrackedDevicePosition = m_UI.FindAction("TrackedDevicePosition", throwIfNotFound: true);
             m_UI_TrackedDeviceOrientation = m_UI.FindAction("TrackedDeviceOrientation", throwIfNotFound: true);
             m_UI_ShowWindow = m_UI.FindAction("ShowWindow", throwIfNotFound: true);
+            m_UI_Debug = m_UI.FindAction("Debug", throwIfNotFound: true);
         }
 
         ~@ComponentControls()
@@ -1463,6 +1484,7 @@ namespace Components.Runtime.Input
         private readonly InputAction m_UI_TrackedDevicePosition;
         private readonly InputAction m_UI_TrackedDeviceOrientation;
         private readonly InputAction m_UI_ShowWindow;
+        private readonly InputAction m_UI_Debug;
         /// <summary>
         /// Provides access to input actions defined in input action map "UI".
         /// </summary>
@@ -1518,6 +1540,10 @@ namespace Components.Runtime.Input
             /// Provides access to the underlying input action "UI/ShowWindow".
             /// </summary>
             public InputAction @ShowWindow => m_Wrapper.m_UI_ShowWindow;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Debug".
+            /// </summary>
+            public InputAction @Debug => m_Wrapper.m_UI_Debug;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1577,6 +1603,9 @@ namespace Components.Runtime.Input
                 @ShowWindow.started += instance.OnShowWindow;
                 @ShowWindow.performed += instance.OnShowWindow;
                 @ShowWindow.canceled += instance.OnShowWindow;
+                @Debug.started += instance.OnDebug;
+                @Debug.performed += instance.OnDebug;
+                @Debug.canceled += instance.OnDebug;
             }
 
             /// <summary>
@@ -1621,6 +1650,9 @@ namespace Components.Runtime.Input
                 @ShowWindow.started -= instance.OnShowWindow;
                 @ShowWindow.performed -= instance.OnShowWindow;
                 @ShowWindow.canceled -= instance.OnShowWindow;
+                @Debug.started -= instance.OnDebug;
+                @Debug.performed -= instance.OnDebug;
+                @Debug.canceled -= instance.OnDebug;
             }
 
             /// <summary>
@@ -1874,6 +1906,13 @@ namespace Components.Runtime.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnShowWindow(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Debug" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnDebug(InputAction.CallbackContext context);
         }
     }
 }

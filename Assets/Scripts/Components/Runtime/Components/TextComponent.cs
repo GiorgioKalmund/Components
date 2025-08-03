@@ -33,9 +33,11 @@ namespace Components.Runtime.Components
             DisplayName = NamePrefix;
         }
 
-        public TextComponent Text(string text)
+        public TextComponent Text(string text, Color? color = null)
         {
             _textMesh.text = text;
+            if (color.HasValue)
+                Color(color.Value);
             return this;
         }
         

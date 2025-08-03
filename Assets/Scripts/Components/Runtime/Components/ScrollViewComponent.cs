@@ -9,7 +9,8 @@ namespace Components.Runtime.Components
     {
         Horizontal = 1,
         Vertical = 2,
-        Both = Horizontal | Vertical
+        Both = Horizontal | Vertical,
+        None = 0
         
     }
     
@@ -25,6 +26,7 @@ namespace Components.Runtime.Components
         private HorizontalLayoutGroup _hStack;
         private GridLayoutGroup _grid;
 
+        public bool contentHasBeenSizedManually = false; 
         private bool _contentFitsSize;
         public bool ContentFitsSize
         {
@@ -33,8 +35,10 @@ namespace Components.Runtime.Components
             {
                 _contentFitsSize = value;
                 HandleContentFitsSizeChange(value);
+                contentHasBeenSizedManually = true;
             }
         }
+
 
 
         public override void Awake()
@@ -45,6 +49,7 @@ namespace Components.Runtime.Components
             _mask = gameObject.AddComponent<RectMask2D>();
 
             content = ComponentBuilder.N<ImageComponent>("Content", transform)
+                    .Alpha(0f)
                 ;
             _fitter = content.gameObject.AddComponent<ContentSizeFitter>();
 
@@ -146,6 +151,7 @@ namespace Components.Runtime.Components
         public ScrollViewComponent SizeContent(float x, float y)
         {
             content.Size(x, y);
+            contentHasBeenSizedManually = true;
             return this;
         }
 

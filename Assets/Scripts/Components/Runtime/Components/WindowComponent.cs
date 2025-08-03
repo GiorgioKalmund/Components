@@ -18,7 +18,7 @@ namespace Components.Runtime.Components
             base.Start();
             DisplayName = "WindowComponent";
             
-            Content.Alpha(1).Sprite("backdrop_1").ImageType(Image.Type.Tiled).PixelsPerUnitMultiplier(0.33f);
+            ScrollContent.Alpha(1).Sprite("backdrop_1").ImageType(Image.Type.Tiled).PixelsPerUnitMultiplier(0.33f);
             WindowBase.Color(UnityEngine.Color.gray6);
         }
     }

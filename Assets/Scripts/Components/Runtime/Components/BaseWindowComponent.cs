@@ -1,9 +1,12 @@
+using System;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
+using ColorUtility = Unity.VisualScripting.ColorUtility;
 
 namespace Components.Runtime.Components
 {
@@ -19,20 +22,6 @@ namespace Components.Runtime.Components
         private float _borderOffset = 0f;
         private float _contentPadding = 0f;
 
-        // -- Focus State for ActiveWindow handling -- //
-        private static BaseWindowComponent _activeWindow;
-        public static BaseWindowComponent ActiveWindow
-        {
-            get => _activeWindow;
-            set
-            {
-                _activeWindow?.HandleUnfocus();
-                _activeWindow = value;
-                _activeWindow?.HandleFocus();
-            }
-        }
-        public bool Focused => ActiveWindow == this;
-        
         // Key for showing / hiding the window, initial state -- //
         private InputAction _toggleInputAction;
         private bool _startOfHidden;
@@ -45,7 +34,7 @@ namespace Components.Runtime.Components
         protected ImageComponent WindowBase;
         private ButtonComponent _minimizeMaximizeButton;
         protected ImageComponent Header;
-        protected ImageComponent Content;
+        protected ScrollViewComponent ScrollContent;
         protected ImageComponent HeaderTools;
         private TextComponent _headerText;
         protected string Title = "";
@@ -55,7 +44,7 @@ namespace Components.Runtime.Components
         
         // -- Minimize / Maximize -- //
         private Vector2 _maximizedSize;
-        
+
         public override void Awake()
         {
             base.Awake();
@@ -91,11 +80,16 @@ namespace Components.Runtime.Components
                 .Cast<ButtonComponent>()
                 ;
             
-            Content = ComponentBuilder.N<ImageComponent>(WindowBase, "Content").Pivot(PivotPosition.LowerCenter, true);
+            ScrollContent = ComponentBuilder.N<ScrollViewComponent>(WindowBase, "Content").Pivot(PivotPosition.LowerCenter, true);
             
-            _rectMask2D = Content.gameObject.GetOrAddComponent<RectMask2D>();
-            
-            ActiveWindow = this;
+            _rectMask2D = ScrollContent.gameObject.GetOrAddComponent<RectMask2D>();
+
+            this.Focus();
+        }
+
+        public ScrollViewComponent ConfigureContent()
+        {
+            return ScrollContent;
         }
 
         public virtual BaseWindowComponent Build(InputAction action)
@@ -147,12 +141,7 @@ namespace Components.Runtime.Components
 
         public void ToggleCollapse(bool force = false)
         {
-            // If the window isn't focus, we first focus it and on a second click, we act accordingly
-            if (!Focused && !force)
-            {
-                ActiveWindow = this;
-                return;
-            }
+            this.Focus();
             if (_maximizedSize.magnitude > 0)
                 Expand();
             else 
@@ -163,7 +152,7 @@ namespace Components.Runtime.Components
         {
             _maximizedSize = GetRect().sizeDelta;
             this.Height(HeaderHeight);
-            Content.SetActive(false);
+            ScrollContent.SetActive(false);
             _minimizeMaximizeButton.Text(">");
         }
         public virtual void Expand()
@@ -171,7 +160,7 @@ namespace Components.Runtime.Components
             if (_maximizedSize.magnitude > 0)
                 this.Height(_maximizedSize.y);
             _maximizedSize = Vector2.zero;
-            Content.SetActive(true);
+            ScrollContent.SetActive(true);
             _minimizeMaximizeButton.Text("v");
         }
 
@@ -184,14 +173,14 @@ namespace Components.Runtime.Components
         
         public void OnPointerDown(PointerEventData eventData)
         {
-            ActiveWindow = this;
+            this.Focus();
             RecalculateSizes();
         }
         
         
         public void OnBeginDrag(PointerEventData eventData)
         {
-            ActiveWindow = this;
+            this.Focus();
             RecalculateSizes();
         }
 
@@ -235,7 +224,7 @@ namespace Components.Runtime.Components
 
         public BaseWindowComponent AddContent(BaseComponent component)
         {
-            component.Parent(Content);
+            ScrollContent.AddContent(component);
             return this;
         }
         
@@ -255,13 +244,19 @@ namespace Components.Runtime.Components
         }
         public virtual void RenderContent()
         {
-            Content.Size(this.GetWidth() - 2 * _contentPadding, this.GetHeight() - HeaderHeight - 2 * _contentPadding).Pos(0, _contentPadding);
+            ScrollContent.Size(this.GetWidth() - 2 * _contentPadding, this.GetHeight() - HeaderHeight - 2 * _contentPadding).Pos(0, _contentPadding);
         }
 
         public override BaseComponent HandleSizeChanged(float x, float y)
         {
             base.HandleSizeChanged(x, y);
             WindowBase?.Size(x, y);
+
+            if (!ScrollContent.contentHasBeenSizedManually)
+            {
+                var currentSize = ScrollContent.content.GetSize();
+                ScrollContent.SizeContent(Mathf.Max(currentSize.x, x), Mathf.Max(currentSize.y, y));
+            }
             return this;
         }
 
@@ -293,14 +288,14 @@ namespace Components.Runtime.Components
         
         public BaseWindowComponent SetContent(Sprite sprite)
         {
-            Content.Sprite(sprite);
+            ScrollContent.Sprite(sprite);
             return this;
         }
         
         public BaseWindowComponent SetContent(Color color)
         {
-            Content.ClearSprite();
-            Content.Color(color);
+            ScrollContent.ClearSprite();
+            ScrollContent.Color(color);
             return this;
         }
         

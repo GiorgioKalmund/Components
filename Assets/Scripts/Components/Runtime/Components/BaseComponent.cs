@@ -238,6 +238,10 @@ namespace Components.Runtime.Components
         {
             return Size(renderable, renderable.GetWidth(), height);
         }
+        public static Vector2 GetSize<T>(this T renderable) where T : BaseComponent
+        {
+            return renderable.GetRect().sizeDelta;
+        }
         // Add Size
         public static T AddHeight<T>(this T renderable, float extraHeight) where T : BaseComponent
         {
@@ -360,6 +364,19 @@ namespace Components.Runtime.Components
             renderable.gameObject.SetActive(active);
             return renderable;
         }
+        
+        // Creates a very rudimentary copy of the object. Not intended for real copies at the moment
+        public static T Copy<T>(this T renderable) where T : BaseComponent
+        {
+            var newGameObject = GameObject.Instantiate(renderable);
+            T component = newGameObject.GetComponent<T>();
+            
+            component.Size(renderable.GetSize());
+            component.Pos(renderable.GetPos3D());
+            
+            return component;
+        }
+        
         
     }
 }

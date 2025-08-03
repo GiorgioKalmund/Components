@@ -7,7 +7,7 @@ using UnityEngine.UI;
 
 namespace Components.Runtime.Components
 {
-    public class ButtonComponent : ImageComponent
+    public class ButtonComponent : ImageComponent, IFocusable
     {
         public ButtonComponent() { NamePrefix = "ButtonComponent"; }
         
@@ -17,6 +17,8 @@ namespace Components.Runtime.Components
         // -- Subcomponents -- // 
         protected ImageComponent ForegroundImage;
         protected TextComponent ButtonText;
+
+        private bool _focusable;
         
         public override void Awake()
         {
@@ -40,9 +42,12 @@ namespace Components.Runtime.Components
         {
             base.Start();
             DisplayName = "ButtonComponent";
+
+            if (_focusable)
+                Function(this.Focus);
         }
 
-        public ButtonComponent Create(string text = "", UnityAction action = null, Sprite foreground = null)
+        public ButtonComponent Create(string text = "", UnityAction action = null, Sprite foreground = null, bool focusable = false)
         {
             Text(text);
             if (action != null)
@@ -51,19 +56,19 @@ namespace Components.Runtime.Components
             {
                 ForegroundImage.Sprite(foreground).Alpha(1);
             }
+
+            _focusable = focusable;
             
             return this;
         }
 
         public ButtonComponent Text(string text, Color? color = null)
         {
-            ButtonText.Text(text);
-            if (color.HasValue)
-                ButtonText.Color(color.Value);
+            ButtonText.Text(text, color);
             return this;
         }
 
-        public TextComponent TextComponent()
+        public TextComponent GetTextComponent()
         {
             return ButtonText;
         }

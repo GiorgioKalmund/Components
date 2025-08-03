@@ -11,7 +11,8 @@ namespace Components.Runtime.Components
         Top       = 1 << 2,
         Bottom    = 1 << 3,
         Horizontal = Leading | Trailing,
-        Vertical   = Top | Bottom
+        Vertical   = Top | Bottom,
+        All = Bottom | Top | Leading | Trailing 
     }
 
 }

@@ -10,96 +10,58 @@ namespace Components.Runtime.Testing
     public class ComponentCreator : MonoBehaviour
     {
         private ComponentControls _input;
+        private WindowComponent window3;
+        private ButtonComponent _copyButton;
         public void Awake()
         {
             TextComponent.GlobalFont(Resources.Load<TMPro.TMP_FontAsset>("Font/Main"));
+
+            var backdrop = ComponentBuilder.N<ImageComponent>("Brr", GUIService.GetCanvas().GetTransform())
+                    .FullScreen(GUIService.GetCanvas())
+                    .Sprite("wallpaper_1")
+                ;
+            var button = ComponentBuilder.N<ButtonComponent>("Button", GUIService.GetCanvas().GetTransform())
+                .Size(300, 100)
+                .Pivot(PivotPosition.MiddleRight, true)
+                .Offset(-100, 0)
+                .Create("Focus me", focusable:true)
+                ;
             
             _input = new ComponentControls();
-            /*
-            var window1= ComponentBuilder.N<BaseWindowComponent>("W1", GUIService.GetCanvas().GetTransform())
-                    .Build(_input.UI.ShowWindow)
-                    .SetContent(Color.orange)
-                    .ContentPadding(10)
-                    .SetBase(Color.red)
-                    .SetHeaderColor(Color.blue)
-                    .Size(500, 300)
-                    .Offset(0, 0)
-                ;
             
-            var window11 = ComponentBuilder.N<BaseWindowComponent>("W2", GUIService.GetCanvas().GetTransform())
-                    .Build(_input.UI.ShowWindow)
-                    .SetContent(Color.red)
-                    .ContentPadding(20)
-                    .Size(500, 300)
-                    .NoHeader()
-                    .Offset(500, 0)
-                ;
-            
-            var window2 = ComponentBuilder.N<ResizableWindowComponent>(GUIService.GetCanvas().GetTransform())
-                    .Build("Window 1 Sint voluptate enim dolor incididunt consectetur occaecat incididunt consectetur aute id exercitation. Do non aliquip ea do deserunt cupidatat velit sit pariatur sit pariatur veniam magna anim.")
-                    .MinimumSize(300, 300)
-                    .SetBase(Color.gray)
-                    .Size(500, 300)
-                    .ContentPadding(7)
-                    .Cast<ResizableWindowComponent>()
-                    .Offset(0, -300)
-                ;
-            
-            var window3 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
+            window3 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
                     .Build("Window 2", Color.green, Color.blue)
                     .ContentPadding(5)
                     .Size(500, 300)
                     .Cast<WindowComponent>()
                     .Offset(500, -300)
                 ;
-
-            var a = ComponentBuilder.N<ButtonComponent>("Hello!")
-                    .Size(100, 100)
-                    .Text("Yo", Color.black)
-                ;
-            a.TextComponent().Bold();
-            */
-            
-            var b = ComponentBuilder.N<ButtonComponent>("B,A,Sports!")
-                    .Size(300, 100)
-                    .Text("End Game", Color.black)
-                ;
-            b.TextComponent().Underline();
-
-            var c = ComponentBuilder.N<ImageComponent>("C")
-                    .Size(200, 200)
-                    .Color(Color.cadetBlue)
-                ;
-
-            /*
-            var popup = ComponentBuilder.N<PopupComponent>(GUIService.GetCanvas().GetTransform(), "Popup")
-                    .Build(GUIService.GetCanvas())
-                    .DontCloseOnBackGroundTap()
-                    .AddContent(b)
-                ;
-
-            a.Function(() => popup.OpenPopup());
-            b.Function(() => popup.ClosePopup());
-
-            window1.AddContent(a);
-            */
-
-            var a = ComponentBuilder.N<ScrollViewComponent>(GUIService.GetCanvas().GetTransform())
-                .Size(400, 800)
-                .Create(ScrollViewDirection.Horizontal, ScrollRect.MovementType.Clamped, false)
-                .Color(Color.blanchedAlmond)
-                .Cast<ScrollViewComponent>()
+            window3.ConfigureContent()
+                .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, false)
+                .SizeContent(800, 2000)
+                .AddVerticalLayout(30)
+                .ContentPadding(PaddingSide.Bottom, 100)
                 ;
             
-            a.AddContent(b);
-            a.AddContent(c);
-            a.content.Color(Color.red);
+            _copyButton = ComponentBuilder.N<ButtonComponent>("Inside")
+                    .Size(200, 100)
+                    .Create("Inside!", focusable:true)
+                    .Function(SpawnNew)
+                    .Color(Color.red)
+                    .Cast<ButtonComponent>()
+                ;
+            _copyButton.GetTextComponent().Bold();
+            window3.AddContent(_copyButton);
+         
+        }
 
-            b.Function(() => a.ScrollToBottom());
+        private void SpawnNew()
+        {
+            var b1 = _copyButton.Copy();
+            var b2 = _copyButton.Copy();
 
-            a.AddHorizontalLayout(30, TextAnchor.MiddleRight);
-            
-            a.SizeContent(700, 400).ContentPadding(PaddingSide.Trailing, 30);
+            window3.AddContent(b1);
+            window3.AddContent(b2);
         }
 
         private void OnEnable()
