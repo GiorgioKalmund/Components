@@ -3,6 +3,7 @@ using Components.Runtime.Components;
 using Components.Runtime.Input;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UI;
 
 namespace Components.Runtime.Testing
 {
@@ -14,7 +15,7 @@ namespace Components.Runtime.Testing
             TextComponent.GlobalFont(Resources.Load<TMPro.TMP_FontAsset>("Font/Main"));
             
             _input = new ComponentControls();
-            
+            /*
             var window1= ComponentBuilder.N<BaseWindowComponent>("W1", GUIService.GetCanvas().GetTransform())
                     .Build(_input.UI.ShowWindow)
                     .SetContent(Color.orange)
@@ -57,6 +58,7 @@ namespace Components.Runtime.Testing
                     .Text("Yo", Color.black)
                 ;
             a.TextComponent().Bold();
+            */
             
             var b = ComponentBuilder.N<ButtonComponent>("B,A,Sports!")
                     .Size(300, 100)
@@ -64,17 +66,40 @@ namespace Components.Runtime.Testing
                 ;
             b.TextComponent().Underline();
 
+            var c = ComponentBuilder.N<ImageComponent>("C")
+                    .Size(200, 200)
+                    .Color(Color.cadetBlue)
+                ;
+
+            /*
             var popup = ComponentBuilder.N<PopupComponent>(GUIService.GetCanvas().GetTransform(), "Popup")
                     .Build(GUIService.GetCanvas())
                     .DontCloseOnBackGroundTap()
                     .AddContent(b)
                 ;
-            
-            
+
             a.Function(() => popup.OpenPopup());
             b.Function(() => popup.ClosePopup());
 
             window1.AddContent(a);
+            */
+
+            var a = ComponentBuilder.N<ScrollViewComponent>(GUIService.GetCanvas().GetTransform())
+                .Size(400, 800)
+                .Create(ScrollViewDirection.Horizontal, ScrollRect.MovementType.Clamped, false)
+                .Color(Color.blanchedAlmond)
+                .Cast<ScrollViewComponent>()
+                ;
+            
+            a.AddContent(b);
+            a.AddContent(c);
+            a.content.Color(Color.red);
+
+            b.Function(() => a.ScrollToBottom());
+
+            a.AddHorizontalLayout(30, TextAnchor.MiddleRight);
+            
+            a.SizeContent(700, 400).ContentPadding(PaddingSide.Trailing, 30);
         }
 
         private void OnEnable()
