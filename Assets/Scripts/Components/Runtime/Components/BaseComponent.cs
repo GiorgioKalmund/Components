@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using UnityEngine;
 
 namespace Components.Runtime.Components
@@ -57,9 +58,9 @@ namespace Components.Runtime.Components
         public static string DefaultName => "Component";
         
         // Object creation
-        private static GameObject CreateEmptyGameObjectWithParent(Transform parent, bool worldPositionStays)
+        public static GameObject CreateEmptyGameObjectWithParent(Transform parent, bool worldPositionStays, string name = "")
         {
-            GameObject toReturn = new GameObject();
+            GameObject toReturn = new GameObject(name);
             toReturn.AddComponent<RectTransform>();
             if (parent)
                 toReturn.transform.SetParent(parent, worldPositionStays);
@@ -268,14 +269,14 @@ namespace Components.Runtime.Components
         {
             return Size(renderable, renderable.GetWidth()  * widthScaleFactor, renderable.GetHeight() * heightScaleFactor);
         }
-        public static T LocalScale<T>(this T renderable, Vector2 localScale) where T : BaseComponent
+        public static T LocalScale<T>(this T renderable, Vector3 localScale) where T : BaseComponent
         {
             renderable.GetRect().localScale = localScale;
             return renderable;
         }
         public static T LocalScale<T>(this T renderable, float widthScaleFactor, float heightScaleFactor) where T : BaseComponent
         {
-            return LocalScale(renderable, new Vector2(widthScaleFactor, heightScaleFactor));
+            return LocalScale(renderable, new Vector3(widthScaleFactor, heightScaleFactor, 1));
         }
         
         // Pivots
@@ -381,20 +382,10 @@ namespace Components.Runtime.Components
             yield return new WaitForEndOfFrame();
             behaviour.enabled = true;
         }
-
         
-        // Creates a very rudimentary copy of the object. Not intended for real copies at the moment
-        public static T Copy<T>(this T renderable) where T : BaseComponent
+        public static Transform GetParent<T>(this T renderable) where T : BaseComponent
         {
-            var newGameObject = GameObject.Instantiate(renderable);
-            T component = newGameObject.GetComponent<T>();
-            
-            component.Size(renderable.GetSize());
-            component.Pos(renderable.GetPos3D());
-            
-            return component;
+            return renderable.GetRect().transform.parent;
         }
-        
-        
     }
 }

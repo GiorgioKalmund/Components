@@ -5,7 +5,7 @@ using Unity.VisualScripting;
 
 namespace Components.Runtime.Components
 {
-    public class ImageComponent : BaseComponent 
+    public class ImageComponent : BaseComponent, ICopyable<ImageComponent>
     {
         private Image _image;
         protected static string NamePrefix = "ImageComponent";
@@ -89,6 +89,27 @@ namespace Components.Runtime.Components
         {
             _image.raycastTarget = target;
             return this;
+        }
+
+        public ImageComponent Copy()
+        {
+            ImageComponent copyImage = this.BaseCopy(this);
+            return copyImage.CopyFrom(this);
+        }
+
+        public ImageComponent CopyFrom(ImageComponent other)
+        {
+            CopyImageProperties(other.GetImage(), this);
+            return this;
+        }
+
+        public static void CopyImageProperties(Image image, ImageComponent copyImage) 
+        {
+            copyImage.ImageType(image.type);
+            copyImage.Color(image.color);
+            copyImage.Sprite(image.sprite);
+            copyImage.PixelsPerUnitMultiplier(image.pixelsPerUnitMultiplier);
+            copyImage.RaycastTarget(image.raycastTarget);
         }
     }
 

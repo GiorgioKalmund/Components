@@ -21,7 +21,7 @@ namespace Components.Runtime.Testing
                     .FullScreen(GUIService.GetCanvas())
                     .Sprite("wallpaper_1")
                 ;
-            var button = ComponentBuilder.N<ButtonComponent>("Button", GUIService.GetCanvas().GetTransform())
+            var focusButton = ComponentBuilder.N<ButtonComponent>("Button", GUIService.GetCanvas().GetTransform())
                 .Size(300, 100)
                 .Pivot(PivotPosition.MiddleRight, true)
                 .Offset(-100, 0)
@@ -32,7 +32,7 @@ namespace Components.Runtime.Testing
             
             window3 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
                     .Build(_input.UI.ShowWindow,"Window 2", Color.green, Color.blue)
-                    .StartHidden(false)
+                    .StartHidden()
                     .ContentPadding(5)
                     .Size(500, 300)
                     .Cast<WindowComponent>()
@@ -44,48 +44,21 @@ namespace Components.Runtime.Testing
                 .AddVerticalLayout(30, TextAnchor.UpperLeft)
                 .ContentPadding(PaddingSide.Leading, 30)
                 .ContentPadding(PaddingSide.Top, 30)
+                .ScrollToTop()
                 ;
 
-            /*
-            var a = ComponentBuilder.N<InputComponent>(GUIService.GetCanvas().GetTransform())
-                    .Create("Hello, World!")
-                    .Color(Color.black, Color.gray5)
-                    .Size(300, 50)
-                ;
-
-            window3.AddContent(a);
-            */
-            
-            _copyButton = ComponentBuilder.N<ButtonComponent>("Inside")
-                    .Create("Inside!", focusable:true)
-                    .Function(SpawnNew)
-                    .FitToContents()
-                    .Color(Color.red)
+            var button = ComponentBuilder.N<ButtonComponent>(GUIService.GetCanvas().GetTransform())
+                    .Create("Helllo, World!", focusable:true)
+                    .Function(() => Debug.Log("Hello From button"))
+                    .Size(300, 100)
+                    .Pivot(PivotPosition.MiddleLeft, true)
                     .Cast<ButtonComponent>()
                 ;
-            _copyButton.GetTextComponent().Bold();
-            
-            var b = ComponentBuilder.N<ButtonComponent>("Inside")
-                    .Create("Inside as well!")
-                    .Function(SpawnNew)
-                    .FitToContents()
-                    .ContentPadding(PaddingSide.Horizontal, 30)
-                    .Color(Color.green)
-                    .Cast<ButtonComponent>()
-                ;
-            b.GetTextComponent().Bold();
-            
-            window3.AddContent(_copyButton, b);
-            window3.ConfigureContent().ScrollToTop();
-        }
 
-        private void SpawnNew()
-        {
-            var b1 = _copyButton.Copy();
-            var b2 = _copyButton.Copy();
+            button.GetTextComponent().Bold().Italic();
 
-            window3.AddContent(b1);
-            window3.AddContent(b2);
+            var b = button.Copy().Function(() => Debug.Log("Hello from purple button"));
+            b.Offset(200, 300).Color(Color.purple);
         }
 
         private void OnEnable()

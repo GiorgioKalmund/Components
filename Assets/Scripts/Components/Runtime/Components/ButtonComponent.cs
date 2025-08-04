@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -8,12 +9,13 @@ using UnityEngine.UI;
 
 namespace Components.Runtime.Components
 {
-    public class ButtonComponent : ImageComponent, IFocusable
+    public class ButtonComponent : ImageComponent, IFocusable, ICopyable<ButtonComponent>
     {
         public ButtonComponent() { NamePrefix = "ButtonComponent"; }
         
         // -- Button -- //
         protected Button ButtonElement;
+        protected List<UnityAction> Listeners = new List<UnityAction>();
 
         // -- Subcomponents -- // 
         protected ImageComponent ForegroundImage;
@@ -107,6 +109,7 @@ namespace Components.Runtime.Components
         public ButtonComponent Function(UnityAction action)
         {
             ButtonElement.onClick.AddListener(action);
+            Listeners.Add(action);
             return this;
         }
         
@@ -166,6 +169,33 @@ namespace Components.Runtime.Components
         public ButtonComponent Unlock()
         {
             ButtonElement.interactable = true;
+            return this;
+        }
+
+        public new ButtonComponent Copy()
+        {
+            ButtonComponent copyButton = this.BaseCopy(this);
+            return copyButton.CopyFrom(this);
+        }
+
+        public bool IsFocusable()
+        {
+            return _focusable;
+        }
+
+        public ButtonComponent CopyFrom(ButtonComponent other)
+        {
+            ((ImageComponent)this).CopyFrom(other);
+            Create(focusable:other.IsFocusable());
+            ButtonText.CopyFrom(other.ButtonText);
+            ForegroundImage.CopyFrom(other.ForegroundImage);
+            
+            ClearAllFunctions();
+            foreach (var unityAction in other.Listeners)
+            {
+                Function(unityAction);
+            }
+
             return this;
         }
     }

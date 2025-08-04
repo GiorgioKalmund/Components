@@ -5,7 +5,7 @@ using FontStyles = TMPro.FontStyles;
 
 namespace Components.Runtime.Components
 {
-    public class TextComponent : BaseComponent
+    public class TextComponent : BaseComponent, ICopyable<TextComponent>
     {
         private TextMeshProUGUI _textMesh;
         protected static readonly string NamePrefix = "TextComponent";
@@ -96,9 +96,14 @@ namespace Components.Runtime.Components
             return this;
         }
 
-        public TextComponent FontStyle(TMPro.FontStyles style)
+        public TextComponent FontStyle(FontStyles style)
         {
-            _textMesh.fontStyle = style;
+            _textMesh.fontStyle |= style;
+            return this;
+        }
+        public TextComponent FontStyleRemove(FontStyles style)
+        {
+            _textMesh.fontStyle &= ~style;
             return this;
         }
 
@@ -136,5 +141,27 @@ namespace Components.Runtime.Components
             return _textMesh;
         }
 
+        public TextComponent Copy()
+        {
+            TextComponent textCopy = this.BaseCopy(this);
+            return textCopy.CopyFrom(this);
+        }
+
+        public TextComponent CopyFrom(TextComponent other)
+        {
+            CopyTextProperties(other.GetTextMesh(), this);
+            return this;
+        }
+
+        public static void CopyTextProperties(TMP_Text text, TextComponent textComponent)
+        {
+            textComponent.Text(text.text);
+            textComponent.Color(text.color);
+            textComponent.Alignment(text.alignment);
+            textComponent.VAlignment(text.verticalAlignment);
+            textComponent.FontStyle(text.fontStyle);
+            textComponent.FontSize(text.fontSize);
+            textComponent.OverflowMode(text.overflowMode);
+        }
     }
 }
