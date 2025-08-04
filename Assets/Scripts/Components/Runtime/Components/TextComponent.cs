@@ -144,11 +144,12 @@ namespace Components.Runtime.Components
         public TextComponent Copy()
         {
             TextComponent textCopy = this.BaseCopy(this);
-            return textCopy.CopyFrom(this);
+            return textCopy.CopyFrom(this, false).Offset(-50, -50);
         }
 
-        public TextComponent CopyFrom(TextComponent other)
+        public TextComponent CopyFrom(TextComponent other, bool copyAnchoredPosition = true)
         {
+            CopyRect(other.GetRect(), this, copyAnchoredPosition);
             CopyTextProperties(other.GetTextMesh(), this);
             return this;
         }

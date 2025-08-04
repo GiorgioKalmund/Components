@@ -5,7 +5,7 @@ namespace Components.Runtime.Components
     public interface ICopyable<T> where T : BaseComponent
     {
         T Copy();
-        T CopyFrom(T other);
+        T CopyFrom(T other, bool copyAnchoredPosition = true);
     }
     
     public static class CopyableExtensions
@@ -20,17 +20,8 @@ namespace Components.Runtime.Components
                 );
             var copyComponent = copy.AddComponent<T>();
 
-            var r = src.GetRect();
-            copyComponent.AnchorMin(r.anchorMin);
-            copyComponent.AnchorMax(r.anchorMax);
-            copyComponent.Pos(src.GetPos3D());
-            copyComponent.Pivot(r.pivot);
-            copyComponent.OffsetMin(r.offsetMin);
-            copyComponent.OffsetMax(r.offsetMax);
-            copyComponent.LocalScale(r.localScale);
-            copyComponent.GetRect().localRotation = r.localRotation;
-            copyComponent.Size(src.GetSize());
             return copyComponent;
         }
+
     }
 }

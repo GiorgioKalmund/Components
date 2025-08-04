@@ -59,6 +59,11 @@ namespace Components.Runtime.Components
             }
             return this;
         }
+
+        public ImageComponent Color(Color color, float alpha)
+        {
+            return Color(color).Alpha(alpha);
+        }
         
         public ImageComponent Alpha(float alpha)
         {
@@ -97,8 +102,9 @@ namespace Components.Runtime.Components
             return copyImage.CopyFrom(this);
         }
 
-        public ImageComponent CopyFrom(ImageComponent other)
+        public ImageComponent CopyFrom(ImageComponent other, bool copyAnchoredPosition = true)
         {
+            CopyRect(other.GetRect(), this, copyAnchoredPosition);
             CopyImageProperties(other.GetImage(), this);
             return this;
         }

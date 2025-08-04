@@ -51,14 +51,26 @@ namespace Components.Runtime.Testing
                     .Create("Helllo, World!", focusable:true)
                     .Function(() => Debug.Log("Hello From button"))
                     .Size(300, 100)
-                    .Pivot(PivotPosition.MiddleLeft, true)
                     .Cast<ButtonComponent>()
                 ;
 
             button.GetTextComponent().Bold().Italic();
 
-            var b = button.Copy().Function(() => Debug.Log("Hello from purple button"));
-            b.Offset(200, 300).Color(Color.purple);
+            var b = button.Copy();
+            b
+                .Offset(200, 300)
+                .Color(Color.purple);
+            
+            var c = ComponentBuilder.N<ButtonComponent>(GUIService.GetCanvas().GetTransform())
+                    .Size(100, 100)
+                    .Create("Old but Gold")
+                    .Color(Color.gold, 0.5f)
+                    .Offset(100, 100)
+                    .Cast<ButtonComponent>()
+                ;
+            c.GetTextComponent().Bold().Color(Color.gray1);
+
+            b.Function(() => c.CopyFrom(b, false));
         }
 
         private void OnEnable()

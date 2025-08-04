@@ -51,6 +51,24 @@ namespace Components.Runtime.Components
         {
             this.SafeDisplayName(_displayName);
         }
+        
+        
+        public void CopyRect(RectTransform rect, BaseComponent component, bool copyPos = true)
+        {
+            Vector2 originalPos = component.GetPos();
+            component.LocalScale(rect.localScale);
+            component.GetRect().localRotation = rect.localRotation;
+            component.Pivot(rect.pivot);
+            component.AnchorMin(rect.anchorMin);
+            component.AnchorMax(rect.anchorMax);
+            component.OffsetMin(rect.offsetMin);
+            component.OffsetMax(rect.offsetMax);
+            component.Size(rect.sizeDelta);
+            if (copyPos)
+                component.Pos(rect.anchoredPosition);
+            else
+                component.Pos(originalPos);
+        }
     }
     
     static class ComponentBuilder

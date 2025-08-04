@@ -22,7 +22,7 @@ namespace Components.Runtime.Components
         protected TextComponent ButtonText;
         
         // -- Auto Sizing -- //
-        private HorizontalLayoutGroup _hStack;
+        private HorizontalLayoutGroup HorizontalLayout;
         private ContentSizeFitter _fitter;
 
         private bool _focusable;
@@ -71,7 +71,7 @@ namespace Components.Runtime.Components
 
         public ButtonComponent FitToContents(PaddingSide side, int amount)
         {
-            _hStack = gameObject.AddComponent<HorizontalLayoutGroup>();
+            HorizontalLayout = gameObject.AddComponent<HorizontalLayoutGroup>();
             
             _fitter = gameObject.AddComponent<ContentSizeFitter>();
             _fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
@@ -88,10 +88,10 @@ namespace Components.Runtime.Components
         
         public ButtonComponent ContentPadding(PaddingSide side, int amount)
         {
-            if (side.HasFlag(PaddingSide.Leading)) { if (_hStack) _hStack.padding.left = amount; }
-            if (side.HasFlag(PaddingSide.Trailing)) { if (_hStack) _hStack.padding.right = amount; }
-            if (side.HasFlag(PaddingSide.Top)) { if (_hStack) _hStack.padding.top = amount; }
-            if (side.HasFlag(PaddingSide.Bottom)) { if (_hStack) _hStack.padding.bottom = amount; }
+            if (side.HasFlag(PaddingSide.Leading)) { if (HorizontalLayout) HorizontalLayout.padding.left = amount; }
+            if (side.HasFlag(PaddingSide.Trailing)) { if (HorizontalLayout) HorizontalLayout.padding.right = amount; }
+            if (side.HasFlag(PaddingSide.Top)) { if (HorizontalLayout) HorizontalLayout.padding.top = amount; }
+            if (side.HasFlag(PaddingSide.Bottom)) { if (HorizontalLayout) HorizontalLayout.padding.bottom = amount; }
             return this;
         }
 
@@ -127,7 +127,6 @@ namespace Components.Runtime.Components
 
         public override BaseComponent HandleSizeChanged(float x, float y)
         {
-            //Debug.Log("Size Changed to "+ x + "x" + y);
             base.HandleSizeChanged(x, y);
             if (ForegroundImage)
                 ForegroundImage.Size(x, y);
@@ -183,12 +182,19 @@ namespace Components.Runtime.Components
             return _focusable;
         }
 
-        public ButtonComponent CopyFrom(ButtonComponent other)
+        public ButtonComponent CopyFrom(ButtonComponent other, bool copyAnchoredPosition = true)
         {
-            ((ImageComponent)this).CopyFrom(other);
+            base.CopyFrom(other, copyAnchoredPosition);
             Create(focusable:other.IsFocusable());
             ButtonText.CopyFrom(other.ButtonText);
             ForegroundImage.CopyFrom(other.ForegroundImage);
+
+            if (other._fitter || other.HorizontalLayout)
+            {
+                FitToContents();
+                RectOffset offset = other.HorizontalLayout.padding.Clone();
+                HorizontalLayout.padding = offset;
+            }
             
             ClearAllFunctions();
             foreach (var unityAction in other.Listeners)
