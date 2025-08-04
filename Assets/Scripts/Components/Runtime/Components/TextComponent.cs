@@ -45,6 +45,11 @@ namespace Components.Runtime.Components
         {
             return Text(text.ToString());
         }
+
+        public TextComponent Clear()
+        {
+            return Text("");
+        }
       
         public TextComponent Font(TMP_FontAsset font)
         {

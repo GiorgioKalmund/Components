@@ -30,7 +30,8 @@ namespace Components.Runtime.Testing
             _input = new ComponentControls();
             
             window3 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
-                    .Build("Window 2", Color.green, Color.blue)
+                    .Build(_input.UI.ShowWindow,"Window 2", Color.green, Color.blue)
+                    .StartHidden()
                     .ContentPadding(5)
                     .Size(500, 300)
                     .Cast<WindowComponent>()
@@ -42,7 +43,15 @@ namespace Components.Runtime.Testing
                 .AddVerticalLayout(30)
                 .ContentPadding(PaddingSide.Bottom, 100)
                 ;
-            
+
+            var a = ComponentBuilder.N<InputComponent>(GUIService.GetCanvas().GetTransform())
+                    .Create("Hello, World!")
+                    .Color(Color.black, Color.gray5)
+                    .Size(300, 50)
+                ;
+
+            window3.AddContent(a);
+            /*
             _copyButton = ComponentBuilder.N<ButtonComponent>("Inside")
                     .Size(200, 100)
                     .Create("Inside!", focusable:true)
@@ -52,7 +61,8 @@ namespace Components.Runtime.Testing
                 ;
             _copyButton.GetTextComponent().Bold();
             window3.AddContent(_copyButton);
-         
+            */
+
         }
 
         private void SpawnNew()
