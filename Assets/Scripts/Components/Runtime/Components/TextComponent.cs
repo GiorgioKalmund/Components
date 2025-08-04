@@ -50,6 +50,11 @@ namespace Components.Runtime.Components
         {
             return Text("");
         }
+
+        public string GetText()
+        {
+            return _textMesh.text;
+        }
       
         public TextComponent Font(TMP_FontAsset font)
         {

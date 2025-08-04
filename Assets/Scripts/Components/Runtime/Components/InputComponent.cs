@@ -64,8 +64,9 @@ namespace Components.Runtime.Components
             return this;
         }
 
-        public TextComponent GetText() { return TextContents; }
-        public TextComponent GetHint() { return HintContents; }
+        public TextComponent GetTextComponent() { return TextContents; }
+        public string GetText() { return TextContents.GetText(); }
+        public TextComponent GetHintComponent() { return HintContents; }
         
         
         private void Start()
