@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -364,6 +365,23 @@ namespace Components.Runtime.Components
             renderable.gameObject.SetActive(active);
             return renderable;
         }
+        public static BaseComponent Refresh<V>(this BaseComponent renderable) where V : Behaviour 
+        {
+            V behaviour = renderable.GetComponent<V>();
+            if (behaviour)
+            {
+                renderable.StartCoroutine(RefreshComponent(behaviour));
+            }
+            return renderable;
+        }
+
+        private static IEnumerator RefreshComponent(Behaviour behaviour) 
+        {
+            behaviour.enabled = false;
+            yield return new WaitForEndOfFrame();
+            behaviour.enabled = true;
+        }
+
         
         // Creates a very rudimentary copy of the object. Not intended for real copies at the moment
         public static T Copy<T>(this T renderable) where T : BaseComponent

@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using JetBrains.Annotations;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -17,6 +18,10 @@ namespace Components.Runtime.Components
         // -- Subcomponents -- // 
         protected ImageComponent ForegroundImage;
         protected TextComponent ButtonText;
+        
+        // -- Auto Sizing -- //
+        private HorizontalLayoutGroup _hStack;
+        private ContentSizeFitter _fitter;
 
         private bool _focusable;
         
@@ -59,6 +64,32 @@ namespace Components.Runtime.Components
 
             _focusable = focusable;
             
+            return this;
+        }
+
+        public ButtonComponent FitToContents(PaddingSide side, int amount)
+        {
+            _hStack = gameObject.AddComponent<HorizontalLayoutGroup>();
+            
+            _fitter = gameObject.AddComponent<ContentSizeFitter>();
+            _fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            _fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+
+            ContentPadding(side, amount);
+            return this;
+        }
+
+        public ButtonComponent FitToContents(int amount = 0)
+        {
+            return FitToContents(PaddingSide.All, amount);
+        }
+        
+        public ButtonComponent ContentPadding(PaddingSide side, int amount)
+        {
+            if (side.HasFlag(PaddingSide.Leading)) { if (_hStack) _hStack.padding.left = amount; }
+            if (side.HasFlag(PaddingSide.Trailing)) { if (_hStack) _hStack.padding.right = amount; }
+            if (side.HasFlag(PaddingSide.Top)) { if (_hStack) _hStack.padding.top = amount; }
+            if (side.HasFlag(PaddingSide.Bottom)) { if (_hStack) _hStack.padding.bottom = amount; }
             return this;
         }
 

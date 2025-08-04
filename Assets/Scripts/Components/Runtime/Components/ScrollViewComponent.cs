@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -91,15 +92,10 @@ namespace Components.Runtime.Components
             layout.spacing = spacing;
             layout.childAlignment = childAlignment;
             
-            if (!forceExpandChildren)
-            {
-                
-                layout.childControlWidth = false;
-                layout.childControlHeight = false;
-                
-                layout.childForceExpandWidth = false;
-                layout.childForceExpandHeight = false;
-            }
+            layout.childControlWidth = forceExpandChildren;
+            layout.childControlHeight = forceExpandChildren;
+            layout.childForceExpandWidth = forceExpandChildren;
+            layout.childForceExpandHeight = forceExpandChildren;
             return layout;
         }
 
@@ -142,10 +138,22 @@ namespace Components.Runtime.Components
             content.Pos(content.GetPos().x, -(content.GetHeight() -  this.GetHeight()) / 2);
         }
 
-        public ScrollViewComponent AddContent(BaseComponent component)
+        public ScrollViewComponent AddContent(BaseComponent component, bool forceThisFrame = false)
         {
-            component.Parent(content);
+            // If we really want to make it a child this frame, we can force it to.
+            // However, in most cases we wait 1 extra frame to let the component fully load its desired size and then add it to the content
+            // This fixes some issues related to auto-scaling objects such as buttons using 'FitToContent'
+            if (forceThisFrame)
+                component.Parent(content);
+            else 
+                StartCoroutine(AddContentNextFrame(component));
+            
             return this;
+        }
+        private IEnumerator AddContentNextFrame(BaseComponent component)
+        {
+            yield return new WaitForEndOfFrame();
+            component.Parent(content);
         }
 
         public ScrollViewComponent SizeContent(float x, float y)

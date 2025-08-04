@@ -1,8 +1,9 @@
 using System;
+using System.Collections;
+using System.Threading.Tasks;
 using Components.Runtime.Components;
 using Components.Runtime.Input;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Components.Runtime.Testing
@@ -31,7 +32,7 @@ namespace Components.Runtime.Testing
             
             window3 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
                     .Build(_input.UI.ShowWindow,"Window 2", Color.green, Color.blue)
-                    .StartHidden()
+                    .StartHidden(false)
                     .ContentPadding(5)
                     .Size(500, 300)
                     .Cast<WindowComponent>()
@@ -39,11 +40,13 @@ namespace Components.Runtime.Testing
                 ;
             window3.ConfigureContent()
                 .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, false)
-                .SizeContent(800, 2000)
-                .AddVerticalLayout(30)
-                .ContentPadding(PaddingSide.Bottom, 100)
+                .SizeContent(500, 500)
+                .AddVerticalLayout(30, TextAnchor.UpperLeft)
+                .ContentPadding(PaddingSide.Leading, 30)
+                .ContentPadding(PaddingSide.Top, 30)
                 ;
 
+            /*
             var a = ComponentBuilder.N<InputComponent>(GUIService.GetCanvas().GetTransform())
                     .Create("Hello, World!")
                     .Color(Color.black, Color.gray5)
@@ -51,18 +54,29 @@ namespace Components.Runtime.Testing
                 ;
 
             window3.AddContent(a);
-            /*
+            */
+            
             _copyButton = ComponentBuilder.N<ButtonComponent>("Inside")
-                    .Size(200, 100)
                     .Create("Inside!", focusable:true)
                     .Function(SpawnNew)
+                    .FitToContents()
                     .Color(Color.red)
                     .Cast<ButtonComponent>()
                 ;
             _copyButton.GetTextComponent().Bold();
-            window3.AddContent(_copyButton);
-            */
-
+            
+            var b = ComponentBuilder.N<ButtonComponent>("Inside")
+                    .Create("Inside as well!")
+                    .Function(SpawnNew)
+                    .FitToContents()
+                    .ContentPadding(PaddingSide.Horizontal, 30)
+                    .Color(Color.green)
+                    .Cast<ButtonComponent>()
+                ;
+            b.GetTextComponent().Bold();
+            
+            window3.AddContent(_copyButton, b);
+            window3.ConfigureContent().ScrollToTop();
         }
 
         private void SpawnNew()

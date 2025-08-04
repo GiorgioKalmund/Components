@@ -228,6 +228,15 @@ namespace Components.Runtime.Components
             return this;
         }
         
+        public BaseWindowComponent AddContent(params BaseComponent[] components)
+        {
+            foreach (var baseComponent in components)
+            {
+                AddContent(baseComponent);
+            }
+            return this;
+        }
+        
         public virtual void Render()
         {
             RenderHeader();
