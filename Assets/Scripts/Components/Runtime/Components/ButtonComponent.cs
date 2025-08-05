@@ -61,11 +61,17 @@ namespace Components.Runtime.Components
                 Function(action);
             if (foreground)
             {
-                ForegroundImage.Sprite(foreground).Alpha(1);
+                Foreground(foreground);
             }
 
             _focusable = focusable;
             
+            return this;
+        }
+        
+        public ButtonComponent Foreground(Sprite sprite, float alpha = 1f)
+        {
+            ForegroundImage.Sprite(sprite).Alpha(alpha);
             return this;
         }
 

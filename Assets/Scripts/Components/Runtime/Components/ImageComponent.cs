@@ -39,6 +39,11 @@ namespace Components.Runtime.Components
         {
             return Sprite(ImageService.GetSprite(path));
         }
+        
+        public ImageComponent Sprite(string asset, string layerName)
+        {
+            return Sprite(ImageService.GetSpriteFromAsset(asset, layerName));
+        }
 
         public ImageComponent ClearSprite()
         {

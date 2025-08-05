@@ -21,7 +21,7 @@ namespace Components.Runtime.Components
                 .Pivot(PivotPosition.LowerRight, true)
                 .Size(30, 30)
                 .Build(this)
-                .Sprite("resizer")
+                .Sprite("gui_assets" ,"resizer")
                 .Cast<WindowResizer>()
                 ;
         }

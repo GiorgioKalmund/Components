@@ -153,7 +153,7 @@ namespace Components.Runtime.Components
             _maximizedSize = GetRect().sizeDelta;
             this.Height(HeaderHeight);
             ScrollContent.SetActive(false);
-            _minimizeMaximizeButton.Text(">");
+            _minimizeMaximizeButton.Foreground(ImageService.GetSpriteFromAsset("gui_assets", "right_arrow"));
         }
         public virtual void Expand()
         {
@@ -161,7 +161,7 @@ namespace Components.Runtime.Components
                 this.Height(_maximizedSize.y);
             _maximizedSize = Vector2.zero;
             ScrollContent.SetActive(true);
-            _minimizeMaximizeButton.Text("v");
+            _minimizeMaximizeButton.Foreground(ImageService.GetSpriteFromAsset("gui_assets", "down_arrow"));
         }
 
         public BaseWindowComponent RecalculateSizes()

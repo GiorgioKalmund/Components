@@ -22,6 +22,28 @@ public class ImageService
         return texture;
     }
     
+    public static Sprite GetSpriteFromAsset(string asset, string spriteName)
+    {
+        var sprites = Resources.LoadAll<Sprite>("Aseprite/" + asset);
+        Sprite toReturn = null;
+        foreach (var sprite in sprites)
+        {
+            if (sprite.name == spriteName)
+            {
+                toReturn = sprite;
+                break;
+            }
+        }
+
+        if (!toReturn)
+        {
+            Debug.LogWarning("No image found for: Aseprite/" + asset + ": " + spriteName);
+            return GetSprite("missing");
+        }
+
+        return toReturn;
+    }
+    
     public static Sprite GetSpriteDirectly(string path)
     {
         if (string.IsNullOrEmpty(path))
