@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 namespace Components.Runtime.Components.Game
@@ -24,6 +25,11 @@ namespace Components.Runtime.Components.Game
         {
             base.CopyFrom(other, fullyCopyRect);
             return this;
+        }
+
+        private void OnDestroy()
+        {
+            this.UnFocus();
         }
     }
 }

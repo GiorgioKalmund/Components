@@ -4,8 +4,16 @@ namespace Components.Runtime.Components
 {
     public interface IFocusable
     {
-        
-        public static IFocusable FocusedElement;
+
+        private static IFocusable _focusedElement;
+        public static IFocusable FocusedElement
+        {
+            get => _focusedElement;
+            set
+            {
+                _focusedElement = value;
+            }
+        }
 
         private static IFocusable _lastFocusedElement;
 
@@ -20,6 +28,11 @@ namespace Components.Runtime.Components
         {
             _lastFocusedElement.Focus();
         }
+
+        public static void ClearFocus()
+        {
+            FocusedElement.UnFocus();
+        }
     }
 
     public static class FocusableHelper
@@ -27,15 +40,14 @@ namespace Components.Runtime.Components
         public static void Focus<T>(this T focusable) where T : IFocusable
         {
             IFocusable.FocusedElement?.UnFocus();
-            
             IFocusable.FocusedElement = focusable;
-            focusable.HandleFocus();
+            focusable?.HandleFocus();
         }
         public static void UnFocus<T>(this T focusable) where T : IFocusable
         {
             IFocusable.SetLastFocusedElement(focusable);
+            focusable?.HandleUnfocus();
             IFocusable.FocusedElement = null;
-            focusable.HandleUnfocus();
         }
 
         public static bool IsFocused<T>(this T focusable) where T : IFocusable

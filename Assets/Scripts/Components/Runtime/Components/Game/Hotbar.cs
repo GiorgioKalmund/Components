@@ -6,20 +6,20 @@ namespace Components.Runtime.Components.Game
 {
     public class Hotbar : ButtonComponent
     {
-        protected List<HotbarSlot> Slots = new List<HotbarSlot>();
-        private int _selectedSlotIndex = 0;
+        public List<HotbarSlot> Slots = new List<HotbarSlot>();
+        public int activeSlot = 0;
 
         private ComponentControls _input;
 
         public int SelectedSlotIndex
         {
-            get => _selectedSlotIndex;
+            get => activeSlot;
             set
             {
                 if (value < 0)
                     value = Slots.Count - 1;
-                _selectedSlotIndex = value % Slots.Count;
-                Slots[_selectedSlotIndex].Focus();
+                activeSlot = value % Slots.Count;
+                Slots[activeSlot].Focus();
             }
         }
 
@@ -39,8 +39,8 @@ namespace Components.Runtime.Components.Game
                 
             };
 
-            this.FitToContents(25);
-            this.GetTextComponent().SetActive(false);
+            FitToContents(25).DisabledColor(UnityEngine.Color.white).Lock();
+            GetTextComponent().SetActive(false);
         }
 
         public override void Start()
@@ -79,9 +79,9 @@ namespace Components.Runtime.Components.Game
             return this;
         }
         
-        public Hotbar AddNewSlot(HotbarSlot template)
+        public Hotbar AddNewSlot(HotbarSlot template, bool copy = false)
         {
-            AddSlots(template.Copy());
+            AddSlots(copy ? template : template.Copy());
             return this;
         }
 

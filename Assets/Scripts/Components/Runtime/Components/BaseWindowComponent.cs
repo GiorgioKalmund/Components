@@ -67,7 +67,7 @@ namespace Components.Runtime.Components
             _headerText = ComponentBuilder.N<TextComponent>(HeaderTools)
                     .Pivot(PivotPosition.MiddleLeft)
                     .AnchoredTo(PivotPosition.MiddleRight)
-                    .FontSize(HeaderHeight - 5)
+                    .FontSize(HeaderHeight - 10)
                     .VAlignCenter()
                     .OverflowMode(TextOverflowModes.Ellipsis)
                 ;
@@ -83,8 +83,6 @@ namespace Components.Runtime.Components
             ScrollContent = ComponentBuilder.N<ScrollViewComponent>(WindowBase, "Content").Pivot(PivotPosition.LowerCenter, true);
             
             _rectMask2D = ScrollContent.gameObject.GetOrAddComponent<RectMask2D>();
-
-            this.Focus();
         }
 
         public ScrollViewComponent ConfigureContent()
@@ -254,18 +252,18 @@ namespace Components.Runtime.Components
         }
         public virtual void RenderContent()
         {
-            ScrollContent.Size(this.GetWidth() - 2 * _contentPadding, this.GetHeight() - HeaderHeight - 2 * _contentPadding).Pos(0, _contentPadding);
         }
 
         public override BaseComponent HandleSizeChanged(float x, float y)
         {
             base.HandleSizeChanged(x, y);
             WindowBase?.Size(x, y);
-
+            
+            ScrollContent.Size(this.GetWidth() - 2 * _contentPadding, this.GetHeight() - HeaderHeight - 2 * _contentPadding).Pos(0, _contentPadding);
             if (!ScrollContent.contentHasBeenSizedManually)
             {
-                var currentSize = ScrollContent.content.GetSize();
-                ScrollContent.SizeContent(Mathf.Max(currentSize.x, x), Mathf.Max(currentSize.y, y));
+                Vector2 maxSize = ScrollContent.GetSize();
+                ScrollContent.SizeContent(maxSize.x, maxSize.y);
             }
             return this;
         }

@@ -168,19 +168,12 @@ namespace Components.Runtime.Components
                 textComponent.AutoSize(text.fontSizeMin, text.fontSizeMax);
         }
 
-        public TextComponent AutoSize(float minSize, float maxSize)
+        public TextComponent AutoSize(float minSize = 18, float maxSize = 72)
         {
             _textMesh.enableAutoSizing = true;
             _textMesh.fontSizeMin = minSize;
             _textMesh.fontSizeMax = maxSize;
             return this;
         }
-
-        public TextComponent AutoSize(float maxSize)
-        {
-            return AutoSize(24, maxSize);
-        }
-        
-        
     }
 }

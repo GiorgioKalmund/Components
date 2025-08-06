@@ -19,7 +19,7 @@ namespace Components.Runtime.Testing
         {
             var canvas = GUIService.GetCanvas();
             var canvasT = canvas.GetTransform();
-            TextComponent.GlobalFont(Resources.Load<TMPro.TMP_FontAsset>("Font/Main"));
+            TextComponent.GlobalFont(Resources.Load<TMPro.TMP_FontAsset>("Font/GoogleSansCode SDF"));
             _input = new ComponentControls();
 
             Vector2 nativeScaleSize = new Vector2(5, 5);
@@ -86,27 +86,32 @@ namespace Components.Runtime.Testing
             
             // Debug
             var debugWindow = ComponentBuilder.N<WindowComponent>("Debug", canvasT)
-                    .Build(_input.UI.ShowWindow, "Debug")
-                    .Size(300, 500)
+                    .Build(_input.UI.Debug, "Debug")
+                    .Size(400, 500)
+                    .ContentPadding(5)
                 ;
             debugWindow.ConfigureContent()
-                .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, true)
+                .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, false)
                 .AddVerticalLayout(10, TextAnchor.UpperLeft)
                 .ContentPadding(PaddingSide.All, 10)
                 ;
 
             var removeSlots = ComponentBuilder.N<ButtonComponent>("Remove Slots", canvasT)
-                    .Create("Remove Slots", () => hotbar.RemoveSlot(0))
+                    .Create("Remove Slots", () => hotbar.RemoveSlot(0), ImageService.GetSpriteFromAsset("player", "rock"))
                     .FitToContents()
                     .ContentPadding(PaddingSide.All, 10)
                     .Sprite("Slice/Circle Orange", Image.Type.Sliced)
                     .Cast<ButtonComponent>()
                 ;
-            removeSlots.ForegroundSize(40, 40).ContentSpacing(10).GetTextComponent().AutoSize(32).Bold();
+            removeSlots.ForegroundSize(40, 40).ContentSpacing(10).GetTextComponent().AutoSize(maxSize:32).Bold();
 
-            var addSlots = removeSlots.Copy().Text("Add Slots").ClearAllFunctions().Function(() => hotbar.AddNewSlot(slot0));
-
-            debugWindow.AddContent(removeSlots, addSlots);
+            var addSlots = removeSlots.Copy().Text("Add Slots").ClearAllFunctions().Function(() => hotbar.AddNewSlot(ComponentBuilder.N<HotbarSlot>().Sprite("player", "Inventory Slot").Cast<HotbarSlot>()));
+            var refocus = removeSlots.Copy().Text("Refocus").ClearAllFunctions().Function(IFocusable.FocusLastFocused);
+            refocus.GetForeground().Sprite("player", "paddels");
+            var unfocus = removeSlots.Copy().Parent(canvasT).Text("Unfocus").ClearAllFunctions().Function(() => IFocusable.FocusedElement.UnFocus());
+            var currentlyFocused = removeSlots.Copy().Parent(canvasT).Text("Current Focus").ClearAllFunctions().Function(() => Debug.Log(IFocusable.FocusedElement)).Offset(0, 100);
+            debugWindow.AddContent(removeSlots, addSlots, refocus, unfocus, currentlyFocused);
+            
         }
 
         private void OnEnable()

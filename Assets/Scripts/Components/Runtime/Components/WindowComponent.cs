@@ -10,7 +10,6 @@ namespace Components.Runtime.Components
         public override void Awake()
         {
             base.Awake();
-            WindowBase.Color(UnityEngine.Color.gray6);
         }
 
         public override void Start()
@@ -19,7 +18,8 @@ namespace Components.Runtime.Components
             DisplayName = "WindowComponent";
             
             ScrollContent.Alpha(1).Sprite("gui_assets","tileable_backdrop").ImageType(Image.Type.Tiled).PixelsPerUnitMultiplier(0.33f);
-            WindowBase.Color(UnityEngine.Color.gray6);
+            WindowBase.Color(UnityEngine.Color.gray2);
+            Header.Color(Color.gray1);
         }
     }
 }

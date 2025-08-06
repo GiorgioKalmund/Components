@@ -9,7 +9,6 @@ namespace Components.Runtime.Components
         // -- Subcomponents -- //
         private WindowResizer _windowResizer;
 
-
         protected Vector2 MinimumWindowSize = new Vector2(100, 100);
         private bool _allowResize = true;
 

@@ -34,9 +34,10 @@ namespace Components.Runtime.Components
             get => _contentFitsSize;
             set
             {
+                var oldValue = _contentFitsSize;
                 _contentFitsSize = value;
                 HandleContentFitsSizeChange(value);
-                contentHasBeenSizedManually = true;
+                contentHasBeenSizedManually = value || oldValue;
             }
         }
 
@@ -128,7 +129,6 @@ namespace Components.Runtime.Components
         public ScrollViewComponent SizeContent(float x, float y)
         {
             content.Size(x, y);
-            contentHasBeenSizedManually = true;
             return this;
         }
 
