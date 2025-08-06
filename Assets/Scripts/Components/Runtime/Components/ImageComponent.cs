@@ -101,6 +101,11 @@ namespace Components.Runtime.Components
             return this;
         }
 
+        public bool HasImage()
+        {
+            return _image.sprite;
+        }
+
         public ImageComponent Copy()
         {
             ImageComponent copyImage = this.BaseCopy(this);

@@ -64,9 +64,11 @@ namespace Components.Runtime.Testing
             var c = ComponentBuilder.N<ButtonComponent>(GUIService.GetCanvas().GetTransform())
                     .Size(100, 100)
                     .Create("Old but Gold")
+                    .FitToContents(10, 10)
                     .Color(Color.gold, 0.5f)
                     .Offset(100, 100)
                     .Cast<ButtonComponent>()
+                    .ForegroundSize(50, 50)
                 ;
             c.GetTextComponent().Bold().Color(Color.gray1);
 

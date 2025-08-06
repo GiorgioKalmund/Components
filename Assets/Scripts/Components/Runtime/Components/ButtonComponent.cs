@@ -24,6 +24,7 @@ namespace Components.Runtime.Components
         // -- Auto Sizing -- //
         private HorizontalLayoutGroup HorizontalLayout;
         private ContentSizeFitter _fitter;
+        private LayoutElement _foregroundLayout;
 
         private bool _focusable;
         
@@ -35,7 +36,7 @@ namespace Components.Runtime.Components
 
             ForegroundImage = ComponentBuilder.N<ImageComponent>(transform, "Foreground-Hint")
                     .RaycastTarget(false)
-                    .Alpha(0)
+                    .SetActive(false)
                 ;
 
             ButtonText = ComponentBuilder.N<TextComponent>(transform, "Text")
@@ -43,6 +44,8 @@ namespace Components.Runtime.Components
                     .VAlignCenter()
                     .Color(UnityEngine.Color.gray1)
                 ;
+
+            _foregroundLayout = ForegroundImage.GetOrAddComponent<LayoutElement>();
         }
 
         public override void Start()
@@ -71,25 +74,49 @@ namespace Components.Runtime.Components
         
         public ButtonComponent Foreground(Sprite sprite, float alpha = 1f)
         {
-            ForegroundImage.Sprite(sprite).Alpha(alpha);
+            ForegroundImage.Sprite(sprite).Alpha(alpha).SetActive();
             return this;
         }
 
-        public ButtonComponent FitToContents(PaddingSide side, int amount)
+        public ButtonComponent FitToContents(PaddingSide side, int amount, float spacing = 0f)
         {
-            HorizontalLayout = gameObject.AddComponent<HorizontalLayoutGroup>();
+            ForegroundSize(ForegroundImage.GetSize());
             
-            _fitter = gameObject.AddComponent<ContentSizeFitter>();
+            HorizontalLayout = gameObject.GetOrAddComponent<HorizontalLayoutGroup>();
+            HorizontalLayout.childForceExpandWidth = false;
+            HorizontalLayout.childForceExpandHeight = false;
+            HorizontalLayout.childAlignment = TextAnchor.MiddleCenter;
+            
+            _fitter = gameObject.GetOrAddComponent<ContentSizeFitter>();
             _fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
             _fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
             ContentPadding(side, amount);
+            ContentSpacing(spacing);
             return this;
         }
 
-        public ButtonComponent FitToContents(int amount = 0)
+        public ButtonComponent FitToContents(int padding = 0, float spacing = 0f)  
         {
-            return FitToContents(PaddingSide.All, amount);
+            return FitToContents(PaddingSide.All, padding, spacing);
+        }
+        
+        public ButtonComponent ForegroundSize(float x, float y)
+        {
+            _foregroundLayout.preferredWidth = x;
+            _foregroundLayout.preferredHeight = y;
+            return this;
+        }
+
+        public ButtonComponent ForegroundSize(Vector2 size)
+        {
+            return ForegroundSize(size.x, size.y);
+        }
+
+        public ButtonComponent ContentSpacing(float spacing)
+        {
+            HorizontalLayout.spacing = spacing;
+            return this;
         }
         
         public ButtonComponent ContentPadding(PaddingSide side, int amount)

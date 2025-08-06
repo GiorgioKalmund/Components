@@ -379,7 +379,7 @@ namespace Components.Runtime.Components
         }
         
         // Gameobject 
-        public static T SetActive<T>(this T renderable, bool active) where T : BaseComponent
+        public static T SetActive<T>(this T renderable, bool active = true) where T : BaseComponent
         {
             renderable.gameObject.SetActive(active);
             return renderable;

@@ -74,7 +74,7 @@ ScriptedImporter:
   previousAsepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
-    layerImportMode: 1
+    layerImportMode: 0
     defaultPivotSpace: 0
     defaultPivotAlignment: 7
     customPivotPosition: {x: 0.5, y: 0.5}
@@ -89,7 +89,7 @@ ScriptedImporter:
   asepriteImporterSettings:
     fileImportMode: 1
     importHiddenLayers: 0
-    layerImportMode: 1
+    layerImportMode: 0
     defaultPivotSpace: 0
     defaultPivotAlignment: 7
     customPivotPosition: {x: 0.5, y: 0.5}
@@ -102,7 +102,7 @@ ScriptedImporter:
     generateIndividualEvents: 1
     generateSpriteAtlas: 1
   importFileNodeState: 1
-  platformSettingsDirtyTick: 0
+  platformSettingsDirtyTick: 638900707404297040
   textureAssetName: 
   singleSpriteImportData:
   - name: 
@@ -127,9 +127,450 @@ ScriptedImporter:
     tessellationDetail: 0
     uvTransform: {x: 0, y: 0}
   animatedSpriteImportData:
-  - name: player
+  - name: Inventory Slot
     originalName: 
-    pivot: {x: 0.45454547, y: -0.10588236}
+    pivot: {x: 4.5, y: -4.6428576}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 143
+      y: 26
+      width: 28
+      height: 28
+    spriteID: 3984cacc343cf4becbf624e66203c34d
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 143, y: 26}
+  - name: Inventory Slot Selected
+    originalName: 
+    pivot: {x: 4.2333336, y: -3.2333336}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 103
+      y: 167
+      width: 30
+      height: 30
+    spriteID: 133e35708bb6f4f97b3438057819932f
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 103, y: 167}
+  - name: Health Bar
+    originalName: 
+    pivot: {x: 1.2179487, y: -5.3199997}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 4
+      width: 78
+      height: 25
+    spriteID: 6740d1aa6ec734393b982c26eba72702
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 4}
+  - name: Health Bar Partial
+    originalName: 
+    pivot: {x: 1.2307693, y: -4.04}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 37
+      width: 78
+      height: 25
+    spriteID: 99544c580b7b44b2b98ac32308188e95
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 37}
+  - name: Air Bar
+    originalName: 
+    pivot: {x: 0.1923077, y: -5.3199997}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 70
+      width: 78
+      height: 25
+    spriteID: d4f1eb78b4f824fbfa4403c860b70829
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 70}
+  - name: Health Bar Hints
+    originalName: 
+    pivot: {x: 1.5849056, y: -7.1578946}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 231
+      width: 53
+      height: 19
+    spriteID: d1e2f0302b86849cbb4692221d5a6c59
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 231}
+  - name: Air Bar Partial
+    originalName: 
+    pivot: {x: 0.1923077, y: -4.04}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 103
+      width: 78
+      height: 25
+    spriteID: 54c93f398f3ea4722bd13325c6ca34a9
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 103}
+  - name: Sprint / Ability? Bar
+    originalName: 
+    pivot: {x: 1.5409836, y: -5.7857146}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 143
+      y: 4
+      width: 61
+      height: 14
+    spriteID: bac20fc813f31424f9b73ba8d2b1b0a6
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 143, y: 4}
+  - name: Sprint / Ability? Bar Partial
+    originalName: 
+    pivot: {x: 1.557377, y: -2.826087}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 136
+      width: 61
+      height: 23
+    spriteID: 56368b27f65004987b25a690986f044c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 136}
+  - name: Crosshair
+    originalName: 
+    pivot: {x: 6.7222223, y: -3.9444444}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 179
+      y: 26
+      width: 18
+      height: 18
+    spriteID: 0729d61a583c44786a2b850b0ff8cbad
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 179, y: 26}
+  - name: Circle Gray
+    originalName: 
+    pivot: {x: 4, y: -1}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 65
+      width: 32
+      height: 32
+    spriteID: e6fc22f89501a4727a2026553753049c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 65}
+  - name: Circle Green
+    originalName: 
+    pivot: {x: 3, y: -1}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 105
+      width: 32
+      height: 32
+    spriteID: 9c8a6f248277049d88aa6f0b8583ff5c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 105}
+  - name: Circle Orange
+    originalName: 
+    pivot: {x: 2, y: -1}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 145
+      width: 32
+      height: 32
+    spriteID: 2eed26f422eb64659b8df082971b4cb8
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 145}
+  - name: Circle Blue
+    originalName: 
+    pivot: {x: 1, y: -1}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 185
+      width: 32
+      height: 32
+    spriteID: c2e08ef495af34a4386e3305c3e8d183
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 185}
+  - name: legs
+    originalName: 
+    pivot: {x: 3.409091, y: -8.454546}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 143
+      y: 201
+      width: 22
+      height: 22
+    spriteID: b3c745a547d094c54ad88740b3dfa812
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 143, y: 201}
+  - name: feet
+    originalName: 
+    pivot: {x: 2.9615386, y: -7.041667}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 4
+      y: 225
+      width: 26
+      height: 24
+    spriteID: d8b50c0fd8c2c431199c3a2ee39438fc
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 4, y: 225}
+  - name: arms + hands
+    originalName: 
+    pivot: {x: 1.6034483, y: -11.444445}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 205
+      width: 58
+      height: 18
+    spriteID: d420889444533487f96537af82a91be6
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 205}
+  - name: shoulders
+    originalName: 
+    pivot: {x: 2.6333334, y: -36.833336}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 212
+      y: 4
+      width: 30
+      height: 6
+    spriteID: af136d8a1f30b4e10ac5e7ada21fb906
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 212, y: 4}
+  - name: torso + neck
+    originalName: 
+    pivot: {x: 3.409091, y: -8.16}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 143
+      y: 131
+      width: 22
+      height: 25
+    spriteID: 36032242b6d174f788b7d1ce7b359c53
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 143, y: 131}
+  - name: head
+    originalName: 
+    pivot: {x: 3.1666667, y: -9.5}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 143
+      y: 62
+      width: 24
+      height: 24
+    spriteID: 51405c6c86fd94b88958cec7e0af6ed2
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 143, y: 62}
+  - name: eyes
+    originalName: 
+    pivot: {x: 4.055556, y: -19.5}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 179
+      y: 52
+      width: 18
+      height: 12
+    spriteID: d94e85fff95e04d929c52c1edfda3220
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 179, y: 52}
+  - name: arm attachements
+    originalName: 
+    pivot: {x: 0.6888889, y: -3.1886792}
     alignment: 9
     border: {x: 0, y: 0, z: 0, w: 0}
     customData: 
@@ -137,9 +578,9 @@ ScriptedImporter:
       serializedVersion: 2
       x: 4
       y: 4
-      width: 99
-      height: 85
-    spriteID: b510d7db310e54e4b8f56e446d8554d7
+      width: 45
+      height: 53
+    spriteID: 77ebfb67798a04221bb9f30330b31c99
     spriteBone: []
     spriteOutline: []
     vertices: []
@@ -148,38 +589,907 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 4, y: 4}
+  - name: rock
+    originalName: 
+    pivot: {x: 5.5789475, y: -11.45}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 143
+      y: 231
+      width: 19
+      height: 20
+    spriteID: ce04a2262687c4ab0afda08e5b239a1c
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 143, y: 231}
+  - name: backpack
+    originalName: 
+    pivot: {x: 2.368421, y: -7.793103}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 143
+      y: 94
+      width: 19
+      height: 29
+    spriteID: 26e36e18c801c4471a19e5f13431e01e
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 143, y: 94}
+  - name: paddels
+    originalName: 
+    pivot: {x: 0.31578946, y: -7.5000005}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 57
+      y: 167
+      width: 38
+      height: 30
+    spriteID: 52361285ebaf04375a052a58adb80c78
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 57, y: 167}
+  - name: Walkie Talkie
+    originalName: 
+    pivot: {x: 6.7222223, y: -5.586207}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 143
+      y: 164
+      width: 18
+      height: 29
+    spriteID: 60f2994ca7dd2499e878becc6e17b570
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 143, y: 164}
   spriteSheetImportData: []
   tileSetImportData: []
   asepriteLayers:
   - layerIndex: 0
     uuid:
-      value0: 1875821083
+      value0: 1273912624
       value1: 0
       value2: 0
       value3: 0
     guid: 0
-    name: player
-    layerFlags: 0
+    name: Backdrop
+    layerFlags: 3
     layerType: 0
     blendMode: 0
-    cells:
-    - name: player
-      frameIndex: 0
-      additiveSortOrder: 0
-      cellRect:
-        x: 19
-        y: 9
-        width: 99
-        height: 85
-      spriteId: b510d7db310e54e4b8f56e446d8554d7
+    cells: []
     linkedCells: []
     tileCells: []
     tileSetIndex: 0
     parentIndex: -1
+  - layerIndex: 1
+    uuid:
+      value0: 884247067
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: GUI
+    layerFlags: 3
+    layerType: 1
+    blendMode: 0
+    cells: []
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: -1
+  - layerIndex: 2
+    uuid:
+      value0: 3448497346
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Inventory Slot
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Inventory Slot
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 2
+        y: 130
+        width: 28
+        height: 28
+      spriteId: 3984cacc343cf4becbf624e66203c34d
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 3
+    uuid:
+      value0: 3652190815
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Inventory Slot Selected
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Inventory Slot Selected
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 1
+        y: 97
+        width: 30
+        height: 30
+      spriteId: 133e35708bb6f4f97b3438057819932f
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 4
+    uuid:
+      value0: 331461917
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Health Bar
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Health Bar
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 33
+        y: 133
+        width: 78
+        height: 25
+      spriteId: 6740d1aa6ec734393b982c26eba72702
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 5
+    uuid:
+      value0: 2455659280
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Health Bar Partial
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Health Bar Partial
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 32
+        y: 101
+        width: 78
+        height: 25
+      spriteId: 99544c580b7b44b2b98ac32308188e95
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 6
+    uuid:
+      value0: 368505435
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Air Bar
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Air Bar
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 113
+        y: 133
+        width: 78
+        height: 25
+      spriteId: d4f1eb78b4f824fbfa4403c860b70829
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 7
+    uuid:
+      value0: 734633617
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Health Bar Hints
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Health Bar Hints
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 44
+        y: 136
+        width: 53
+        height: 19
+      spriteId: d1e2f0302b86849cbb4692221d5a6c59
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 8
+    uuid:
+      value0: 281658046
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Air Bar Partial
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Air Bar Partial
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 113
+        y: 101
+        width: 78
+        height: 25
+      spriteId: 54c93f398f3ea4722bd13325c6ca34a9
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 9
+    uuid:
+      value0: 1935932517
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Sprint / Ability? Bar
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Sprint / Ability? Bar
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 34
+        y: 81
+        width: 61
+        height: 14
+      spriteId: bac20fc813f31424f9b73ba8d2b1b0a6
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 10
+    uuid:
+      value0: 2601878694
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Sprint / Ability? Bar Partial
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Sprint / Ability? Bar Partial
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 33
+        y: 65
+        width: 61
+        height: 23
+      spriteId: 56368b27f65004987b25a690986f044c
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 11
+    uuid:
+      value0: 1699626690
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Crosshair
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Crosshair
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 7
+        y: 71
+        width: 18
+        height: 18
+      spriteId: 0729d61a583c44786a2b850b0ff8cbad
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 12
+    uuid:
+      value0: 3696630667
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Circle Gray
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Circle Gray
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 0
+        y: 32
+        width: 32
+        height: 32
+      spriteId: e6fc22f89501a4727a2026553753049c
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 13
+    uuid:
+      value0: 3280616365
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Circle Green
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Circle Green
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 32
+        y: 32
+        width: 32
+        height: 32
+      spriteId: 9c8a6f248277049d88aa6f0b8583ff5c
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 14
+    uuid:
+      value0: 3971482476
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Circle Orange
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Circle Orange
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 64
+        y: 32
+        width: 32
+        height: 32
+      spriteId: 2eed26f422eb64659b8df082971b4cb8
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 15
+    uuid:
+      value0: 174475266
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Circle Blue
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Circle Blue
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 96
+        y: 32
+        width: 32
+        height: 32
+      spriteId: c2e08ef495af34a4386e3305c3e8d183
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 1
+  - layerIndex: 16
+    uuid:
+      value0: 1857678349
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Legs
+    layerFlags: 35
+    layerType: 1
+    blendMode: 0
+    cells: []
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: -1
+  - layerIndex: 17
+    uuid:
+      value0: 3919358927
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: legs
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: legs
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 53
+        y: 186
+        width: 22
+        height: 22
+      spriteId: b3c745a547d094c54ad88740b3dfa812
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 16
+  - layerIndex: 18
+    uuid:
+      value0: 4235183328
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: feet
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: feet
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 51
+        y: 169
+        width: 26
+        height: 24
+      spriteId: d8b50c0fd8c2c431199c3a2ee39438fc
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 16
+  - layerIndex: 19
+    uuid:
+      value0: 3383614466
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Body
+    layerFlags: 35
+    layerType: 1
+    blendMode: 0
+    cells: []
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: -1
+  - layerIndex: 20
+    uuid:
+      value0: 87218101
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: arms + hands
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: arms + hands
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 35
+        y: 206
+        width: 58
+        height: 18
+      spriteId: d420889444533487f96537af82a91be6
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 19
+  - layerIndex: 21
+    uuid:
+      value0: 2129946576
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: shoulders
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: shoulders
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 49
+        y: 221
+        width: 30
+        height: 6
+      spriteId: af136d8a1f30b4e10ac5e7ada21fb906
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 19
+  - layerIndex: 22
+    uuid:
+      value0: 4253901066
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: torso + neck
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: torso + neck
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 53
+        y: 204
+        width: 22
+        height: 25
+      spriteId: 36032242b6d174f788b7d1ce7b359c53
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 19
+  - layerIndex: 24
+    uuid:
+      value0: 4136223136
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Head
+    layerFlags: 35
+    layerType: 1
+    blendMode: 0
+    cells: []
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: -1
+  - layerIndex: 25
+    uuid:
+      value0: 1402584355
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: head
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: head
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 52
+        y: 228
+        width: 24
+        height: 24
+      spriteId: 51405c6c86fd94b88958cec7e0af6ed2
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 24
+  - layerIndex: 26
+    uuid:
+      value0: 1536840957
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: eyes
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: eyes
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 55
+        y: 234
+        width: 18
+        height: 12
+      spriteId: d94e85fff95e04d929c52c1edfda3220
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 24
+  - layerIndex: 27
+    uuid:
+      value0: 1880192380
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: mouth
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells: []
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 24
+  - layerIndex: 29
+    uuid:
+      value0: 3321999268
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Accessories
+    layerFlags: 3
+    layerType: 1
+    blendMode: 0
+    cells: []
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: -1
+  - layerIndex: 30
+    uuid:
+      value0: 2191104898
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: arm attachements
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: arm attachements
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 97
+        y: 169
+        width: 45
+        height: 53
+      spriteId: 77ebfb67798a04221bb9f30330b31c99
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 29
+  - layerIndex: 31
+    uuid:
+      value0: 2358964748
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: rock
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: rock
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 22
+        y: 229
+        width: 19
+        height: 20
+      spriteId: ce04a2262687c4ab0afda08e5b239a1c
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 29
+  - layerIndex: 32
+    uuid:
+      value0: 3708283035
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: backpack
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: backpack
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 83
+        y: 226
+        width: 19
+        height: 29
+      spriteId: 26e36e18c801c4471a19e5f13431e01e
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 29
+  - layerIndex: 33
+    uuid:
+      value0: 814953096
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: paddels
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: paddels
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 116
+        y: 225
+        width: 38
+        height: 30
+      spriteId: 52361285ebaf04375a052a58adb80c78
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 29
+  - layerIndex: 34
+    uuid:
+      value0: 3354534794
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: Walkie Talkie
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: Walkie Talkie
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 7
+        y: 162
+        width: 18
+        height: 29
+      spriteId: 60f2994ca7dd2499e878becc6e17b570
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 29
   tileSets: []
-  platformSettings: []
+  platformSettings:
+  - name: DefaultTexturePlatform
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Standalone
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: Android
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
+  - name: iPhone
+    overridden: 0
+    ignorePlatformSupport: 0
+    maxTextureSize: 16384
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 0
+    compressionQuality: 50
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    androidETC2FallbackOverride: 0
   generatePhysicsShape: 0
   secondarySpriteTextures: []
   spritePackingTag: 
-  canvasSize: {x: 128, y: 96}
-  previousTextureSize: {x: 128, y: 128}
+  canvasSize: {x: 256, y: 256}
+  previousTextureSize: {x: 256, y: 256}
