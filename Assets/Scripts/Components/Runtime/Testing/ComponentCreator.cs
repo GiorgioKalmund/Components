@@ -1,11 +1,11 @@
-using System;
-using System.Collections;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using Components.Runtime.Components;
+using Components.Runtime.Components.Animation;
 using Components.Runtime.Components.Game;
 using Components.Runtime.Input;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Animations;
 
 namespace Components.Runtime.Testing
 {
@@ -58,6 +58,7 @@ namespace Components.Runtime.Testing
             var crosshair = ComponentBuilder.N<ImageComponent>(canvasT)
                 .Sprite("player", "Crosshair")
                 .Size(50, 50)
+                .SetActive(false)
                 ;
             
             var hotbar = ComponentBuilder.N<Hotbar>(canvasT)
@@ -94,6 +95,8 @@ namespace Components.Runtime.Testing
                 .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, false)
                 .AddVerticalLayout(10, TextAnchor.UpperLeft)
                 .ContentPadding(PaddingSide.All, 10)
+                .SizeContent(400, 600)
+                .ScrollToTop()
                 ;
 
             var removeSlots = ComponentBuilder.N<ButtonComponent>("Remove Slots", canvasT)
@@ -109,9 +112,32 @@ namespace Components.Runtime.Testing
             var refocus = removeSlots.Copy().Text("Refocus").ClearAllFunctions().Function(IFocusable.FocusLastFocused);
             refocus.GetForeground().Sprite("player", "paddels");
             var unfocus = removeSlots.Copy().Parent(canvasT).Text("Unfocus").ClearAllFunctions().Function(() => IFocusable.FocusedElement.UnFocus());
-            var currentlyFocused = removeSlots.Copy().Parent(canvasT).Text("Current Focus").ClearAllFunctions().Function(() => Debug.Log(IFocusable.FocusedElement)).Offset(0, 100);
+            var currentlyFocused = removeSlots.Copy().Parent(canvasT).Text("Current Focus").ClearAllFunctions()
+                .Function(() => Debug.Log(IFocusable.FocusedElement));
             debugWindow.AddContent(removeSlots, addSlots, refocus, unfocus, currentlyFocused);
             
+            var image = ComponentBuilder.N<ImageComponent>("animation test", canvasT)
+                    .Sprite("player", "eyes")
+                ;
+            Sprite[] frames = new Sprite[4];
+            frames[0] = ImageService.GetSpriteFromAsset("player", "head");
+            frames[1] = ImageService.GetSpriteFromAsset("player", "rock");
+            frames[2] = ImageService.GetSpriteFromAsset("player", "paddels");
+            frames[3] = ImageService.GetSpriteFromAsset("player", "backpack");
+            SpriteAnimation animation = new SpriteAnimation(frames, 10);
+            var animator = image.gameObject.AddComponent<SpriteAnimator>();
+            animator.CreateAnimation(animation, SpriteAnimator.Type.Loop).UseNativeSizing(4, 4);
+            animator.Play();
+
+            var playAnimation = removeSlots.Copy().Text("Play Animation").ClearAllFunctions()
+                .Function(animator.Play).Foreground(null);
+            var pauseAnimation = removeSlots.Copy().Text("Pause Animation").ClearAllFunctions()
+                .Function(animator.Pause).Foreground(null);
+            var resetAnimation = removeSlots.Copy().Text("Reset Animation").ClearAllFunctions()
+                .Function(animator.RestartAnimation).Foreground(null);
+            var restartAnimation = removeSlots.Copy().Text("Restart Animation").ClearAllFunctions()
+                .Function(animator.RestartAnimation).Foreground(null);
+            debugWindow.AddContent(playAnimation, pauseAnimation, resetAnimation, restartAnimation);
         }
 
         private void OnEnable()
