@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Components.Runtime.Components
 {
@@ -68,8 +70,24 @@ namespace Components.Runtime.Components
                 component.Pos(rect.anchoredPosition);
             }
             else
+            {
                 component.Pos(originalPos);
+            }
             component.Size(rect.sizeDelta);
+        }
+        
+        public void CopyLayoutElement(BaseComponent other, BaseComponent component)
+        {
+            LayoutElement layoutElement = other.GetComponent<LayoutElement>();
+            if (layoutElement)
+            {
+                var newLayoutElement = component.gameObject.GetOrAddComponent<LayoutElement>();
+                newLayoutElement.preferredWidth = layoutElement.preferredWidth;
+                newLayoutElement.preferredHeight = layoutElement.preferredHeight;
+                newLayoutElement.minWidth = layoutElement.minWidth;
+                newLayoutElement.minHeight= layoutElement.minHeight;
+                newLayoutElement.layoutPriority = layoutElement.layoutPriority;
+            }
         }
     }
     
@@ -117,7 +135,7 @@ namespace Components.Runtime.Components
         }
         public static T SafeDisplayName<T>(this T renderable, string displayName) where T : BaseComponent
         {
-            if (string.IsNullOrEmpty(renderable.DisplayName))
+            if (string.IsNullOrEmpty(renderable.DisplayName) || displayName.Equals(DefaultName))
                 renderable.DisplayName(displayName);
             return renderable;
         }

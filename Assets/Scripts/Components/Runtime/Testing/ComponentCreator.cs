@@ -30,6 +30,7 @@ namespace Components.Runtime.Testing
                     .ImageType(Image.Type.Tiled)
                     .PixelsPerUnitMultiplier(0.1f)
                     .ToggleVisibilityUsing(_input.UI.ShowWindow)
+                    .SetActive(false)
                 ;
 
             // Health and Sprint
@@ -59,22 +60,53 @@ namespace Components.Runtime.Testing
                 .Size(50, 50)
                 ;
             
-            var hotbar = ComponentBuilder.N<ImageComponent>(canvasT)
+            var hotbar = ComponentBuilder.N<Hotbar>(canvasT)
                     .ImageType(Image.Type.Sliced)
                     .PixelsPerUnitMultiplier(0.3f)
                     .Pivot(PivotPosition.LowerCenter, true)
-                    .Offset(0, 50)
-                    .Size(800, 100)
+                    .Offset(100, 50)
+                    .Size(1050, 150)
                     .Sprite("Slice/Circle Gray")
                     .Alpha(0.9f)
+                    .AddHorizontalLayout(10)
+                    .Cast<Hotbar>()
                 ;
 
-            StartCoroutine(SpriteSwap(hotbar));
-        }
+            var slot0 = ComponentBuilder.N<HotbarSlot>().Sprite("player", "Inventory Slot").Cast<HotbarSlot>();
+            var slot1 = slot0.Copy();
+            var slot2 = slot0.Copy();
+            var slot3 = slot0.Copy();
+            var slot4 = slot0.Copy();
+            var slot5 = slot0.Copy();
+            var slot6 = slot0.Copy();
+            var slot7 = slot0.Copy();
+            var slot8 = slot0.Copy();
 
-        private IEnumerator SpriteSwap(ImageComponent c)
-        {
-            yield return new WaitForEndOfFrame();
+            hotbar.AddSlots(slot0, slot1, slot2, slot3, slot4, slot5, slot6, slot7, slot8);
+            
+            // Debug
+            var debugWindow = ComponentBuilder.N<WindowComponent>("Debug", canvasT)
+                    .Build(_input.UI.ShowWindow, "Debug")
+                    .Size(300, 500)
+                ;
+            debugWindow.ConfigureContent()
+                .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, true)
+                .AddVerticalLayout(10, TextAnchor.UpperLeft)
+                .ContentPadding(PaddingSide.All, 10)
+                ;
+
+            var removeSlots = ComponentBuilder.N<ButtonComponent>("Remove Slots", canvasT)
+                    .Create("Remove Slots", () => hotbar.RemoveSlot(0))
+                    .FitToContents()
+                    .ContentPadding(PaddingSide.All, 10)
+                    .Sprite("Slice/Circle Orange", Image.Type.Sliced)
+                    .Cast<ButtonComponent>()
+                ;
+            removeSlots.ForegroundSize(40, 40).ContentSpacing(10).GetTextComponent().AutoSize(32).Bold();
+
+            var addSlots = removeSlots.Copy().Text("Add Slots").ClearAllFunctions().Function(() => hotbar.AddNewSlot(slot0));
+
+            debugWindow.AddContent(removeSlots, addSlots);
         }
 
         private void OnEnable()

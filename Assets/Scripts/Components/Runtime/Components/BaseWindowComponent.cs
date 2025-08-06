@@ -95,6 +95,7 @@ namespace Components.Runtime.Components
         public virtual BaseWindowComponent Build(InputAction action)
         {
             _toggleInputAction = action;
+            _toggleInputAction.Enable();
             return this;
         }
         

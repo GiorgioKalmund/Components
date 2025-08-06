@@ -9,9 +9,8 @@ namespace Components.Runtime.Components
 
         private static IFocusable _lastFocusedElement;
 
-        public void HandleFocus() { }
-        public void HandleUnfocus() { }
-
+        public void HandleFocus();
+        public void HandleUnfocus();
         public static void SetLastFocusedElement(IFocusable focusable)
         {
             _lastFocusedElement = focusable;

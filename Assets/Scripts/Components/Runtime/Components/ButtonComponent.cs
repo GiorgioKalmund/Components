@@ -22,9 +22,7 @@ namespace Components.Runtime.Components
         protected TextComponent ButtonText;
         
         // -- Auto Sizing -- //
-        private HorizontalLayoutGroup HorizontalLayout;
         private ContentSizeFitter _fitter;
-        private LayoutElement _foregroundLayout;
 
         private bool _focusable;
         
@@ -44,14 +42,12 @@ namespace Components.Runtime.Components
                     .VAlignCenter()
                     .Color(UnityEngine.Color.gray1)
                 ;
-
-            _foregroundLayout = ForegroundImage.GetOrAddComponent<LayoutElement>();
         }
 
         public override void Start()
         {
             base.Start();
-            DisplayName = "ButtonComponent";
+            this.SafeDisplayName("ButtonComponent");
 
             if (_focusable)
                 Function(this.Focus);
@@ -74,18 +70,13 @@ namespace Components.Runtime.Components
         
         public ButtonComponent Foreground(Sprite sprite, float alpha = 1f)
         {
-            ForegroundImage.Sprite(sprite).Alpha(alpha).SetActive();
+            ForegroundImage.Sprite(sprite).Alpha(alpha).SetActive(sprite);
             return this;
         }
 
-        public ButtonComponent FitToContents(PaddingSide side, int amount, float spacing = 0f)
+        public ButtonComponent FitToContents(PaddingSide side, int amount, float spacing)
         {
-            ForegroundSize(ForegroundImage.GetSize());
-            
-            HorizontalLayout = gameObject.GetOrAddComponent<HorizontalLayoutGroup>();
-            HorizontalLayout.childForceExpandWidth = false;
-            HorizontalLayout.childForceExpandHeight = false;
-            HorizontalLayout.childAlignment = TextAnchor.MiddleCenter;
+            AddHorizontalLayout(spacing, childControlWidth:true, childControlHeight:true);
             
             _fitter = gameObject.GetOrAddComponent<ContentSizeFitter>();
             _fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
@@ -103,8 +94,7 @@ namespace Components.Runtime.Components
         
         public ButtonComponent ForegroundSize(float x, float y)
         {
-            _foregroundLayout.preferredWidth = x;
-            _foregroundLayout.preferredHeight = y;
+            ForegroundImage.MakeLayoutElement(x, y);
             return this;
         }
 
@@ -116,15 +106,6 @@ namespace Components.Runtime.Components
         public ButtonComponent ContentSpacing(float spacing)
         {
             HorizontalLayout.spacing = spacing;
-            return this;
-        }
-        
-        public ButtonComponent ContentPadding(PaddingSide side, int amount)
-        {
-            if (side.HasFlag(PaddingSide.Leading)) { if (HorizontalLayout) HorizontalLayout.padding.left = amount; }
-            if (side.HasFlag(PaddingSide.Trailing)) { if (HorizontalLayout) HorizontalLayout.padding.right = amount; }
-            if (side.HasFlag(PaddingSide.Top)) { if (HorizontalLayout) HorizontalLayout.padding.top = amount; }
-            if (side.HasFlag(PaddingSide.Bottom)) { if (HorizontalLayout) HorizontalLayout.padding.bottom = amount; }
             return this;
         }
 
@@ -149,12 +130,14 @@ namespace Components.Runtime.Components
         public ButtonComponent RemoveFunction(UnityAction action)
         {
             ButtonElement.onClick.RemoveListener(action);
+            Listeners.Remove(action);
             return this;
         }
         
         public ButtonComponent ClearAllFunctions()
         {
             ButtonElement.onClick.RemoveAllListeners();
+            Listeners.Clear();
             return this;
         }
 
@@ -217,17 +200,14 @@ namespace Components.Runtime.Components
 
         public ButtonComponent CopyFrom(ButtonComponent other, bool fullyCopyRect = true)
         {
+            if (other._fitter)
+                FitToContents();
+            
             base.CopyFrom(other, fullyCopyRect);
             Create(focusable:other.IsFocusable());
             ButtonText.CopyFrom(other.ButtonText);
             ForegroundImage.CopyFrom(other.ForegroundImage);
-
-            if (other._fitter || other.HorizontalLayout)
-            {
-                FitToContents();
-                RectOffset offset = other.HorizontalLayout.padding.Clone();
-                HorizontalLayout.padding = offset;
-            }
+            Foreground(other.ForegroundImage.GetImage().sprite);
             
             ClearAllFunctions();
             foreach (var unityAction in other.Listeners)
@@ -236,6 +216,14 @@ namespace Components.Runtime.Components
             }
 
             return this;
+        }
+
+        public void HandleFocus() { }
+        public void HandleUnfocus() { }
+
+        public ImageComponent GetForeground()
+        {
+            return ForegroundImage;
         }
     }
 }

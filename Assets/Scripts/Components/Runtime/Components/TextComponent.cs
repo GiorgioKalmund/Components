@@ -149,6 +149,7 @@ namespace Components.Runtime.Components
 
         public TextComponent CopyFrom(TextComponent other, bool fullyCopyRect = true)
         {
+            CopyLayoutElement(other, this);
             CopyRect(other.GetRect(), this, fullyCopyRect);
             CopyTextProperties(other.GetTextMesh(), this);
             return this;
@@ -163,6 +164,23 @@ namespace Components.Runtime.Components
             textComponent.FontStyle(text.fontStyle);
             textComponent.FontSize(text.fontSize);
             textComponent.OverflowMode(text.overflowMode);
+            if (text.enableAutoSizing)
+                textComponent.AutoSize(text.fontSizeMin, text.fontSizeMax);
         }
+
+        public TextComponent AutoSize(float minSize, float maxSize)
+        {
+            _textMesh.enableAutoSizing = true;
+            _textMesh.fontSizeMin = minSize;
+            _textMesh.fontSizeMax = maxSize;
+            return this;
+        }
+
+        public TextComponent AutoSize(float maxSize)
+        {
+            return AutoSize(24, maxSize);
+        }
+        
+        
     }
 }

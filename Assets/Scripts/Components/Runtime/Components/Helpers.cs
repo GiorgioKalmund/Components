@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Components.Runtime.Components
 {
@@ -28,6 +30,20 @@ namespace Components.Runtime.Components
         public static Transform GetTransform(this Behaviour behaviour)
         {
             return behaviour.gameObject.transform;
+        }
+
+        public static void CopyFrom(this HorizontalLayoutGroup layout, HorizontalLayoutGroup other) 
+        {
+            if (!other)
+                return;
+            
+            layout.spacing = other.spacing;
+            layout.childForceExpandWidth = other.childForceExpandWidth;
+            layout.childForceExpandHeight = other.childForceExpandHeight;
+            layout.childControlWidth = other.childControlWidth;
+            layout.childControlHeight= other.childControlHeight;
+
+            layout.padding = other.padding.Clone();
         }
     }
 }
