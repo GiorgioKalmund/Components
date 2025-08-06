@@ -14,6 +14,13 @@ namespace Components.Runtime.Components
         {
             return texture.ToSprite(new Vector2(0.5f, 0.5f));
         }
+
+        public static Vector2 NativeSize(this Sprite sprite)
+        {
+            var nativeTex = sprite.bounds.size;
+            var nativeSize = new Vector2(nativeTex.x * 100, nativeTex.y * 100);
+            return nativeSize;
+        }
     }
 
     public static class BehaviourHelper

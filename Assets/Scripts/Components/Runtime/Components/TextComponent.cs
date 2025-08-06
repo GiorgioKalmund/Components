@@ -141,15 +141,15 @@ namespace Components.Runtime.Components
             return _textMesh;
         }
 
-        public TextComponent Copy()
+        public TextComponent Copy(bool fullyCopyRect = true)
         {
             TextComponent textCopy = this.BaseCopy(this);
-            return textCopy.CopyFrom(this, false).Offset(-50, -50);
+            return textCopy.CopyFrom(this, fullyCopyRect).Offset(-50, -50);
         }
 
-        public TextComponent CopyFrom(TextComponent other, bool copyAnchoredPosition = true)
+        public TextComponent CopyFrom(TextComponent other, bool fullyCopyRect = true)
         {
-            CopyRect(other.GetRect(), this, copyAnchoredPosition);
+            CopyRect(other.GetRect(), this, fullyCopyRect);
             CopyTextProperties(other.GetTextMesh(), this);
             return this;
         }

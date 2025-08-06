@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Threading.Tasks;
 using Components.Runtime.Components;
+using Components.Runtime.Components.Game;
 using Components.Runtime.Input;
 using UnityEngine;
 using UnityEngine.UI;
@@ -13,66 +14,67 @@ namespace Components.Runtime.Testing
         private ComponentControls _input;
         private WindowComponent window3;
         private ButtonComponent _copyButton;
-        public void Awake()
+
+        private void Start()
         {
+            var canvas = GUIService.GetCanvas();
+            var canvasT = canvas.GetTransform();
             TextComponent.GlobalFont(Resources.Load<TMPro.TMP_FontAsset>("Font/Main"));
-
-            var backdrop = ComponentBuilder.N<ImageComponent>("Brr", GUIService.GetCanvas().GetTransform())
-                    .FullScreen(GUIService.GetCanvas())
-                    .Sprite("wallpaper_1")
-                ;
-            var focusButton = ComponentBuilder.N<ButtonComponent>("Button", GUIService.GetCanvas().GetTransform())
-                .Size(300, 100)
-                .Pivot(PivotPosition.MiddleRight, true)
-                .Offset(-100, 0)
-                .Create("Focus me", focusable:true)
-                ;
-            
             _input = new ComponentControls();
-            
-            window3 = ComponentBuilder.N<WindowComponent>(GUIService.GetCanvas().GetTransform())
-                    .Build(_input.UI.ShowWindow,"Window 2", Color.green, Color.blue)
-                    .StartHidden()
-                    .ContentPadding(5)
-                    .Size(500, 300)
-                    .Cast<WindowComponent>()
-                    .Offset(500, -300)
-                ;
-            window3.ConfigureContent()
-                .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, false)
-                .SizeContent(500, 500)
-                .AddVerticalLayout(30, TextAnchor.UpperLeft)
-                .ContentPadding(PaddingSide.Leading, 30)
-                .ContentPadding(PaddingSide.Top, 30)
-                .ScrollToTop()
+
+            Vector2 nativeScaleSize = new Vector2(5, 5);
+
+            var backdrop = ComponentBuilder.N<ImageComponent>("Brr", canvasT)
+                    .FullScreen(GUIService.GetCanvas())
+                    .Sprite("player", "Tile")
+                    .ImageType(Image.Type.Tiled)
+                    .PixelsPerUnitMultiplier(0.1f)
+                    .ToggleVisibilityUsing(_input.UI.ShowWindow)
                 ;
 
-            var button = ComponentBuilder.N<ButtonComponent>(GUIService.GetCanvas().GetTransform())
-                    .Create("Helllo, World!", focusable:true)
-                    .Function(() => Debug.Log("Hello From button"))
-                    .Size(300, 100)
-                    .Cast<ButtonComponent>()
-                ;
-
-            button.GetTextComponent().Bold().Italic();
-
-            var b = button.Copy();
-            b
-                .Offset(200, 300)
-                .Color(Color.purple);
-            
-            var c = ComponentBuilder.N<ButtonComponent>(GUIService.GetCanvas().GetTransform())
-                    .Size(100, 100)
-                    .Create("Old but Gold")
-                    .FitToContents(10, 10)
-                    .Color(Color.gold, 0.5f)
+            // Health and Sprint
+            var healthBarEmpty = ComponentBuilder.N<ImageComponent>(canvasT)
+                    .Sprite("player", "Empty Bar")
+                    .NativeSize(nativeScaleSize)
+                    .Pivot(PivotPosition.LowerLeft, true)
                     .Offset(100, 100)
-                    .Cast<ButtonComponent>()
-                    .ForegroundSize(50, 50)
                 ;
-            c.GetTextComponent().Bold().Color(Color.gray1);
+            var healthBar = healthBarEmpty.Copy(false).Parent(healthBarEmpty).Sprite("player", "Health Bar").ImageTypeFilled(Image.FillMethod.Horizontal);
+            
+            var sprintBarEmpty = ComponentBuilder.N<ImageComponent>(healthBarEmpty)
+                    .Sprite("player", "Power Bar Empty")
+                    .NativeSize(nativeScaleSize)
+                    .Pivot(PivotPosition.UpperLeft)
+                    .AnchoredTo(PivotPosition.LowerLeft)
+                    .Offset(0, -5)
+                ;
+            var sprintBar = sprintBarEmpty.Copy(false).Parent(sprintBarEmpty).Sprite("player", "Power Bar").ImageTypeFilled(Image.FillMethod.Horizontal, 0.66f);
+            
+            var airBar = healthBar.Copy().Sprite("player", "Air Bar").ImageTypeFilled(Image.FillMethod.Horizontal, 0.3f);
+            
+            var healthBarHints = healthBar.Copy(false).Sprite("player", "Health Bar Hints").ImageTypeFilled(Image.FillMethod.Horizontal);
+            
+            var crosshair = ComponentBuilder.N<ImageComponent>(canvasT)
+                .Sprite("player", "Crosshair")
+                .Size(50, 50)
+                ;
+            
+            var hotbar = ComponentBuilder.N<ImageComponent>(canvasT)
+                    .ImageType(Image.Type.Sliced)
+                    .PixelsPerUnitMultiplier(0.3f)
+                    .Pivot(PivotPosition.LowerCenter, true)
+                    .Offset(0, 50)
+                    .Size(800, 100)
+                    .Sprite("Slice/Circle Gray")
+                    .Alpha(0.9f)
+                ;
 
-            b.Function(() => c.CopyFrom(b, false));
+            StartCoroutine(SpriteSwap(hotbar));
+        }
+
+        private IEnumerator SpriteSwap(ImageComponent c)
+        {
+            yield return new WaitForEndOfFrame();
         }
 
         private void OnEnable()

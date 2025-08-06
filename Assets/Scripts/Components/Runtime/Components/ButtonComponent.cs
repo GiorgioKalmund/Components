@@ -204,10 +204,10 @@ namespace Components.Runtime.Components
             return this;
         }
 
-        public new ButtonComponent Copy()
+        public new ButtonComponent Copy(bool fullyCopyRect = true)
         {
             ButtonComponent copyButton = this.BaseCopy(this);
-            return copyButton.CopyFrom(this);
+            return copyButton.CopyFrom(this, fullyCopyRect);
         }
 
         public bool IsFocusable()
@@ -215,9 +215,9 @@ namespace Components.Runtime.Components
             return _focusable;
         }
 
-        public ButtonComponent CopyFrom(ButtonComponent other, bool copyAnchoredPosition = true)
+        public ButtonComponent CopyFrom(ButtonComponent other, bool fullyCopyRect = true)
         {
-            base.CopyFrom(other, copyAnchoredPosition);
+            base.CopyFrom(other, fullyCopyRect);
             Create(focusable:other.IsFocusable());
             ButtonText.CopyFrom(other.ButtonText);
             ForegroundImage.CopyFrom(other.ForegroundImage);

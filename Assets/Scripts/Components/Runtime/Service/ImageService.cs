@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Components.Runtime.Components;
+using UnityEditor;
 using UnityEngine;
 
 public class ImageService
@@ -44,13 +45,14 @@ public class ImageService
         return toReturn;
     }
     
-    public static Sprite GetSpriteDirectly(string path)
+    public static Sprite GetSpriteDirectly(string path, string resourceFolder = "Textures/")
     {
         if (string.IsNullOrEmpty(path))
         {
+            Debug.LogWarning("Could not get image. Path empty.");
             return GetSprite(MissingTextureLocation);
         }
-        Sprite sprite = Resources.Load<Sprite>(path);
+        Sprite sprite = Resources.Load<Sprite>(resourceFolder + path);
         if (!sprite)
         {
             return GetSprite(MissingTextureLocation);
@@ -58,9 +60,9 @@ public class ImageService
         return sprite;
     }
     
-    public static Sprite GetSprite(string path, string resourceFolder = "Textures")
+    public static Sprite GetSprite(string path, string resourceFolder = "Textures/")
     {
-        Texture2D texture = GetTexture2D(resourceFolder + "/" + path);
+        Texture2D texture = GetTexture2D(resourceFolder + path);
         return texture.ToSprite();
     }
   

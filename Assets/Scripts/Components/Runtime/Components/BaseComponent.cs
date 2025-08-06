@@ -58,16 +58,18 @@ namespace Components.Runtime.Components
             Vector2 originalPos = component.GetPos();
             component.LocalScale(rect.localScale);
             component.GetRect().localRotation = rect.localRotation;
-            component.Pivot(rect.pivot);
-            component.AnchorMin(rect.anchorMin);
-            component.AnchorMax(rect.anchorMax);
-            component.OffsetMin(rect.offsetMin);
-            component.OffsetMax(rect.offsetMax);
-            component.Size(rect.sizeDelta);
             if (copyPos)
+            {
+                component.Pivot(rect.pivot);
+                component.AnchorMin(rect.anchorMin);
+                component.AnchorMax(rect.anchorMax);
+                component.OffsetMin(rect.offsetMin);
+                component.OffsetMax(rect.offsetMax);
                 component.Pos(rect.anchoredPosition);
+            }
             else
                 component.Pos(originalPos);
+            component.Size(rect.sizeDelta);
         }
     }
     
