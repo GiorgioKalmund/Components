@@ -67,8 +67,8 @@ namespace Components.Runtime.Components
             _headerText = ComponentBuilder.N<TextComponent>(HeaderTools)
                     .Pivot(PivotPosition.MiddleLeft)
                     .AnchoredTo(PivotPosition.MiddleRight)
-                    .FontSize(HeaderHeight - 10)
-                    .VAlignCenter()
+                    .FontSize(HeaderHeight - 7)
+                    .VAlignment(VerticalAlignmentOptions.Middle)
                     .OverflowMode(TextOverflowModes.Ellipsis)
                 ;
 
