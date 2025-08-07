@@ -98,6 +98,19 @@ namespace Components.Runtime.Testing
                 .SizeContent(400, 800)
                 .ScrollToTop()
                 ;
+            
+            var debugWindow2 = ComponentBuilder.N<WindowComponent>("Debug", canvasT)
+                    .Build(_input.UI.Debug, "Debug 2")
+                    .Size(400, 300)
+                    .ContentPadding(5)
+                    .Offset(0, -510)
+                ;
+            debugWindow2.ConfigureContent()
+                .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, false)
+                .AddVerticalLayout(10, TextAnchor.UpperLeft)
+                .ContentPadding(PaddingSide.All, 10)
+                .SizeContent(400, 300)
+                ;
 
             var removeSlots = ComponentBuilder.N<ButtonComponent>("Remove Slots", canvasT)
                     .Create("Remove Slots", () => hotbar.RemoveSlot(0), ImageService.GetSpriteFromAsset("player", "rock"))
@@ -106,14 +119,14 @@ namespace Components.Runtime.Testing
                     .Sprite("Slice/Circle Orange", Image.Type.Sliced)
                     .Cast<ButtonComponent>()
                 ;
-            removeSlots.ForegroundSize(40, 40).ContentSpacing(10).GetTextComponent().AutoSize(maxSize:32).Bold();
+            removeSlots.ForegroundSize(40, 40).ContentSpacing(10).GetTextComponent().AutoSize(maxSize:26).Bold();
 
             var addSlots = removeSlots.Copy().Text("Add Slots").ClearAllFunctions().Function(() => hotbar.AddNewSlot(ComponentBuilder.N<HotbarSlot>().Sprite("player", "Inventory Slot").Cast<HotbarSlot>()));
             var refocus = removeSlots.Copy().Text("Refocus").ClearAllFunctions().Function(IFocusable.FocusLastFocused);
             refocus.GetForeground().Sprite("player", "paddels");
-            var unfocus = removeSlots.Copy().Parent(canvasT).Text("Unfocus").ClearAllFunctions().Function(() => IFocusable.FocusedElement.UnFocus());
-            var currentlyFocused = removeSlots.Copy().Parent(canvasT).Text("Current Focus").ClearAllFunctions()
-                .Function(() => Debug.Log(IFocusable.FocusedElement));
+            var unfocus = removeSlots.Copy().Parent(canvasT).Text("Unfocus [0]").ClearAllFunctions().Function(() => IFocusable.FocusGroups[0].UnFocus());
+            var currentlyFocused = removeSlots.Copy().Parent(canvasT).Text("Current Focus [0]").ClearAllFunctions()
+                .Function(() => Debug.Log(IFocusable.FocusGroups[0]));
             debugWindow.AddContent(removeSlots, addSlots, refocus, unfocus, currentlyFocused);
             
             var image = ComponentBuilder.N<ImageComponent>("animation test", canvasT)
@@ -139,7 +152,9 @@ namespace Components.Runtime.Testing
                 .Function(animator.RestartAnimation).Foreground(null);
             var toggleType = removeSlots.Copy().Text("Toggle Type").ClearAllFunctions()
                 .Function(() => ToggleAnimationType(animator)).Foreground(ImageService.GetSpriteFromAsset("player", "Walkie Talkie"));
-            debugWindow.AddContent(playAnimation, pauseAnimation, resetAnimation, restartAnimation, toggleType);
+            var freezeInput = removeSlots.Copy().Text("Freeze ").ClearAllFunctions()
+                .Function(hotbar.ToggleFreeze).Foreground(null);
+            debugWindow.AddContent(freezeInput,playAnimation, pauseAnimation, resetAnimation, restartAnimation, toggleType);
         }
 
         private void ToggleAnimationType(SpriteAnimator animator)

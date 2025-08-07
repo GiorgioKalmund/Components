@@ -218,8 +218,8 @@ namespace Components.Runtime.Components
             return this;
         }
 
-        public void HandleFocus() { }
-        public void HandleUnfocus() { }
+        public virtual void HandleFocus() { }
+        public virtual void HandleUnfocus() { }
 
         public ImageComponent GetForeground()
         {

@@ -5,20 +5,16 @@ namespace Components.Runtime.Components
     public interface IFocusable
     {
 
-        private static IFocusable _focusedElement;
-        public static IFocusable FocusedElement
-        {
-            get => _focusedElement;
-            set
-            {
-                _focusedElement = value;
-            }
-        }
+        public static IFocusable[] FocusGroups = new IFocusable[10];
 
         private static IFocusable _lastFocusedElement;
 
         public void HandleFocus();
         public void HandleUnfocus();
+        public int GetFocusGroup()
+        {
+            return 0;
+        }
         public static void SetLastFocusedElement(IFocusable focusable)
         {
             _lastFocusedElement = focusable;
@@ -29,9 +25,9 @@ namespace Components.Runtime.Components
             _lastFocusedElement.Focus();
         }
 
-        public static void ClearFocus()
+        public static void ClearFocus(int focusGroup)
         {
-            FocusedElement.UnFocus();
+            FocusGroups[focusGroup]?.UnFocus();
         }
     }
 
@@ -39,20 +35,24 @@ namespace Components.Runtime.Components
     {
         public static void Focus<T>(this T focusable) where T : IFocusable
         {
-            IFocusable.FocusedElement?.UnFocus();
-            IFocusable.FocusedElement = focusable;
-            focusable?.HandleFocus();
+            if (focusable == null)
+                return;
+            IFocusable.FocusGroups[focusable.GetFocusGroup()]?.UnFocus();
+            IFocusable.FocusGroups[focusable.GetFocusGroup()] = focusable;
+            focusable.HandleFocus();
         }
         public static void UnFocus<T>(this T focusable) where T : IFocusable
         {
             IFocusable.SetLastFocusedElement(focusable);
-            focusable?.HandleUnfocus();
-            IFocusable.FocusedElement = null;
+            if (focusable == null)
+                return;
+            IFocusable.FocusGroups[focusable.GetFocusGroup()]= null;
+            focusable.HandleUnfocus();
         }
 
         public static bool IsFocused<T>(this T focusable) where T : IFocusable
         {
-            return IFocusable.FocusedElement is T f && f.Equals(focusable);
+            return IFocusable.FocusGroups[focusable.GetFocusGroup()] is T f && f.Equals(focusable);
         }
     }
 }

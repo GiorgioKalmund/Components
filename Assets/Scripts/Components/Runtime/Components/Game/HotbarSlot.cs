@@ -3,16 +3,23 @@ using UnityEngine;
 
 namespace Components.Runtime.Components.Game
 {
-    public class HotbarSlot : ImageComponent, IFocusable, ICopyable<HotbarSlot>
+    public class HotbarSlot : ButtonComponent, IFocusable, ICopyable<HotbarSlot>
     {
-        public void HandleFocus()
+        public override void HandleFocus()
         {
+            base.HandleFocus();
             Sprite("player", "Inventory Slot Selected");
         }
 
-        public void HandleUnfocus()
+        public override void HandleUnfocus()
         {
+            base.HandleUnfocus();
             Sprite("player", "Inventory Slot");
+        }
+
+        public int GetFocusGroup()
+        {
+            return 1;
         }
 
         public new HotbarSlot Copy(bool fullyCopyRect = true)

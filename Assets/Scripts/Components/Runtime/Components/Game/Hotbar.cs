@@ -1,34 +1,39 @@
 using System.Collections.Generic;
 using Components.Runtime.Input;
 using UnityEngine;
+using UnityEngine.InputSystem;
 
 namespace Components.Runtime.Components.Game
 {
     public class Hotbar : ButtonComponent
     {
         public List<HotbarSlot> Slots = new List<HotbarSlot>();
-        public int activeSlot = 0;
-
-        private ComponentControls _input;
-
+        private int _selectedSlotIndex = 0;
         public int SelectedSlotIndex
         {
-            get => activeSlot;
+            get => _selectedSlotIndex;
             set
             {
                 if (value < 0)
                     value = Slots.Count - 1;
-                activeSlot = value % Slots.Count;
-                Slots[activeSlot].Focus();
+                _selectedSlotIndex = value % Slots.Count;
+                Slots[_selectedSlotIndex].Focus();
             }
         }
+        
+        // -- Input Handling -- //
+        // probably needs to be outsourced to somewhere more central at some point
+        private ComponentControls _input;
+        private InputAction _scrollAction;
+        public bool Frozen => !_scrollAction?.enabled ?? true;
 
         public override void Awake()
         {
             base.Awake();
             _input = new ComponentControls();
+            _scrollAction = _input.UI.ScrollWheel;
 
-            _input.UI.ScrollWheel.performed += context =>
+            _scrollAction.performed += context =>
             {
                 Vector2 scrollDelta = context.ReadValue<Vector2>();
 
@@ -47,6 +52,23 @@ namespace Components.Runtime.Components.Game
         {
             base.Start();
             Slots[0].Focus();
+        }
+
+        public void Freeze()
+        {
+            _scrollAction?.Disable();
+        } 
+        public void UnFreeze()
+        {
+            _scrollAction?.Enable();
+        }
+
+        public void ToggleFreeze()
+        {
+            if (Frozen)
+                UnFreeze();
+            else
+                Freeze();
         }
 
         public Hotbar AddSlots(params HotbarSlot[] slots)
