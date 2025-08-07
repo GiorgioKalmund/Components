@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using Components.Runtime.Input;
+using Components.Runtime.Service;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -7,7 +8,7 @@ namespace Components.Runtime.Components.Game
 {
     public class Hotbar : ButtonComponent
     {
-        public List<HotbarSlot> Slots = new List<HotbarSlot>();
+        public List<HotbarSlot> slots = new List<HotbarSlot>();
         private int _selectedSlotIndex = 0;
         public int SelectedSlotIndex
         {
@@ -15,23 +16,21 @@ namespace Components.Runtime.Components.Game
             set
             {
                 if (value < 0)
-                    value = Slots.Count - 1;
-                _selectedSlotIndex = value % Slots.Count;
-                Slots[_selectedSlotIndex].Focus();
+                    value = slots.Count - 1;
+                _selectedSlotIndex = value % slots.Count;
+                slots[_selectedSlotIndex].Focus();
             }
         }
         
         // -- Input Handling -- //
         // probably needs to be outsourced to somewhere more central at some point
-        private ComponentControls _input;
         private InputAction _scrollAction;
         public bool Frozen => !_scrollAction?.enabled ?? true;
 
         public override void Awake()
         {
             base.Awake();
-            _input = new ComponentControls();
-            _scrollAction = _input.UI.ScrollWheel;
+            _scrollAction = InputService.Input.UI.ScrollWheel;
 
             _scrollAction.performed += context =>
             {
@@ -51,7 +50,7 @@ namespace Components.Runtime.Components.Game
         public override void Start()
         {
             base.Start();
-            Slots[0].Focus();
+            slots[0].Focus();
         }
 
         public void Freeze()
@@ -78,9 +77,8 @@ namespace Components.Runtime.Components.Game
                 if (!hotbarSlot)
                     return this;
                 
-                Slots.Add(hotbarSlot);
-                hotbarSlot.Parent(this);
-                hotbarSlot.SetActive();
+                this.slots.Add(hotbarSlot);
+                hotbarSlot.Parent(this).SetActive().SetFocusGroup(FocusGroup);
             }
             
             return this;
@@ -88,10 +86,10 @@ namespace Components.Runtime.Components.Game
 
         public Hotbar RemoveSlot(int index)
         {
-            if (index >= 0 && index < Slots.Count)
+            if (index >= 0 && index < slots.Count)
             {
-                var toRemove = Slots[index];
-                Slots.RemoveAt(index);
+                var toRemove = slots[index];
+                slots.RemoveAt(index);
                 Destroy(toRemove.gameObject);
             }
             else
@@ -107,13 +105,5 @@ namespace Components.Runtime.Components.Game
             return this;
         }
 
-        public void OnEnable()
-        {
-            _input?.Enable();
-        }
-        public void OnDisable()
-        {
-            _input?.Disable();
-        }
     }
 }

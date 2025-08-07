@@ -48,6 +48,7 @@ namespace Components.Runtime.Components
         {
             return this;
         }
+        
 
         private void OnValidate()
         {
@@ -214,6 +215,26 @@ namespace Components.Runtime.Components
         public static T OffsetMax<T>(this T renderable, float x, float y) where T : BaseComponent
         {
             return OffsetMax(renderable, new Vector2(x, y));
+        }
+        
+        // Rotation
+        public static T Rotation<T>(this T renderable, Quaternion rotation) where T : BaseComponent
+        {
+            renderable.GetRect().rotation = rotation;
+            return renderable;
+        }
+        public static T Rotation<T>(this T renderable, float zRotation) where T : BaseComponent
+        {
+            return Rotation(renderable, Quaternion.Euler(0, 0, zRotation));
+        }
+        public static T LocalRotation<T>(this T renderable, Quaternion rotation) where T : BaseComponent
+        {
+            renderable.GetRect().localRotation = rotation;
+            return renderable;
+        }
+        public static T LocalRotation<T>(this T renderable, float zRotation) where T : BaseComponent
+        {
+            return LocalRotation(renderable, Quaternion.Euler(0, 0, zRotation));
         }
         
         // Padding

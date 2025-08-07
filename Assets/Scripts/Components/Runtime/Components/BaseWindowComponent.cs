@@ -44,6 +44,9 @@ namespace Components.Runtime.Components
         
         // -- Minimize / Maximize -- //
         private Vector2 _maximizedSize;
+        
+        // Focus
+        public int FocusGroup { get; protected set; } = 0;
 
         public override void Awake()
         {
@@ -309,6 +312,24 @@ namespace Components.Runtime.Components
         {
             Header.Color(color);
             return this;
+        }
+
+        public virtual int GetFocusGroup()
+        {
+            return FocusGroup;
+        }
+
+        public virtual void SetFocusGroup(int group)
+        {
+            FocusGroup = group;
+        }
+        
+        private void OnDrawGizmos()
+        {
+            GUIStyle style = new GUIStyle();
+            style.normal.textColor = UnityEngine.Color.red;
+            style.fontSize = 14; 
+            Handles.Label(transform.position, GetFocusGroup() + "", style);
         }
     }
 }

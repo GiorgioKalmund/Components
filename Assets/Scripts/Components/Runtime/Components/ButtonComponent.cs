@@ -26,6 +26,8 @@ namespace Components.Runtime.Components
 
         private bool _focusable;
         
+        public int FocusGroup { get; protected set; } = 0;
+        
         public override void Awake()
         {
             base.Awake();
@@ -220,6 +222,16 @@ namespace Components.Runtime.Components
 
         public virtual void HandleFocus() { }
         public virtual void HandleUnfocus() { }
+
+        public virtual int GetFocusGroup()
+        {
+            return FocusGroup;
+        }
+
+        public virtual void SetFocusGroup(int group)
+        {
+            FocusGroup = group;
+        }
 
         public ImageComponent GetForeground()
         {

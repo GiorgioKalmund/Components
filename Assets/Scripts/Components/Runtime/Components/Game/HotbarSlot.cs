@@ -1,10 +1,12 @@
 using System;
+using UnityEditor;
 using UnityEngine;
 
 namespace Components.Runtime.Components.Game
 {
     public class HotbarSlot : ButtonComponent, IFocusable, ICopyable<HotbarSlot>
     {
+        // -- Focus -- //
         public override void HandleFocus()
         {
             base.HandleFocus();
@@ -16,12 +18,16 @@ namespace Components.Runtime.Components.Game
             base.HandleUnfocus();
             Sprite("player", "Inventory Slot");
         }
-
-        public int GetFocusGroup()
+        
+        private void OnDrawGizmos()
         {
-            return 1;
+            GUIStyle style = new GUIStyle();
+            style.normal.textColor = UnityEngine.Color.red;
+            style.fontSize = 14; 
+            Handles.Label(transform.position, GetFocusGroup() + "", style);
         }
-
+        
+        // -- Copy -- //
         public new HotbarSlot Copy(bool fullyCopyRect = true)
         {
             HotbarSlot copySlot = this.BaseCopy(this);

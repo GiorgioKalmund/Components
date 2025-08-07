@@ -3,6 +3,7 @@ using Components.Runtime.Components;
 using Components.Runtime.Components.Animation;
 using Components.Runtime.Components.Game;
 using Components.Runtime.Input;
+using Components.Runtime.Service;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Animations;
@@ -11,17 +12,19 @@ namespace Components.Runtime.Testing
 {
     public class ComponentCreator : MonoBehaviour
     {
-        private ComponentControls _input;
+        private ComponentControls Input => InputService.Input;
         private WindowComponent window3;
         private ButtonComponent _copyButton;
+        
+        // Service
+        private InputService _inputService;
 
         private void Start()
         {
+            _inputService = new InputService();
             var canvas = GUIService.GetCanvas();
             var canvasT = canvas.GetTransform();
             TextComponent.GlobalFont(Resources.Load<TMPro.TMP_FontAsset>("Font/GoogleSansCode SDF"));
-            _input = new ComponentControls();
-
             Vector2 nativeScaleSize = new Vector2(5, 5);
 
             var backdrop = ComponentBuilder.N<ImageComponent>("Brr", canvasT)
@@ -29,7 +32,7 @@ namespace Components.Runtime.Testing
                     .Sprite("player", "Tile")
                     .ImageType(Image.Type.Tiled)
                     .PixelsPerUnitMultiplier(0.1f)
-                    .ToggleVisibilityUsing(_input.UI.ShowWindow)
+                    .ToggleVisibilityUsing(Input.UI.ShowWindow)
                     .SetActive(false)
                 ;
 
@@ -72,6 +75,7 @@ namespace Components.Runtime.Testing
                     .AddHorizontalLayout(10)
                     .Cast<Hotbar>()
                 ;
+            hotbar.SetFocusGroup(1);
 
             var slot0 = ComponentBuilder.N<HotbarSlot>().Sprite("player", "Inventory Slot").Cast<HotbarSlot>();
             var slot1 = slot0.Copy();
@@ -87,7 +91,7 @@ namespace Components.Runtime.Testing
             
             // Debug
             var debugWindow = ComponentBuilder.N<WindowComponent>("Debug", canvasT)
-                    .Build(_input.UI.Debug, "Debug")
+                    .Build(Input.UI.Debug, "Debug")
                     .Size(400, 500)
                     .ContentPadding(5)
                 ;
@@ -100,7 +104,7 @@ namespace Components.Runtime.Testing
                 ;
             
             var debugWindow2 = ComponentBuilder.N<WindowComponent>("Debug", canvasT)
-                    .Build(_input.UI.Debug, "Debug 2")
+                    .Build(Input.UI.Debug, "Debug 2")
                     .Size(400, 300)
                     .ContentPadding(5)
                     .Offset(0, -510)
@@ -124,9 +128,9 @@ namespace Components.Runtime.Testing
             var addSlots = removeSlots.Copy().Text("Add Slots").ClearAllFunctions().Function(() => hotbar.AddNewSlot(ComponentBuilder.N<HotbarSlot>().Sprite("player", "Inventory Slot").Cast<HotbarSlot>()));
             var refocus = removeSlots.Copy().Text("Refocus").ClearAllFunctions().Function(IFocusable.FocusLastFocused);
             refocus.GetForeground().Sprite("player", "paddels");
-            var unfocus = removeSlots.Copy().Parent(canvasT).Text("Unfocus [0]").ClearAllFunctions().Function(() => IFocusable.FocusGroups[0].UnFocus());
+            var unfocus = removeSlots.Copy().Parent(canvasT).Text("Unfocus [0]").ClearAllFunctions().Function(() => IFocusable.FocusGroup(0));
             var currentlyFocused = removeSlots.Copy().Parent(canvasT).Text("Current Focus [0]").ClearAllFunctions()
-                .Function(() => Debug.Log(IFocusable.FocusGroups[0]));
+                .Function(() => Debug.Log(IFocusable.GetFocusedElement(0)));
             debugWindow.AddContent(removeSlots, addSlots, refocus, unfocus, currentlyFocused);
             
             var image = ComponentBuilder.N<ImageComponent>("animation test", canvasT)
@@ -155,6 +159,23 @@ namespace Components.Runtime.Testing
             var freezeInput = removeSlots.Copy().Text("Freeze ").ClearAllFunctions()
                 .Function(hotbar.ToggleFreeze).Foreground(null);
             debugWindow.AddContent(freezeInput,playAnimation, pauseAnimation, resetAnimation, restartAnimation, toggleType);
+
+            var wheelMenu = ComponentBuilder.N<WheelMenu>("Wheel Menu", canvasT)
+                .Spacing(200)
+                .Offset(0, 200);
+            for (int index = 0; index < 8; index++)
+            {
+                var mockMenuButton = ComponentBuilder.N<WheelMenuButton>()
+                        .ConfigureSprites(ImageService.GetSpriteFromAsset("player", "Menu Wheel Slot"), ImageService.GetSpriteFromAsset("player", "Menu Wheel Slot Selected"))
+                        .Size(200, 200)
+                        .Create("Yo")
+                        .Cast<WheelMenuButton>()
+                    ;
+                mockMenuButton.SetFocusGroup(8);
+                mockMenuButton.GetTextComponent().Color(Color.white).Bold();
+                wheelMenu.AddContent(mockMenuButton);
+            }
+            wheelMenu.Render();
         }
 
         private void ToggleAnimationType(SpriteAnimator animator)
@@ -167,12 +188,12 @@ namespace Components.Runtime.Testing
 
         private void OnEnable()
         {
-            _input?.Enable();
+            Input?.Enable();
         }
 
         private void OnDisable()
         {
-            _input?.Disable();
+            Input?.Disable();
         }
     }
 }

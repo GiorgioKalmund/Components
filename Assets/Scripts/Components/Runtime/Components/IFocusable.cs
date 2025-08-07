@@ -25,9 +25,19 @@ namespace Components.Runtime.Components
             _lastFocusedElement.Focus();
         }
 
-        public static void ClearFocus(int focusGroup)
+        public static void UnFocusGroup(int focusGroup)
         {
             FocusGroups[focusGroup]?.UnFocus();
+        }
+
+        public static void FocusGroup(int focusGroup)
+        {
+            FocusGroups[focusGroup]?.Focus();
+        }
+
+        public static IFocusable GetFocusedElement(int focusGroup)
+        {
+            return FocusGroups[focusGroup];
         }
     }
 

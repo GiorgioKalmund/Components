@@ -3,11 +3,12 @@ using Components.Runtime.Components.Animation;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.VisualScripting;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 namespace Components.Runtime.Components
 {
-    public class ImageComponent : BaseComponent, ICopyable<ImageComponent>
+    public class ImageComponent : BaseComponent, ICopyable<ImageComponent>, IPointerEnterHandler, IPointerExitHandler
     {
         private Image _image;
         protected static string NamePrefix = "ImageComponent";
@@ -247,6 +248,20 @@ namespace Components.Runtime.Components
         public SpriteAnimator AddAnimator()
         {
             return gameObject.AddComponent<SpriteAnimator>();
+        }
+        
+        
+        public virtual void HandlePointerEnter(PointerEventData eventData) { }
+        public virtual void HandlePointerExit(PointerEventData eventData) { }
+        
+        public void OnPointerEnter(PointerEventData eventData)
+        {
+            HandlePointerEnter(eventData);
+        }
+
+        public void OnPointerExit(PointerEventData eventData)
+        {
+            HandlePointerExit(eventData);
         }
     }
 

@@ -1,7 +1,9 @@
 using System;
 using System.Collections;
+using Components.Runtime.Service;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 namespace Components.Runtime.Components
@@ -16,7 +18,7 @@ namespace Components.Runtime.Components
         
     }
     
-    public class ScrollViewComponent : ImageComponent 
+    public class ScrollViewComponent : ImageComponent , IPointerEnterHandler, IPointerExitHandler
     {
         public ImageComponent content;
 
@@ -140,6 +142,17 @@ namespace Components.Runtime.Components
                 _fitter.horizontalFit= _scroll.horizontal ? ContentSizeFitter.FitMode.MinSize : ContentSizeFitter.FitMode.Unconstrained;
                 _fitter.verticalFit = _scroll.vertical ? ContentSizeFitter.FitMode.MinSize : ContentSizeFitter.FitMode.Unconstrained;
             }
+        }
+
+        // -- Idea: Disable certain controls when hovering over scroll views, to avoid scrolling in other areas as well -- //
+        public override void HandlePointerEnter(PointerEventData eventData)
+        {
+            InputService.Input.UI.ScrollWheel.Disable();
+        }
+
+        public override void HandlePointerExit(PointerEventData eventData)
+        {
+            InputService.Input.UI.ScrollWheel.Enable();
         }
     }
 }
