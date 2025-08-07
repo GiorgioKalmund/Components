@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -9,7 +10,12 @@ namespace Components.Runtime.Components.Game
 
         protected List<BaseComponent> WheelContents = new List<BaseComponent>();
         public int Count => WheelContents.Count;
-        
+
+        private void Start()
+        {
+            Render();
+        }
+
         public void Render()
         {
             for (int index = 0; index < Count; index ++)

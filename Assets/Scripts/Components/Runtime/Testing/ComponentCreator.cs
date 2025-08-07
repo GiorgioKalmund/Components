@@ -162,7 +162,7 @@ namespace Components.Runtime.Testing
 
             var wheelMenu = ComponentBuilder.N<WheelMenu>("Wheel Menu", canvasT)
                 .Spacing(200)
-                .Offset(0, 200);
+                .Offset(400, 200);
             for (int index = 0; index < 8; index++)
             {
                 var mockMenuButton = ComponentBuilder.N<WheelMenuButton>()
@@ -175,7 +175,6 @@ namespace Components.Runtime.Testing
                 mockMenuButton.GetTextComponent().Color(Color.white).Bold();
                 wheelMenu.AddContent(mockMenuButton);
             }
-            wheelMenu.Render();
         }
 
         private void ToggleAnimationType(SpriteAnimator animator)
