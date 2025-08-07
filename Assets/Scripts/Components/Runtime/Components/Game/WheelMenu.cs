@@ -6,7 +6,7 @@ namespace Components.Runtime.Components.Game
 {
     public class WheelMenu : BaseComponent, IRenderable
     {
-        public float distance = 100;
+        public float radius = 100;
 
         protected List<BaseComponent> WheelContents = new List<BaseComponent>();
         public int Count => WheelContents.Count;
@@ -23,7 +23,7 @@ namespace Components.Runtime.Components.Game
                 WheelContents[index] 
                         .Rotation(index * (360f / Count))
                     ;
-                WheelContents[index].GetRect().Translate(new Vector3(0, distance, 0), Space.Self);
+                WheelContents[index].GetRect().Translate(new Vector3(0, radius, 0), Space.Self);
             }
         }
 
@@ -37,9 +37,9 @@ namespace Components.Runtime.Components.Game
             return this;
         }
         
-        public WheelMenu Spacing(float spacing)
+        public WheelMenu Radius(float spacing)
         {
-            distance = spacing;
+            radius = spacing;
             return this;
         }
     }

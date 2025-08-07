@@ -16,7 +16,6 @@ namespace Components.Runtime.Components.Game
 
             ForegroundImage.Rotation(0);
             ButtonText.Rotation(0);
-            ForegroundImage.LocalScale(0.5f, 0.5f);
         }
 
         public override void HandlePointerEnter(PointerEventData eventData)
@@ -43,14 +42,14 @@ namespace Components.Runtime.Components.Game
         public override void HandleFocus()
         {
             base.HandleFocus();
-            Sprite("player", "Menu Wheel Slot Selected");
+            Sprite(_highlightedSprite);
         }
 
 
         public override void HandleUnfocus()
         {
             base.HandleUnfocus();
-            Sprite("player", "Menu Wheel Slot");
+            Sprite(_normalSprite);
         }
         
         private void OnDrawGizmos()

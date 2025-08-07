@@ -60,8 +60,8 @@ namespace Components.Runtime.Testing
             
             var crosshair = ComponentBuilder.N<ImageComponent>(canvasT)
                 .Sprite("player", "Crosshair")
-                .Size(50, 50)
-                .SetActive(false)
+                .Size(30, 30)
+                .SetActive()
                 ;
             
             var hotbar = ComponentBuilder.N<Hotbar>(canvasT)
@@ -114,6 +114,7 @@ namespace Components.Runtime.Testing
                 .AddVerticalLayout(10, TextAnchor.UpperLeft)
                 .ContentPadding(PaddingSide.All, 10)
                 .SizeContent(400, 300)
+                .ScrollToTop()
                 ;
 
             var removeSlots = ComponentBuilder.N<ButtonComponent>("Remove Slots", canvasT)
@@ -133,15 +134,13 @@ namespace Components.Runtime.Testing
                 .Function(() => Debug.Log(IFocusable.GetFocusedElement(0)));
             debugWindow.AddContent(removeSlots, addSlots, refocus, unfocus, currentlyFocused);
             
-            var image = ComponentBuilder.N<ImageComponent>("animation test", canvasT)
-                    .Sprite("player", "eyes")
-                ;
+            var image = ComponentBuilder.N<ImageComponent>("animation test", canvasT).Offset(-100, 200);
             Sprite[] frames = new Sprite[4];
             frames[0] = ImageService.GetSpriteFromAsset("player", "head");
             frames[1] = ImageService.GetSpriteFromAsset("player", "rock");
             frames[2] = ImageService.GetSpriteFromAsset("player", "paddels");
             frames[3] = ImageService.GetSpriteFromAsset("player", "backpack");
-            SpriteAnimation animation = new SpriteAnimation(frames, 1);
+            SpriteAnimation animation = new SpriteAnimation(frames, 2);
             var animator = image.AddAnimator();
             animator.CreateAnimation(animation, SpriteAnimator.Type.PingPong).UseNativeSizing(4, 4);
             //animator.Play();
@@ -156,25 +155,88 @@ namespace Components.Runtime.Testing
                 .Function(animator.RestartAnimation).Foreground(null);
             var toggleType = removeSlots.Copy().Text("Toggle Type").ClearAllFunctions()
                 .Function(() => ToggleAnimationType(animator)).Foreground(ImageService.GetSpriteFromAsset("player", "Walkie Talkie"));
-            var freezeInput = removeSlots.Copy().Text("Freeze ").ClearAllFunctions()
+            var freezeInput = removeSlots.Copy().Text("Toggle Freeze").ClearAllFunctions()
                 .Function(hotbar.ToggleFreeze).Foreground(null);
             debugWindow.AddContent(freezeInput,playAnimation, pauseAnimation, resetAnimation, restartAnimation, toggleType);
 
             var wheelMenu = ComponentBuilder.N<WheelMenu>("Wheel Menu", canvasT)
-                .Spacing(200)
-                .Offset(400, 200);
+                .Radius(200);
             for (int index = 0; index < 8; index++)
             {
                 var mockMenuButton = ComponentBuilder.N<WheelMenuButton>()
                         .ConfigureSprites(ImageService.GetSpriteFromAsset("player", "Menu Wheel Slot"), ImageService.GetSpriteFromAsset("player", "Menu Wheel Slot Selected"))
                         .Size(200, 200)
-                        .Create("Yo")
+                        .Create(foreground:ImageService.GetSpriteFromAsset("player", "rock"))
                         .Cast<WheelMenuButton>()
                     ;
                 mockMenuButton.SetFocusGroup(8);
                 mockMenuButton.GetTextComponent().Color(Color.white).Bold();
+                mockMenuButton.GetForeground().NativeSize(4, 4);
                 wheelMenu.AddContent(mockMenuButton);
             }
+
+            var popup = ComponentBuilder.N<PopupComponent>("popup", canvasT)
+                    .Build(canvas, Input.UI.Escape)
+                    .AddContent(wheelMenu)
+                ;
+            popup.onPopupOpen.AddListener(() => hotbar.Freeze());
+            popup.onPopupClose.AddListener(() => hotbar.UnFreeze());
+            
+            var popupControls = removeSlots.Copy().Text("Popup").ClearAllFunctions()
+                .Function(popup.Open).Foreground(ImageService.GetSpriteFromAsset("player", "Key"));
+            
+            debugWindow2.AddContent(popupControls);
+            
+            var animationTest = ComponentBuilder.N<ImageComponent>("test", canvasT).Offset(-300, -200);
+            Sprite[] framesT = new Sprite[4];
+            framesT[0] = ImageService.GetSpriteFromAsset("player", "1");
+            framesT[1] = ImageService.GetSpriteFromAsset("player", "2");
+            framesT[2] = ImageService.GetSpriteFromAsset("player", "3");
+            framesT[3] = ImageService.GetSpriteFromAsset("player", "4");
+            SpriteAnimation animationT = new SpriteAnimation(framesT, 1);
+            var animatorT = animationTest.AddAnimator();
+            animatorT.CreateAnimation(animationT, SpriteAnimator.Type.Loop);
+            var textDescription = ComponentBuilder.N<TextComponent>("test text", animatorT.transform)
+                    .Text("loop", Color.white)
+                    .FitToContents()
+                    .Bold()
+                    .AlignCenter() 
+                    .VAlignCenter()
+                    .Pivot(PivotPosition.UpperCenter)
+                    .AnchoredTo(PivotPosition.LowerCenter)
+                ;
+
+            var animationTest2 = animationTest.Copy().Offset(200, 0);
+            animationTest2.GetAnimator().Configure(SpriteAnimator.Type.PingPong);
+            var text2 = textDescription.Copy().Parent(animationTest2.transform).Text("ping pong");
+            var animationTest3 = animationTest2.Copy().Offset(200, 0);
+            animationTest3.GetAnimator().Configure(SpriteAnimator.Type.Once);
+            var text3 = textDescription.Copy().Parent(animationTest3.transform).Text("once");
+            
+            var playAnimationT = removeSlots.Copy().Text("Play Animations").ClearAllFunctions()
+                .Function(() =>
+                {
+                    animatorT.Play();
+                    animationTest2.GetAnimator().Play();
+                    animationTest3.GetAnimator().Play();
+                }).Foreground(null);
+            var pauseAnimationT = removeSlots.Copy().Text("Pause Animations").ClearAllFunctions()
+                .Function(() =>
+                {
+                    animatorT.Pause();
+                    animationTest2.GetAnimator().Pause();
+                    animationTest3.GetAnimator().Pause();
+                }).Foreground(null);
+            
+            var resetAnimationT= removeSlots.Copy().Text("Reset Animations").ClearAllFunctions()
+                .Function(() =>
+                {
+                    animatorT.ResetAnimation();
+                    animationTest2.GetAnimator().ResetAnimation();
+                    animationTest3.GetAnimator().ResetAnimation();
+                }).Foreground(null);
+
+            debugWindow2.AddContent(playAnimationT, pauseAnimationT, resetAnimationT);
         }
 
         private void ToggleAnimationType(SpriteAnimator animator)

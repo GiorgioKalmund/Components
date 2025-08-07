@@ -1,4 +1,5 @@
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -6,7 +7,7 @@ using UnityEngine.UI;
 namespace Components.Runtime.Components.Animation
 {
     [RequireComponent(typeof(ImageComponent), typeof(Image))]
-    public class SpriteAnimator : MonoBehaviour
+    public class SpriteAnimator : BaseComponent, ICopyable<SpriteAnimator>
     {
         public enum State
         {
@@ -175,6 +176,27 @@ namespace Components.Runtime.Components.Animation
                 AnimationType = type.Value;
             if (speed.HasValue)
                 Speed = speed.Value;
+            return this;
+        }
+
+        public SpriteAnimator Copy(bool fullyCopyRect = true)
+        {
+            SpriteAnimator copyAnimator = this.BaseCopy(this);
+            return copyAnimator.CopyFrom(this, fullyCopyRect);
+        }
+
+        public SpriteAnimator CopyFrom(SpriteAnimator other, bool fullyCopyRect = true)
+        {
+            DisplayName = other.DisplayName + " (Copy)";
+            CopyRect(other.GetRect(), this, fullyCopyRect);
+            
+            NativeSizeFactor = other.NativeSizeFactor;
+            NativeSizing = other.NativeSizing;
+            Speed = other.Speed;
+            CurrentAnimation = other.CurrentAnimation;
+            CurrentState = other.CurrentState;
+            CurrentFrame = other.CurrentFrame;
+
             return this;
         }
     }

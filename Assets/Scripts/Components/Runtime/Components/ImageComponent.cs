@@ -18,6 +18,7 @@ namespace Components.Runtime.Components
         
         protected HorizontalLayoutGroup HorizontalLayout;
         private LayoutElement _foregroundLayout;
+        protected SpriteAnimator Animator;
 
         public override void Awake()
         {
@@ -159,7 +160,18 @@ namespace Components.Runtime.Components
             CopyRect(other.GetRect(), this, fullyCopyRect);
             CopyLayoutElement(other, this);
             CopyImageProperties(other.GetImage(), this);
+            CopyAnimator(other, this);
             return this;
+        }
+
+
+        public static void CopyAnimator(ImageComponent other, ImageComponent copyImage)
+        {
+            if (other.Animator)
+            {
+                copyImage.AddAnimator();
+                copyImage.Animator.CopyFrom(other.Animator);
+            }
         }
 
         public static void CopyHorizontalLayout(ImageComponent other, ImageComponent copyImage)
@@ -247,7 +259,13 @@ namespace Components.Runtime.Components
 
         public SpriteAnimator AddAnimator()
         {
-            return gameObject.AddComponent<SpriteAnimator>();
+            Animator = gameObject.AddComponent<SpriteAnimator>();
+            return Animator;
+        }
+
+        public SpriteAnimator GetAnimator()
+        {
+            return Animator;
         }
         
         

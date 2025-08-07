@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 namespace Components.Runtime.Components
 {
@@ -13,13 +14,16 @@ namespace Components.Runtime.Components
         private Canvas _canvas;
         private Color _defaultBackdropColor = UnityEngine.Color.black;
 
+        private InputAction _toggleAction;
+
         public override void Awake()
         {
             base.Awake();
-            Function(ClosePopup);
+            Function(Close);
 
             onPopupOpen ??= new UnityEvent();
             onPopupClose ??= new UnityEvent();
+
         }
     
         public override void Start()
@@ -29,7 +33,13 @@ namespace Components.Runtime.Components
             
             this.FullScreen(_canvas);
             
-            if (open) OpenPopup(); else ClosePopup();
+            if (_toggleAction != null)
+            {
+                _toggleAction.performed += ToggleOpenClose;
+                _toggleAction?.Enable();
+            }
+            
+            if (open) Open(); else Close();
         }
 
         protected PopupComponent DontCloseOnStart()
@@ -40,9 +50,11 @@ namespace Components.Runtime.Components
 
         public void Render() { }
 
-        public PopupComponent Build(Canvas canvas, float alpha = 0.6f, Color? backdropColor = null)
+        public PopupComponent Build(Canvas canvas, InputAction toggleAction = null, float alpha = 0.6f, Color? backdropColor = null)
         {
             _canvas = canvas;
+            _toggleAction = toggleAction;
+            
             Color c;
             if (backdropColor.HasValue)
                 c = backdropColor.Value;
@@ -55,7 +67,15 @@ namespace Components.Runtime.Components
             return this;
         }
 
-        public virtual void OpenPopup()
+        public virtual void ToggleOpenClose(InputAction.CallbackContext context)
+        {
+            if (IsOpen())
+                Close();
+            else
+                Open();
+        }
+
+        public virtual void Open()
         {
             GetRect().localScale = Vector2.one;
 
@@ -63,15 +83,15 @@ namespace Components.Runtime.Components
             this.BringToFront();
             Render();
 
-            onPopupOpen?.Invoke();
+            onPopupOpen.Invoke();
         }
 
-        public virtual void ClosePopup()
+        public virtual void Close()
         {
             this.LocalScale(Vector2.zero);
             open = false;
 
-            onPopupClose?.Invoke();
+            onPopupClose.Invoke();
         }
 
         public bool IsOpen()
@@ -92,6 +112,15 @@ namespace Components.Runtime.Components
         {
             component.Parent(this);
             return this;
+        }
+
+        public void OnEnable()
+        {
+            _toggleAction?.Enable();
+        }
+        public void OnDisable()
+        {
+            _toggleAction?.Disable();
         }
     }
 }

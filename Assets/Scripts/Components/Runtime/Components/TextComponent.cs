@@ -107,6 +107,12 @@ namespace Components.Runtime.Components
             return this;
         }
 
+        public TextComponent FitToContents(bool fit = true)
+        {
+            _textMesh.autoSizeTextContainer = fit;
+            return this;
+        }
+
         public TextComponent Bold() { return FontStyle(FontStyles.Bold); }
         public TextComponent Italic() { return FontStyle(FontStyles.Italic); }
         public TextComponent Underline() { return FontStyle(FontStyles.Underline); }
@@ -144,7 +150,7 @@ namespace Components.Runtime.Components
         public TextComponent Copy(bool fullyCopyRect = true)
         {
             TextComponent textCopy = this.BaseCopy(this);
-            return textCopy.CopyFrom(this, fullyCopyRect).Offset(-50, -50);
+            return textCopy.CopyFrom(this, fullyCopyRect);
         }
 
         public TextComponent CopyFrom(TextComponent other, bool fullyCopyRect = true)
@@ -164,6 +170,7 @@ namespace Components.Runtime.Components
             textComponent.FontStyle(text.fontStyle);
             textComponent.FontSize(text.fontSize);
             textComponent.OverflowMode(text.overflowMode);
+            textComponent.FitToContents(text.autoSizeTextContainer);
             if (text.enableAutoSizing)
                 textComponent.AutoSize(text.fontSizeMin, text.fontSizeMax);
         }
