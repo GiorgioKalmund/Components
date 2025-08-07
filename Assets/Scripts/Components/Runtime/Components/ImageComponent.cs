@@ -1,4 +1,5 @@
 using System;
+using Components.Runtime.Components.Animation;
 using UnityEngine;
 using UnityEngine.UI;
 using Unity.VisualScripting;
@@ -234,6 +235,18 @@ namespace Components.Runtime.Components
             if (side.HasFlag(PaddingSide.Top)) { if (HorizontalLayout) HorizontalLayout.padding.top = amount; }
             if (side.HasFlag(PaddingSide.Bottom)) { if (HorizontalLayout) HorizontalLayout.padding.bottom = amount; }
             return this;
+        }
+
+        // For more flexible and efficient use, allowing controlling of instances, we might want to use MaterialPropertyBlock in the future
+        public ImageComponent Material(Material material)
+        {
+            _image.material = material;
+            return this;
+        }
+
+        public SpriteAnimator AddAnimator()
+        {
+            return gameObject.AddComponent<SpriteAnimator>();
         }
     }
 

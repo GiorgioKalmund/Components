@@ -95,7 +95,7 @@ namespace Components.Runtime.Testing
                 .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, false)
                 .AddVerticalLayout(10, TextAnchor.UpperLeft)
                 .ContentPadding(PaddingSide.All, 10)
-                .SizeContent(400, 600)
+                .SizeContent(400, 800)
                 .ScrollToTop()
                 ;
 
@@ -124,20 +124,30 @@ namespace Components.Runtime.Testing
             frames[1] = ImageService.GetSpriteFromAsset("player", "rock");
             frames[2] = ImageService.GetSpriteFromAsset("player", "paddels");
             frames[3] = ImageService.GetSpriteFromAsset("player", "backpack");
-            SpriteAnimation animation = new SpriteAnimation(frames, 10);
-            var animator = image.gameObject.AddComponent<SpriteAnimator>();
-            animator.CreateAnimation(animation, SpriteAnimator.Type.Loop).UseNativeSizing(4, 4);
-            animator.Play();
+            SpriteAnimation animation = new SpriteAnimation(frames, 1);
+            var animator = image.AddAnimator();
+            animator.CreateAnimation(animation, SpriteAnimator.Type.PingPong).UseNativeSizing(4, 4);
+            //animator.Play();
 
             var playAnimation = removeSlots.Copy().Text("Play Animation").ClearAllFunctions()
                 .Function(animator.Play).Foreground(null);
             var pauseAnimation = removeSlots.Copy().Text("Pause Animation").ClearAllFunctions()
                 .Function(animator.Pause).Foreground(null);
             var resetAnimation = removeSlots.Copy().Text("Reset Animation").ClearAllFunctions()
-                .Function(animator.RestartAnimation).Foreground(null);
+                .Function(animator.ResetAnimation).Foreground(null);
             var restartAnimation = removeSlots.Copy().Text("Restart Animation").ClearAllFunctions()
                 .Function(animator.RestartAnimation).Foreground(null);
-            debugWindow.AddContent(playAnimation, pauseAnimation, resetAnimation, restartAnimation);
+            var toggleType = removeSlots.Copy().Text("Toggle Type").ClearAllFunctions()
+                .Function(() => ToggleAnimationType(animator)).Foreground(ImageService.GetSpriteFromAsset("player", "Walkie Talkie"));
+            debugWindow.AddContent(playAnimation, pauseAnimation, resetAnimation, restartAnimation, toggleType);
+        }
+
+        private void ToggleAnimationType(SpriteAnimator animator)
+        {
+            if (animator.AnimationType == SpriteAnimator.Type.Once)
+                animator.Configure(SpriteAnimator.Type.Loop, speed:3);
+            else 
+                animator.Configure(SpriteAnimator.Type.Once, speed:1);
         }
 
         private void OnEnable()

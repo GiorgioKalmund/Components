@@ -28,14 +28,14 @@ namespace Components.Runtime.Components
         private GridLayoutGroup _grid;
 
         public bool contentHasBeenSizedManually = false; 
-        private bool _contentFitsSize;
-        public bool ContentFitsSize
+        private bool _sizeFitsContents;
+        public bool SizeFitsContents
         {
-            get => _contentFitsSize;
+            get => _sizeFitsContents;
             set
             {
-                var oldValue = _contentFitsSize;
-                _contentFitsSize = value;
+                var oldValue = _sizeFitsContents;
+                _sizeFitsContents = value;
                 HandleContentFitsSizeChange(value);
                 contentHasBeenSizedManually = value || oldValue;
             }
@@ -64,14 +64,14 @@ namespace Components.Runtime.Components
             DisplayName = "ScrollViewComponent";
         }
 
-        public ScrollViewComponent Create(ScrollViewDirection direction, ScrollRect.MovementType movementType, bool contentFitsSize)
+        public ScrollViewComponent Create(ScrollViewDirection direction, ScrollRect.MovementType movementType, bool sizeFitsContents)
         {
             _scroll.horizontal = direction.HasFlag(ScrollViewDirection.Horizontal);
             _scroll.vertical = direction.HasFlag(ScrollViewDirection.Vertical);
 
             _scroll.movementType = movementType;
 
-            ContentFitsSize = contentFitsSize;
+            SizeFitsContents = sizeFitsContents;
             return this;
         }
 

@@ -19,12 +19,20 @@ namespace Components.Runtime.Components.Animation
         public enum Type
         {
             Loop,
-            Once
+            Once,
+            PingPong
+        }
+
+        private enum PingPongPhase
+        {
+            Ping,
+            Pong
         }
         
         public SpriteAnimation CurrentAnimation;
         public State CurrentState { get; private set; } = State.None;
         public Type AnimationType { get; private set;  }
+        private PingPongPhase _currentPingPongPhase = PingPongPhase.Ping;
         public float Speed { get; private set; } = 1f;
         public float ElapsedTime { get; private set; }
         public int CurrentFrame { get; private set; }
@@ -39,13 +47,9 @@ namespace Components.Runtime.Components.Animation
         public void Play() => CurrentState = State.Running;
         public void Pause() => CurrentState = State.Paused;
 
-        private void Awake()
-        {
-            Image = GetComponent<ImageComponent>();
-        }
-
         private void Start()
         {
+            Image = GetComponent<ImageComponent>();
             SetFrame();
         }
 
@@ -57,17 +61,17 @@ namespace Components.Runtime.Components.Animation
             ElapsedTime += Time.deltaTime;
             
             float frameDuration = GetFrameTime();
-
             if (ElapsedTime >= frameDuration)
             {
                 NextFrame();
             }
         }
 
-        public SpriteAnimator CreateAnimation(SpriteAnimation anim, Type animationType)
+        public SpriteAnimator CreateAnimation(SpriteAnimation anim, Type animationType, float speed = 1f)
         {
             CurrentAnimation = anim;
             AnimationType = animationType;
+            Speed = speed;
             return this;
         }
 
@@ -77,9 +81,9 @@ namespace Components.Runtime.Components.Animation
             {
                 case Type.Loop:
                 {
-                    SetFrame();
                     CurrentFrame++;
                     CurrentFrame %= AnimationLength;
+                    SetFrame();
                     break;   
                 }
                 case Type.Once:
@@ -89,6 +93,34 @@ namespace Components.Runtime.Components.Animation
                         SetFrame();
                     else
                         CurrentState = State.Completed;
+                    break;
+                }
+                case Type.PingPong:
+                {
+                    if (_currentPingPongPhase == PingPongPhase.Ping)
+                    {
+                        if (CurrentFrame == AnimationLength - 1)
+                        {
+                            _currentPingPongPhase = PingPongPhase.Pong;
+                            CurrentFrame--;
+                            SetFrame();
+                            break;
+                        }
+                        CurrentFrame++;
+                        SetFrame();
+                    }
+                    else
+                    {
+                        if (CurrentFrame == 0)
+                        {
+                            _currentPingPongPhase = PingPongPhase.Ping;
+                            CurrentFrame++;
+                            SetFrame();
+                            break;
+                        }
+                        CurrentFrame--;
+                        SetFrame();
+                    }
                     break;
                 }
             }
@@ -101,7 +133,14 @@ namespace Components.Runtime.Components.Animation
             CurrentFrame = 0;
             CurrentState = State.None;
             ElapsedTime = 0;
+            _currentPingPongPhase = PingPongPhase.Ping;
             SetFrame();
+        }
+
+        public void Clear()
+        {
+            ResetAnimation();
+            CurrentAnimation = null;
         }
         
         public void RestartAnimation()
@@ -127,6 +166,15 @@ namespace Components.Runtime.Components.Animation
         {
             NativeSizing = true;
             NativeSizeFactor = new Vector2(scaleFactorX, scaleFactorY);
+            return this;
+        }
+
+        public SpriteAnimator Configure(Type? type = null, float? speed = null)
+        {
+            if (type.HasValue)
+                AnimationType = type.Value;
+            if (speed.HasValue)
+                Speed = speed.Value;
             return this;
         }
     }
