@@ -107,7 +107,8 @@ namespace Components.Runtime.Components
         public ScrollViewComponent AddContent(BaseComponent component)
         {
             component.Parent(content);
-            
+
+            // Maybe there is a more elegant, less computationally heavy solution, but this works for now
             LayoutRebuilder.ForceRebuildLayoutImmediate(GetRect());
             _vStack.CalculateLayoutInputVertical();
             _vStack.SetLayoutVertical();
