@@ -104,22 +104,15 @@ namespace Components.Runtime.Components
             content.Pos(content.GetPos().x, -(content.GetHeight() -  this.GetHeight()) / 2);
         }
 
-        public ScrollViewComponent AddContent(BaseComponent component, bool forceThisFrame = false)
+        public ScrollViewComponent AddContent(BaseComponent component)
         {
-            // If we really want to make it a child this frame, we can force it to.
-            // However, in most cases we wait 1 extra frame to let the component fully load its desired size and then add it to the content
-            // This fixes some issues related to auto-scaling objects such as buttons using 'FitToContent'
-            if (forceThisFrame)
-                component.Parent(content);
-            else 
-                StartCoroutine(AddContentNextFrame(component));
+            component.Parent(content);
+            
+            LayoutRebuilder.ForceRebuildLayoutImmediate(GetRect());
+            _vStack.CalculateLayoutInputVertical();
+            _vStack.SetLayoutVertical();
             
             return this;
-        }
-        private IEnumerator AddContentNextFrame(BaseComponent component)
-        {
-            yield return new WaitForEndOfFrame();
-            component.Parent(content);
         }
 
         public ScrollViewComponent SizeContent(float x, float y)
@@ -147,6 +140,11 @@ namespace Components.Runtime.Components
         public override void HandlePointerExit(PointerEventData eventData)
         {
             InputService.Input.UI.ScrollWheel.Enable();
+        }
+
+        public VerticalLayoutGroup GetVerticalLayout()
+        {
+            return _vStack;
         }
     }
 }

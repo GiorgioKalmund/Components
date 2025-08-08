@@ -245,6 +245,7 @@ namespace Components.Runtime.Testing
                 .Sprite(ImageService.GetSpriteFromAsset("player", "Walkie Talkie"))
                 .NativeSize(5, 5)
                 .Material(MaterialService.GetMaterial("ColorFade"))
+                .Offset(100, 0)
                 ;
         }
 
