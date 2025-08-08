@@ -1,4 +1,3 @@
-using System;
 using Components.Runtime.Components.Animation;
 using UnityEngine;
 using UnityEngine.UI;
@@ -155,15 +154,24 @@ namespace Components.Runtime.Components
 
         public virtual ImageComponent CopyFrom(ImageComponent other, bool fullyCopyRect = true)
         {
-            DisplayName = other.DisplayName + " (Copy)";
+            //DisplayName = other.DisplayName + " (Copy)";
             CopyHorizontalLayout(other, this);
             CopyRect(other.GetRect(), this, fullyCopyRect);
             CopyLayoutElement(other, this);
             CopyImageProperties(other.GetImage(), this);
             CopyAnimator(other, this);
+            CopyMaterial(other, this);
             return this;
         }
 
+        public static void CopyMaterial(ImageComponent other, ImageComponent copyImage)
+        {
+            var defaultMat = Graphic.defaultGraphicMaterial;
+            if (other.GetImage().material && other.GetImage().material != defaultMat)
+            {
+                copyImage.Material(other.GetImage().material);
+            }
+        }
 
         public static void CopyAnimator(ImageComponent other, ImageComponent copyImage)
         {
@@ -262,6 +270,7 @@ namespace Components.Runtime.Components
         public SpriteAnimator AddAnimator()
         {
             Animator = gameObject.AddComponent<SpriteAnimator>();
+            Animator.DisplayName(DisplayName);
             return Animator;
         }
 

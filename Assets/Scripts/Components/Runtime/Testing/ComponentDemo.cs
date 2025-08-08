@@ -143,8 +143,7 @@ namespace Components.Runtime.Testing
             SpriteAnimation animation = new SpriteAnimation(frames, 2);
             var animator = image.AddAnimator();
             animator.CreateAnimation(animation, SpriteAnimator.Type.PingPong).NativeSizing(4, 4);
-            //animator.Play();
-
+            animator.Play();
             var playAnimation = removeSlots.Copy().Text("Play Animation").ClearAllFunctions()
                 .Function(animator.Play).Foreground(null);
             var pauseAnimation = removeSlots.Copy().Text("Pause Animation").ClearAllFunctions()
@@ -241,6 +240,12 @@ namespace Components.Runtime.Testing
                 }).Foreground(null);
 
             debugWindow2.AddContent(playAnimationT, pauseAnimationT, resetAnimationT);
+
+            var materialDemo1 = ComponentBuilder.N<ImageComponent>("Material Demo 1", canvasT)
+                .Sprite(ImageService.GetSpriteFromAsset("player", "Walkie Talkie"))
+                .NativeSize(5, 5)
+                .Material(MaterialService.GetMaterial("ColorFade"))
+                ;
         }
 
         private void ToggleAnimationType(SpriteAnimator animator)
