@@ -66,6 +66,7 @@ namespace Components.Runtime.Components
                     .Pivot(PivotPosition.MiddleLeft, true)
                     .Alpha(0)
                 ;
+            HeaderTools.AddHorizontalLayout(10, reverseArrangement:true);
             
             _headerText = ComponentBuilder.N<TextComponent>(HeaderTools)
                     .Pivot(PivotPosition.MiddleLeft)
@@ -76,8 +77,8 @@ namespace Components.Runtime.Components
                 ;
 
             _minimizeMaximizeButton = ComponentBuilder.N<ButtonComponent>(HeaderTools, "MinimizeMaximize")
-                .Pivot(PivotPosition.MiddleLeft, true)
                 .Create(action:() => ToggleCollapse())
+                .Sprite(ImageService.GetSpriteFromAsset("gui_assets", "right_arrow"))
                 .Cast<ButtonComponent>()
                 ;
             
@@ -153,15 +154,15 @@ namespace Components.Runtime.Components
             _maximizedSize = GetRect().sizeDelta;
             this.Height(HeaderHeight);
             ScrollContent.SetActive(false);
-            _minimizeMaximizeButton.Sprite(ImageService.GetSpriteFromAsset("gui_assets", "right_arrow"));
+            _minimizeMaximizeButton.Rotation(-90);
         }
         public virtual void Expand()
         {
             if (_maximizedSize.magnitude > 0)
                 this.Height(_maximizedSize.y);
             _maximizedSize = Vector2.zero;
-            ScrollContent.SetActive(true);
-            _minimizeMaximizeButton.Sprite(ImageService.GetSpriteFromAsset("gui_assets", "down_arrow"));
+            ScrollContent.SetActive();
+            _minimizeMaximizeButton.Rotation(0);
         }
 
         public BaseWindowComponent RecalculateSizes()

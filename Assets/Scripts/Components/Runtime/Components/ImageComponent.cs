@@ -222,7 +222,7 @@ namespace Components.Runtime.Components
             _toggleInputAction?.Disable();
         }
         
-        protected T AddLayout<T>(GameObject obj, float spacing, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false) where T : HorizontalOrVerticalLayoutGroup
+        protected T AddLayout<T>(GameObject obj, float spacing, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false, bool reverseArrangement = false) where T : HorizontalOrVerticalLayoutGroup
         {
             var layout = obj.GetOrAddComponent<T>();
             layout.spacing = spacing;
@@ -232,12 +232,14 @@ namespace Components.Runtime.Components
             layout.childControlHeight = childControlHeight;
             layout.childForceExpandWidth = childForceExpandWidth;
             layout.childForceExpandHeight = childForceExpandHeight;
+
+            layout.reverseArrangement = reverseArrangement;
             return layout;
         }
 
-        public ImageComponent AddHorizontalLayout(float spacing = 0f, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false) 
+        public ImageComponent AddHorizontalLayout(float spacing = 0f, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false, bool reverseArrangement = false) 
         {
-            HorizontalLayout = AddLayout<HorizontalLayoutGroup>(gameObject, spacing, childAlignment, childControlWidth, childControlHeight, childForceExpandWidth, childForceExpandHeight);
+            HorizontalLayout = AddLayout<HorizontalLayoutGroup>(gameObject, spacing, childAlignment, childControlWidth, childControlHeight, childForceExpandWidth, childForceExpandHeight, reverseArrangement);
             return this;
         }
         
@@ -266,6 +268,11 @@ namespace Components.Runtime.Components
         public SpriteAnimator GetAnimator()
         {
             return Animator;
+        }
+
+        public HorizontalLayoutGroup GetHorizontalLayout()
+        {
+            return HorizontalLayout;
         }
         
         

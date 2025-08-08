@@ -236,6 +236,19 @@ namespace Components.Runtime.Components
         {
             return LocalRotation(renderable, Quaternion.Euler(0, 0, zRotation));
         }
+        public static T RotateRel<T>(this T renderable, Vector3 rotation, Space space) where T : BaseComponent
+        {
+            renderable.GetRect().Rotate(rotation, space);
+            return renderable;
+        }
+        public static T RotateRel<T>(this T renderable, Quaternion rotation, Space space) where T : BaseComponent
+        {
+            return RotateRel(renderable, rotation.eulerAngles, space);
+        }
+        public static T RotateRel<T>(this T renderable, float zRotation, Space space) where T : BaseComponent
+        {
+            return RotateRel(renderable, new Vector3(0, 0, zRotation), space);
+        }
         
         // Padding
         public static T Padding<T>(this T renderable, PaddingSide side, float padding) where T : BaseComponent

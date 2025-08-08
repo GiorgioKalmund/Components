@@ -77,15 +77,9 @@ namespace Components.Runtime.Components
             return this;
         }
 
-        public ScrollViewComponent AddVerticalLayout(float spacing, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false) 
+        public ScrollViewComponent AddVerticalLayout(float spacing, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false, bool reverseArrangement = false) 
         {
-            _vStack = AddLayout<VerticalLayoutGroup>(content.gameObject,spacing, childAlignment, childControlWidth, childControlHeight, childForceExpandWidth, childForceExpandHeight);
-            return this;
-        }
-        
-        public new ScrollViewComponent AddHorizontalLayout(float spacing = 0f, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false) 
-        {
-            HorizontalLayout = AddLayout<HorizontalLayoutGroup>(content.gameObject, spacing, childAlignment, childControlWidth, childControlHeight, childForceExpandWidth, childForceExpandHeight);
+            _vStack = AddLayout<VerticalLayoutGroup>(content.gameObject,spacing, childAlignment, childControlWidth, childControlHeight, childForceExpandWidth, childForceExpandHeight,reverseArrangement);
             return this;
         }
 

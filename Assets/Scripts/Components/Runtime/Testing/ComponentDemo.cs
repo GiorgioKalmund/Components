@@ -10,7 +10,7 @@ using UnityEngine.Animations;
 
 namespace Components.Runtime.Testing
 {
-    public class ComponentCreator : MonoBehaviour
+    public class ComponentDemo : MonoBehaviour
     {
         private ComponentControls Input => InputService.Input;
         private WindowComponent window3;
@@ -142,7 +142,7 @@ namespace Components.Runtime.Testing
             frames[3] = ImageService.GetSpriteFromAsset("player", "backpack");
             SpriteAnimation animation = new SpriteAnimation(frames, 2);
             var animator = image.AddAnimator();
-            animator.CreateAnimation(animation, SpriteAnimator.Type.PingPong).UseNativeSizing(4, 4);
+            animator.CreateAnimation(animation, SpriteAnimator.Type.PingPong).NativeSizing(4, 4);
             //animator.Play();
 
             var playAnimation = removeSlots.Copy().Text("Play Animation").ClearAllFunctions()
@@ -171,7 +171,11 @@ namespace Components.Runtime.Testing
                     ;
                 mockMenuButton.SetFocusGroup(8);
                 mockMenuButton.GetTextComponent().Color(Color.white).Bold();
-                mockMenuButton.GetForeground().NativeSize(4, 4);
+                var wheelAnimator = mockMenuButton.GetForeground().AddAnimator();
+                Sprite[] rockAnimFrames = new[] { ImageService.GetSpriteFromAsset("player", "rock"), ImageService.GetSpriteFromAsset("player", "rock_anim")};
+                SpriteAnimation rockAnim = new SpriteAnimation(rockAnimFrames, new float[] { 0.5f, 3 });
+                wheelAnimator.CreateAnimation(rockAnim, SpriteAnimator.Type.Loop).NativeSizing(4, 4);
+                wheelAnimator.Play();
                 wheelMenu.AddContent(mockMenuButton);
             }
 

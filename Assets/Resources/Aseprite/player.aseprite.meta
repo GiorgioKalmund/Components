@@ -2300,8 +2300,8 @@ ScriptedImporter:
     customData: 
     rect:
       serializedVersion: 2
-      x: 143
-      y: 173
+      x: 169
+      y: 183
       width: 16
       height: 16
     spriteID: 8c4a75c9388d44f2da95334d142b82de
@@ -2312,7 +2312,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 143, y: 173}
+    uvTransform: {x: 169, y: 183}
   - name: 1
     originalName: 
     pivot: {x: 8, y: 8}
@@ -2321,8 +2321,8 @@ ScriptedImporter:
     customData: 
     rect:
       serializedVersion: 2
-      x: 143
-      y: 197
+      x: 169
+      y: 207
       width: 16
       height: 16
     spriteID: e6ccc2d70bac942d89fd0cd3eb66eea3
@@ -2333,7 +2333,7 @@ ScriptedImporter:
     indices: 
     edges: []
     tessellationDetail: 0
-    uvTransform: {x: 143, y: 197}
+    uvTransform: {x: 169, y: 207}
   - name: rocks
     originalName: 
     pivot: {x: 3.2820513, y: 5.818182}
@@ -2397,6 +2397,27 @@ ScriptedImporter:
     edges: []
     tessellationDetail: 0
     uvTransform: {x: 143, y: 134}
+  - name: rock_anim
+    originalName: 
+    pivot: {x: 6.736842, y: 6.4}
+    alignment: 9
+    border: {x: 0, y: 0, z: 0, w: 0}
+    customData: 
+    rect:
+      serializedVersion: 2
+      x: 169
+      y: 155
+      width: 19
+      height: 20
+    spriteID: ad6f885842ce140469f0d34559dbf4b5
+    spriteBone: []
+    spriteOutline: []
+    vertices: []
+    spritePhysicsOutline: []
+    indices: 
+    edges: []
+    tessellationDetail: 0
+    uvTransform: {x: 169, y: 155}
   asepriteLayers:
   - layerIndex: 30
     uuid:
@@ -2678,7 +2699,7 @@ ScriptedImporter:
     tileCells: []
     tileSetIndex: 0
     parentIndex: 43
-  - layerIndex: 46
+  - layerIndex: 47
     uuid:
       value0: 2358964748
       value1: 0
@@ -2703,7 +2724,7 @@ ScriptedImporter:
     tileCells: []
     tileSetIndex: 0
     parentIndex: 43
-  - layerIndex: 47
+  - layerIndex: 48
     uuid:
       value0: 3708283035
       value1: 0
@@ -2728,7 +2749,7 @@ ScriptedImporter:
     tileCells: []
     tileSetIndex: 0
     parentIndex: 43
-  - layerIndex: 48
+  - layerIndex: 49
     uuid:
       value0: 814953096
       value1: 0
@@ -2753,7 +2774,7 @@ ScriptedImporter:
     tileCells: []
     tileSetIndex: 0
     parentIndex: 43
-  - layerIndex: 49
+  - layerIndex: 50
     uuid:
       value0: 3354534794
       value1: 0
@@ -3497,6 +3518,31 @@ ScriptedImporter:
         width: 14
         height: 31
       spriteId: f2d3433f1e04444008b54a18d55b7a8e
+    linkedCells: []
+    tileCells: []
+    tileSetIndex: 0
+    parentIndex: 43
+  - layerIndex: 46
+    uuid:
+      value0: 1693320640
+      value1: 0
+      value2: 0
+      value3: 0
+    guid: 0
+    name: rock_anim
+    layerFlags: 3
+    layerType: 0
+    blendMode: 0
+    cells:
+    - name: rock_anim
+      frameIndex: 0
+      additiveSortOrder: 0
+      cellRect:
+        x: 7
+        y: 198
+        width: 19
+        height: 20
+      spriteId: ad6f885842ce140469f0d34559dbf4b5
     linkedCells: []
     tileCells: []
     tileSetIndex: 0

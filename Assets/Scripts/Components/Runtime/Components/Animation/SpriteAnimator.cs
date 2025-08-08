@@ -1,5 +1,6 @@
 using System;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -40,13 +41,26 @@ namespace Components.Runtime.Components.Animation
         public int AnimationLength => CurrentAnimation.Frames.Length;
         
         // Sprite Sizing
-        public bool NativeSizing  {get; private set;  }
-        public Vector2 NativeSizeFactor { get; private set; }
+        protected bool UseNativeSizing  {get; private set;  }
+        protected Vector2 NativeSizeFactor { get; private set; }
         
         public ImageComponent Image { get; private set; }
 
-        public void Play() => CurrentState = State.Running;
-        public void Pause() => CurrentState = State.Paused;
+        public void Play()
+        {
+            if (CurrentState == State.Completed)
+                return;
+            
+            CurrentState = State.Running;
+        }
+
+        public void Pause()
+        {
+            if (CurrentState == State.Completed)
+                return;
+            
+            CurrentState = State.Paused;
+        }
 
         private void Start()
         {
@@ -93,7 +107,10 @@ namespace Components.Runtime.Components.Animation
                     if (CurrentFrame < AnimationLength)
                         SetFrame();
                     else
+                    {
+                        CurrentFrame = AnimationLength - 1;
                         CurrentState = State.Completed;
+                    }
                     break;
                 }
                 case Type.PingPong:
@@ -154,18 +171,20 @@ namespace Components.Runtime.Components.Animation
         {
             Image.Sprite(CurrentAnimation.Frames[CurrentFrame]);
             
-            if (NativeSizing)
+            if (UseNativeSizing)
                 Image.NativeSize(NativeSizeFactor);
         }
 
         float GetFrameTime()
         {
+            if (CurrentFrame < 0 || CurrentFrame >= CurrentAnimation.FramesPerSecond.Length)
+                Debug.Log(AnimationType + ": "+ CurrentAnimation.FramesPerSecond.Length + $">> ({CurrentFrame})");
             return 1f / (CurrentAnimation.FramesPerSecond[CurrentFrame] * Speed);
         }
 
-        public SpriteAnimator UseNativeSizing(float scaleFactorX, float scaleFactorY)
+        public SpriteAnimator NativeSizing(float scaleFactorX, float scaleFactorY)
         {
-            NativeSizing = true;
+            UseNativeSizing = true;
             NativeSizeFactor = new Vector2(scaleFactorX, scaleFactorY);
             return this;
         }
@@ -191,13 +210,22 @@ namespace Components.Runtime.Components.Animation
             CopyRect(other.GetRect(), this, fullyCopyRect);
             
             NativeSizeFactor = other.NativeSizeFactor;
-            NativeSizing = other.NativeSizing;
+            UseNativeSizing = other.UseNativeSizing;
             Speed = other.Speed;
             CurrentAnimation = other.CurrentAnimation;
             CurrentState = other.CurrentState;
             CurrentFrame = other.CurrentFrame;
 
             return this;
+        }
+
+        private void OnDrawGizmos()
+        {
+            GUIStyle style = new GUIStyle();
+            style.normal.textColor = UnityEngine.Color.red;
+            style.fontSize = 14; 
+            
+            Handles.Label(transform.position, $"Type: {AnimationType}\nState: {CurrentState}\nFrame: {CurrentFrame}\nSpeed: {Speed}\nFrames: {CurrentAnimation.Frames.Length}", style);
         }
     }
 }

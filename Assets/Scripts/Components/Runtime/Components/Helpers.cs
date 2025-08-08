@@ -42,8 +42,14 @@ namespace Components.Runtime.Components
             layout.childForceExpandHeight = other.childForceExpandHeight;
             layout.childControlWidth = other.childControlWidth;
             layout.childControlHeight= other.childControlHeight;
+            layout.reverseArrangement = other.reverseArrangement;
 
             layout.padding = other.padding.Clone();
+        }
+
+        public static void ReverseArrangement(this HorizontalLayoutGroup layout, bool reverse = true)
+        {
+            layout.reverseArrangement = reverse;
         }
     }
 }
