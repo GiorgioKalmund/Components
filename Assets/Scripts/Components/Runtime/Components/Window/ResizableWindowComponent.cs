@@ -7,7 +7,7 @@ namespace Components.Runtime.Components
     {
         
         // -- Subcomponents -- //
-        private WindowResizer _windowResizer;
+        protected WindowResizer WindowResizer;
 
         protected Vector2 MinimumWindowSize = new Vector2(100, 100);
         private bool _allowResize = true;
@@ -16,7 +16,7 @@ namespace Components.Runtime.Components
         {
             base.Awake();
 
-            _windowResizer = ComponentBuilder.N<WindowResizer>(WindowBase)
+            WindowResizer = ComponentBuilder.N<WindowResizer>(WindowBase)
                 .Pivot(PivotPosition.LowerRight, true)
                 .Size(40, 40)
                 .Build(this)
@@ -60,13 +60,13 @@ namespace Components.Runtime.Components
         public override void Collapse()
         {
             base.Collapse();
-            _windowResizer.SetActive(!_allowResize);
+            WindowResizer.SetActive(!_allowResize);
         }
         
         public override void Expand()
         {
             base.Expand();
-            _windowResizer.SetActive(_allowResize);
+            WindowResizer.SetActive(_allowResize);
         }
 
         public ResizableWindowComponent MinimumSize(Vector2 minSize)
@@ -88,7 +88,7 @@ namespace Components.Runtime.Components
         public ResizableWindowComponent NoResize()
         {
             _allowResize = false;
-            _windowResizer.SetActive(false);
+            WindowResizer.SetActive(false);
             return this;
         }
     }

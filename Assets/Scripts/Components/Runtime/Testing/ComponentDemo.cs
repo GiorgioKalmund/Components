@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.Text;
+using System.Text.RegularExpressions;
 using Components.Runtime.Components;
 using Components.Runtime.Components.Animation;
 using Components.Runtime.Components.Game;
@@ -44,7 +46,7 @@ namespace Components.Runtime.Testing
                     .Offset(100, 100)
                 ;
             var healthBar = healthBarEmpty.Copy(false).Parent(healthBarEmpty).Sprite("player", "Health Bar").ImageTypeFilled(Image.FillMethod.Horizontal);
-            
+
             var sprintBarEmpty = ComponentBuilder.N<ImageComponent>(healthBarEmpty)
                     .Sprite("player", "Power Bar Empty")
                     .NativeSize(nativeScaleSize)
@@ -53,17 +55,17 @@ namespace Components.Runtime.Testing
                     .Offset(0, -5)
                 ;
             var sprintBar = sprintBarEmpty.Copy(false).Parent(sprintBarEmpty).Sprite("player", "Power Bar").ImageTypeFilled(Image.FillMethod.Horizontal, 0.66f);
-            
+
             var airBar = healthBar.Copy().Sprite("player", "Air Bar").ImageTypeFilled(Image.FillMethod.Horizontal, 0.3f);
-            
+
             var healthBarHints = healthBar.Copy(false).Sprite("player", "Health Bar Hints").ImageTypeFilled(Image.FillMethod.Horizontal);
-            
+
             var crosshair = ComponentBuilder.N<ImageComponent>(canvasT)
                 .Sprite("player", "Crosshair")
                 .Size(30, 30)
                 .SetActive()
                 ;
-            
+
             var hotbar = ComponentBuilder.N<Hotbar>(canvasT)
                     .ImageType(Image.Type.Sliced)
                     .PixelsPerUnitMultiplier(0.3f)
@@ -88,7 +90,7 @@ namespace Components.Runtime.Testing
             var slot8 = slot0.Copy();
 
             hotbar.AddSlots(slot0, slot1, slot2, slot3, slot4, slot5, slot6, slot7, slot8);
-            
+
             // Debug
             var debugWindow = ComponentBuilder.N<WindowComponent>("Debug", canvasT)
                     .Build(Input.UI.Debug, "Debug")
@@ -102,9 +104,10 @@ namespace Components.Runtime.Testing
                 .SizeContent(400, 800)
                 .ScrollToTop()
                 ;
-            
+
             var debugWindow2 = ComponentBuilder.N<WindowComponent>("Debug", canvasT)
                     .Build(Input.UI.Debug, "Debug 2")
+                    .MinimumSize(200, 200)
                     .Size(400, 300)
                     .ContentPadding(5)
                     .Offset(0, -510)
@@ -133,7 +136,7 @@ namespace Components.Runtime.Testing
             var currentlyFocused = removeSlots.Copy().Parent(canvasT).Text("Current Focus [0]").ClearAllFunctions()
                 .Function(() => Debug.Log(IFocusable.GetFocusedElement(0)));
             debugWindow.AddContent(removeSlots, addSlots, refocus, unfocus, currentlyFocused);
-            
+
             var image = ComponentBuilder.N<ImageComponent>("animation test", canvasT).Offset(-100, 200);
             Sprite[] frames = new Sprite[4];
             frames[0] = ImageService.GetSpriteFromAsset("player", "head");
@@ -184,12 +187,12 @@ namespace Components.Runtime.Testing
                 ;
             popup.onPopupOpen.AddListener(() => hotbar.Freeze());
             popup.onPopupClose.AddListener(() => hotbar.UnFreeze());
-            
+
             var popupControls = removeSlots.Copy().Text("Popup").ClearAllFunctions()
                 .Function(popup.Open).Foreground(ImageService.GetSpriteFromAsset("player", "Key"));
-            
+
             debugWindow2.AddContent(popupControls);
-            
+
             var animationTest = ComponentBuilder.N<ImageComponent>("test", canvasT).Offset(-300, -200);
             Sprite[] framesT = new Sprite[4];
             framesT[0] = ImageService.GetSpriteFromAsset("player", "1");
@@ -203,7 +206,7 @@ namespace Components.Runtime.Testing
                     .Text("loop", Color.white)
                     .FitToContents()
                     .Bold()
-                    .AlignCenter() 
+                    .AlignCenter()
                     .VAlignCenter()
                     .Pivot(PivotPosition.UpperCenter)
                     .AnchoredTo(PivotPosition.LowerCenter)
@@ -215,7 +218,7 @@ namespace Components.Runtime.Testing
             var animationTest3 = animationTest2.Copy().Offset(200, 0);
             animationTest3.GetAnimator().Configure(SpriteAnimator.Type.Once);
             var text3 = textDescription.Copy().Parent(animationTest3.transform).Text("once");
-            
+
             var playAnimationT = removeSlots.Copy().Text("Play Animations").ClearAllFunctions()
                 .Function(() =>
                 {
@@ -230,7 +233,7 @@ namespace Components.Runtime.Testing
                     animationTest2.GetAnimator().Pause();
                     animationTest3.GetAnimator().Pause();
                 }).Foreground(null);
-            
+
             var resetAnimationT= removeSlots.Copy().Text("Reset Animations").ClearAllFunctions()
                 .Function(() =>
                 {
@@ -247,6 +250,12 @@ namespace Components.Runtime.Testing
                 .Material(MaterialService.GetMaterial("ColorFade"))
                 .Offset(100, 0)
                 ;
+
+            var console = ComponentBuilder.N<ConsoleWindowComponent>("Console", canvasT)
+                    .Build(Input.UI.Debug, "Console")
+                    .Size(500, 200)
+                    .Offset(1420, 0)
+                    .Cast<ConsoleWindowComponent>();
         }
 
         private void ToggleAnimationType(SpriteAnimator animator)

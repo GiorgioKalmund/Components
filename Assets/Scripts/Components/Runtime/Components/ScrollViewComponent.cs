@@ -147,5 +147,10 @@ namespace Components.Runtime.Components
         {
             return _vStack;
         }
+
+        public ContentSizeFitter GetFitter()
+        {
+            return _fitter;
+        }
     }
 }

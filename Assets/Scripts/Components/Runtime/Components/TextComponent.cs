@@ -95,6 +95,17 @@ namespace Components.Runtime.Components
             _textMesh.overflowMode = overflowModes;
             return this;
         }
+        
+        public TextComponent WrappingMode(TextWrappingModes wrappingModes)
+        {
+            _textMesh.textWrappingMode = wrappingModes;
+            return this;
+        }
+        
+        public TextComponent NoWrap()
+        {
+            return WrappingMode(TextWrappingModes.NoWrap);
+        }
 
         public TextComponent FontStyle(FontStyles style)
         {

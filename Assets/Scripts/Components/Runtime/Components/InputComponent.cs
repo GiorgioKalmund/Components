@@ -31,6 +31,9 @@ namespace Components.Runtime.Components
             Input.textComponent = TextContents.GetTextMesh();
             Input.textViewport = GetRect();
             Input.placeholder = HintContents.GetTextMesh();
+
+            TextContents.OverflowMode(TextOverflowModes.Ellipsis);
+            HintContents.OverflowMode(TextOverflowModes.Ellipsis);
         }
 
 
@@ -45,6 +48,25 @@ namespace Components.Runtime.Components
         {
             TextContents.Color(textColor);
             HintContents.Color(hintColor ?? textColor);
+            return this;
+        }
+
+        public InputComponent ColorBackdrop(Color color)
+        {
+            Backdrop.Color(color);
+            return this;
+        }
+        
+        public InputComponent FontSize(float size)
+        {
+            TextContents.FontSize(size);
+            HintContents.FontSize(size);
+            return this;
+        }
+
+        public InputComponent Clear()
+        {
+            Input.text = "";
             return this;
         }
 
@@ -67,11 +89,15 @@ namespace Components.Runtime.Components
         public TextComponent GetTextComponent() { return TextContents; }
         public string GetText() { return TextContents.GetText(); }
         public TextComponent GetHintComponent() { return HintContents; }
-        
-        
+
         private void Start()
         {
             DisplayName = "Input";
+        }
+
+        public TMP_InputField GetInput()
+        {
+            return Input;
         }
     }
 }

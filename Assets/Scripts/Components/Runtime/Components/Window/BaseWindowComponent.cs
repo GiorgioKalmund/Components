@@ -22,6 +22,7 @@ namespace Components.Runtime.Components
         // -- Border offset to allow for margins around the screen -- //
         private float _borderOffset = 0f;
         private float _contentPadding = 0f;
+        private PaddingSide _paddingSide = PaddingSide.None;
 
         // Key for showing / hiding the window, initial state -- //
         private InputAction _toggleInputAction;
@@ -220,7 +221,12 @@ namespace Components.Runtime.Components
 
         public BaseWindowComponent ContentPadding(float padding)
         {
+            return ContentPadding(PaddingSide.All, padding);
+        }
+        public BaseWindowComponent ContentPadding(PaddingSide side, float padding)
+        {
             _contentPadding = padding;
+            _paddingSide = side;
             return this;
         }
 
@@ -255,14 +261,25 @@ namespace Components.Runtime.Components
         }
         public virtual void RenderContent()
         {
+            HandleSizeChanged(this.GetWidth(), this.GetHeight());
         }
 
         public override BaseComponent HandleSizeChanged(float x, float y)
         {
             base.HandleSizeChanged(x, y);
             WindowBase?.Size(x, y);
-            
-            ScrollContent.Size(this.GetWidth() - 2 * _contentPadding, this.GetHeight() - HeaderHeight - 2 * _contentPadding).Pos(0, _contentPadding);
+
+            float horizontalPadding = 0f;
+            float verticalPadding = 0f;
+            if (_paddingSide.HasFlag(PaddingSide.Leading))
+                horizontalPadding += _contentPadding;
+            if (_paddingSide.HasFlag(PaddingSide.Trailing))
+                horizontalPadding += _contentPadding;
+            if (_paddingSide.HasFlag(PaddingSide.Top))
+                verticalPadding += _contentPadding;
+            if (_paddingSide.HasFlag(PaddingSide.Bottom))
+                verticalPadding += _contentPadding;
+            ScrollContent.Size(this.GetWidth() - horizontalPadding, this.GetHeight() - HeaderHeight - verticalPadding).Pos(0, _contentPadding);
             if (!ScrollContent.contentHasBeenSizedManually)
             {
                 Vector2 maxSize = ScrollContent.GetSize();
