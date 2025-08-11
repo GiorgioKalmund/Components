@@ -119,6 +119,7 @@ namespace Components.Runtime.Components
         public ScrollViewComponent SizeContent(float x, float y)
         {
             content.Size(x, y);
+            contentHasBeenSizedManually = true;
             return this;
         }
 

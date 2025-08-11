@@ -110,7 +110,7 @@ namespace Components.Runtime.Components
         {
             Render();
             Expand();
-            DisplayName = "BaseWindowComponent";
+            this.SafeDisplayName("BaseWindowComponent");
             
             if (_startOfHidden)
                 Minimize();

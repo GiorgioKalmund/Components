@@ -17,6 +17,8 @@ namespace Components.Runtime.Testing
         private ComponentControls Input => InputService.Input;
         private WindowComponent window3;
         private ButtonComponent _copyButton;
+
+        public GameObject cube;
         
         // Service
         private InputService _inputService;
@@ -101,7 +103,7 @@ namespace Components.Runtime.Testing
                 .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, false)
                 .AddVerticalLayout(10, TextAnchor.UpperLeft)
                 .ContentPadding(PaddingSide.All, 10)
-                .SizeContent(400, 800)
+                .SizeContent(400, 1000)
                 .ScrollToTop()
                 ;
 
@@ -256,6 +258,15 @@ namespace Components.Runtime.Testing
                     .Size(500, 200)
                     .Offset(1420, 0)
                     .Cast<ConsoleWindowComponent>();
+
+            var cubePos = cube.transform.position.ToCanvasPos(Camera.main, canvas);
+            Debug.Log("Cube is positioned at: " + cubePos + " on the canvas");
+            
+            var moveCube1 = removeSlots.Copy().Text("Move Sphere").ClearAllFunctions()
+                .Function(() => cube.MoveToCanvasPos(new Vector2(300, 500), Camera.main, canvas)).Foreground(null);
+            var moveCube2 = removeSlots.Copy().Text("Move Sphere 2").ClearAllFunctions()
+                .Function(() => cube.MoveToCanvasPos(new Vector2(1200 , 700), Camera.main, canvas)).Foreground(null);
+            debugWindow.AddContent(moveCube1, moveCube2);
         }
 
         private void ToggleAnimationType(SpriteAnimator animator)

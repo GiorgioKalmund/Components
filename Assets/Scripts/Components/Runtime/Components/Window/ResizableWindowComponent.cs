@@ -28,7 +28,7 @@ namespace Components.Runtime.Components
         public override void Start()
         {
             base.Start();
-            DisplayName = "ResizableWindowComponent";
+            this.SafeDisplayName("ResizableWindowComponent");
         }
 
         
