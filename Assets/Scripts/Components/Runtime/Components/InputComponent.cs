@@ -1,12 +1,16 @@
 using System;
 using TMPro;
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 namespace Components.Runtime.Components
 {
-    public class InputComponent : BaseComponent
+    public class InputComponent : BaseComponent, IFocusable
     {
         // -- TMP Input Field -- //
         protected TMP_InputField Input;
@@ -15,6 +19,8 @@ namespace Components.Runtime.Components
         protected TextComponent TextContents;
         protected TextComponent HintContents;
 
+        private InputAction _submitAction;
+        public TMP_InputField.SubmitEvent onSubmit => Input.onSubmit;
         public override void Awake()
         {
             base.Awake();
@@ -31,6 +37,7 @@ namespace Components.Runtime.Components
             Input.textComponent = TextContents.GetTextMesh();
             Input.textViewport = GetRect();
             Input.placeholder = HintContents.GetTextMesh();
+            Input.onFocusSelectAll = true;
 
             TextContents.OverflowMode(TextOverflowModes.Ellipsis);
             HintContents.OverflowMode(TextOverflowModes.Ellipsis);
@@ -43,6 +50,15 @@ namespace Components.Runtime.Components
             HintContents.Text(placeholder);
             return this;
         }
+
+        public InputComponent SubmitAction(InputAction action)
+        {
+            _submitAction = action;
+            return this;
+        }
+        private void OnEnable() { if (_submitAction!= null) _submitAction.performed += SendOnSubmitEvent; }
+        private void OnDisable() { if (_submitAction != null) _submitAction.performed -= SendOnSubmitEvent; }
+        private void SendOnSubmitEvent(InputAction.CallbackContext context) { Input.OnSubmit(null); }
 
         public InputComponent Color(Color textColor, Color? hintColor = null)
         {
@@ -98,6 +114,18 @@ namespace Components.Runtime.Components
         public TMP_InputField GetInput()
         {
             return Input;
+        }
+
+        public void HandleFocus()
+        {
+            Input.ActivateInputField();
+        }
+
+        public void HandleUnfocus() { }
+
+        private void OnDrawGizmos()
+        {
+            Handles.Label(transform.position + new Vector3(0, 40, 0), this.IsFocused() + $" ({((IFocusable)this).GetFocusGroup()})");
         }
     }
 }

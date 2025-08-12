@@ -37,12 +37,13 @@ namespace Components.Runtime.Components
 
             MinimumSize(150, 100);
             
-            ConfigureContent()
-                .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, true)
+            Configure()
+                .ScrollingDirection(ScrollViewDirection.Vertical)
+                .FittingDirection(ScrollViewDirection.Vertical)
                 .AddVerticalLayout(10, TextAnchor.LowerLeft)
                 .ContentPadding(PaddingSide.All, 10)
                 ;
-            ConfigureContent()
+            Configure()
                 .ClearSprite().Color(Color.black);
 
             _inputFooter = ComponentBuilder.N<BaseComponent>("Footer", transform)
@@ -70,22 +71,26 @@ namespace Components.Runtime.Components
             _input.FontSize(18f).Color(Color.white).ColorBackdrop(Color.gray1);
 
             ScrollContent.content.Pivot(PivotPosition.LowerCenter, true);
+            
+            _input.onSubmit.AddListener(_ => SendCommand());
         }
 
         public override void Start()
         {
             base.Start();
-            ConfigureContent().ScrollToBottom();
+            Configure().ScrollToBottom();
         }
-
+        
         private void SendCommand()
         {
             var message = _input.GetText();
+            message = CleanString(message);
             if (string.IsNullOrEmpty(message))
                 return;
             
             AddCommand(message);
             _input.Clear();
+            _input.Focus();
         }
 
         public static string ParseCommand(string expectedDelimiter, string command, bool requiresEmptySuffix = false)
@@ -112,16 +117,16 @@ namespace Components.Runtime.Components
             return s;
         }
 
-        public void AddCommand(string command, Color? color = null, FontStyles fontStyle = FontStyles.Normal)
+        private void AddCommand(string command, Color? color = null, FontStyles fontStyle = FontStyles.Normal)
         {
+            
             var text = ComponentBuilder.N<TextComponent>("Command: " + command)
                     .NoWrap()
                     .FitToContents()
                     .FontStyle(fontStyle)
                     .FontSize(18f)
                 ;
-            command = CleanString(command);
-
+            
             var clearCommand = ParseCommand("/clear", command.ToLowerInvariant(), true);
             if (clearCommand != null)
             {
@@ -160,7 +165,7 @@ namespace Components.Runtime.Components
             
             ScrollContent.AddContent(text);
             onCommandEntered.Invoke(command);
-            ConfigureContent().ScrollToBottom();
+            Configure().ScrollToBottom();
         }
 
         public void ResetColor()
@@ -185,6 +190,23 @@ namespace Components.Runtime.Components
             _input.Width(_inputFooter.GetWidth() - _sendButton.GetWidth() - 8f);
             ScrollContent.content.Width(ScrollContent.GetWidth());
             return this;
+        }
+
+        public InputComponent GetInputField()
+        {
+            return _input;
+        }
+
+        public override void Collapse()
+        {
+            base.Collapse();
+            _inputFooter.SetActive(false);
+        }
+
+        public override void Expand()
+        {
+            base.Expand();
+            _inputFooter.SetActive();
         }
     }
 }

@@ -29,22 +29,6 @@ namespace Components.Runtime.Components
         private VerticalLayoutGroup _vStack;
         private GridLayoutGroup _grid;
 
-        public bool contentHasBeenSizedManually = false; 
-        private bool _sizeFitsContents;
-        public bool SizeFitsContents
-        {
-            get => _sizeFitsContents;
-            set
-            {
-                var oldValue = _sizeFitsContents;
-                _sizeFitsContents = value;
-                HandleContentFitsSizeChange(value);
-                contentHasBeenSizedManually = value || oldValue;
-            }
-        }
-
-
-
         public override void Awake()
         {
             base.Awake();
@@ -58,23 +42,14 @@ namespace Components.Runtime.Components
             _fitter = content.gameObject.AddComponent<ContentSizeFitter>();
 
             _scroll.content = content.GetRect();
+
+            _scroll.movementType = ScrollRect.MovementType.Clamped;
         }
 
         public override void Start()
         {
             base.Start();
             DisplayName = "ScrollViewComponent";
-        }
-
-        public ScrollViewComponent Create(ScrollViewDirection direction, ScrollRect.MovementType movementType, bool sizeFitsContents)
-        {
-            _scroll.horizontal = direction.HasFlag(ScrollViewDirection.Horizontal);
-            _scroll.vertical = direction.HasFlag(ScrollViewDirection.Vertical);
-
-            _scroll.movementType = movementType;
-
-            SizeFitsContents = sizeFitsContents;
-            return this;
         }
 
         public ScrollViewComponent AddVerticalLayout(float spacing, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false, bool reverseArrangement = false) 
@@ -116,21 +91,31 @@ namespace Components.Runtime.Components
             return this;
         }
 
-        public ScrollViewComponent SizeContent(float x, float y)
+        public override BaseComponent HandleSizeChanged(float x, float y)
         {
-            content.Size(x, y);
-            contentHasBeenSizedManually = true;
+            base.HandleSizeChanged(x, y);
+            if (content)
+                content.Size(x, y);
+            return this;
+        }
+        
+        public ScrollViewComponent ScrollingDirection(ScrollViewDirection dir)
+        {
+            _scroll.vertical = dir.HasFlag(ScrollViewDirection.Vertical);
+            _scroll.horizontal = dir.HasFlag(ScrollViewDirection.Horizontal);
+            return this;
+        }
+        public ScrollViewComponent FittingDirection(ScrollViewDirection dir)
+        {
+            _fitter.verticalFit = dir.HasFlag(ScrollViewDirection.Vertical) ? ContentSizeFitter.FitMode.MinSize : ContentSizeFitter.FitMode.Unconstrained;
+            _fitter.horizontalFit = dir.HasFlag(ScrollViewDirection.Horizontal) ? ContentSizeFitter.FitMode.MinSize : ContentSizeFitter.FitMode.Unconstrained;
             return this;
         }
 
-        public void HandleContentFitsSizeChange(bool active)
+        public ScrollViewComponent MovementType(ScrollRect.MovementType movementType)
         {
-            if (_fitter)
-            {
-                _fitter.enabled = active;
-                _fitter.horizontalFit= _scroll.horizontal ? ContentSizeFitter.FitMode.MinSize : ContentSizeFitter.FitMode.Unconstrained;
-                _fitter.verticalFit = _scroll.vertical ? ContentSizeFitter.FitMode.MinSize : ContentSizeFitter.FitMode.Unconstrained;
-            }
+            _scroll.movementType = movementType;
+            return this;
         }
 
         // -- Idea: Disable certain controls when hovering over scroll views, to avoid scrolling in other areas as well -- //

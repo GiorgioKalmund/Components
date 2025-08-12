@@ -683,6 +683,15 @@ namespace Components.Runtime.Input
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Enter"",
+                    ""type"": ""Button"",
+                    ""id"": ""59bc6c62-c098-473b-a379-57c832609d77"",
+                    ""expectedControlType"": """",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -1136,6 +1145,17 @@ namespace Components.Runtime.Input
                     ""action"": ""Escape"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""e8d5461b-857c-4d69-a492-c99f2fd1fbdd"",
+                    ""path"": ""<Keyboard>/enter"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Enter"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -1229,6 +1249,7 @@ namespace Components.Runtime.Input
             m_UI_ShowWindow = m_UI.FindAction("ShowWindow", throwIfNotFound: true);
             m_UI_Debug = m_UI.FindAction("Debug", throwIfNotFound: true);
             m_UI_Escape = m_UI.FindAction("Escape", throwIfNotFound: true);
+            m_UI_Enter = m_UI.FindAction("Enter", throwIfNotFound: true);
         }
 
         ~@ComponentControls()
@@ -1507,6 +1528,7 @@ namespace Components.Runtime.Input
         private readonly InputAction m_UI_ShowWindow;
         private readonly InputAction m_UI_Debug;
         private readonly InputAction m_UI_Escape;
+        private readonly InputAction m_UI_Enter;
         /// <summary>
         /// Provides access to input actions defined in input action map "UI".
         /// </summary>
@@ -1570,6 +1592,10 @@ namespace Components.Runtime.Input
             /// Provides access to the underlying input action "UI/Escape".
             /// </summary>
             public InputAction @Escape => m_Wrapper.m_UI_Escape;
+            /// <summary>
+            /// Provides access to the underlying input action "UI/Enter".
+            /// </summary>
+            public InputAction @Enter => m_Wrapper.m_UI_Enter;
             /// <summary>
             /// Provides access to the underlying input action map instance.
             /// </summary>
@@ -1635,6 +1661,9 @@ namespace Components.Runtime.Input
                 @Escape.started += instance.OnEscape;
                 @Escape.performed += instance.OnEscape;
                 @Escape.canceled += instance.OnEscape;
+                @Enter.started += instance.OnEnter;
+                @Enter.performed += instance.OnEnter;
+                @Enter.canceled += instance.OnEnter;
             }
 
             /// <summary>
@@ -1685,6 +1714,9 @@ namespace Components.Runtime.Input
                 @Escape.started -= instance.OnEscape;
                 @Escape.performed -= instance.OnEscape;
                 @Escape.canceled -= instance.OnEscape;
+                @Enter.started -= instance.OnEnter;
+                @Enter.performed -= instance.OnEnter;
+                @Enter.canceled -= instance.OnEnter;
             }
 
             /// <summary>
@@ -1952,6 +1984,13 @@ namespace Components.Runtime.Input
             /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
             /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
             void OnEscape(InputAction.CallbackContext context);
+            /// <summary>
+            /// Method invoked when associated input action "Enter" is either <see cref="UnityEngine.InputSystem.InputAction.started" />, <see cref="UnityEngine.InputSystem.InputAction.performed" /> or <see cref="UnityEngine.InputSystem.InputAction.canceled" />.
+            /// </summary>
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.started" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.performed" />
+            /// <seealso cref="UnityEngine.InputSystem.InputAction.canceled" />
+            void OnEnter(InputAction.CallbackContext context);
         }
     }
 }

@@ -99,13 +99,14 @@ namespace Components.Runtime.Testing
                     .Size(400, 500)
                     .ContentPadding(5)
                 ;
-            debugWindow.ConfigureContent()
-                .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, false)
+            debugWindow.Configure()
+                .ScrollingDirection(ScrollViewDirection.Vertical)
+                .FittingDirection(ScrollViewDirection.Vertical)
                 .AddVerticalLayout(10, TextAnchor.UpperLeft)
                 .ContentPadding(PaddingSide.All, 10)
-                .SizeContent(400, 1000)
                 .ScrollToTop()
                 ;
+            debugWindow.Configure().content.Pivot(PivotPosition.UpperCenter, true);
 
             var debugWindow2 = ComponentBuilder.N<WindowComponent>("Debug", canvasT)
                     .Build(Input.UI.Debug, "Debug 2")
@@ -114,13 +115,14 @@ namespace Components.Runtime.Testing
                     .ContentPadding(5)
                     .Offset(0, -510)
                 ;
-            debugWindow2.ConfigureContent()
-                .Create(ScrollViewDirection.Vertical, ScrollRect.MovementType.Clamped, false)
+            debugWindow2.Configure()
+                .ScrollingDirection(ScrollViewDirection.Vertical)
+                .FittingDirection(ScrollViewDirection.Vertical)
                 .AddVerticalLayout(10, TextAnchor.UpperLeft)
                 .ContentPadding(PaddingSide.All, 10)
-                .SizeContent(400, 300)
                 .ScrollToTop()
                 ;
+            debugWindow2.Configure().content.Pivot(PivotPosition.UpperCenter, true);
 
             var removeSlots = ComponentBuilder.N<ButtonComponent>("Remove Slots", canvasT)
                     .Create("Remove Slots", () => hotbar.RemoveSlot(0), ImageService.GetSpriteFromAsset("player", "rock"))
@@ -258,9 +260,9 @@ namespace Components.Runtime.Testing
                     .Size(500, 200)
                     .Offset(1420, 0)
                     .Cast<ConsoleWindowComponent>();
+            console.GetInputField().SubmitAction(Input.UI.Enter);
 
-            var cubePos = cube.transform.position.ToCanvasPos(Camera.main, canvas);
-            Debug.Log("Cube is positioned at: " + cubePos + " on the canvas");
+            var cubePos = cube.GetCanvasPos(Camera.main, canvas);
             
             var moveCube1 = removeSlots.Copy().Text("Move Sphere").ClearAllFunctions()
                 .Function(() => cube.MoveToCanvasPos(new Vector2(300, 500), Camera.main, canvas)).Foreground(null);

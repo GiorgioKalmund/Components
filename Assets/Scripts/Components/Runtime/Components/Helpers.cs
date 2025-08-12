@@ -78,6 +78,11 @@ namespace Components.Runtime.Components
             float depth = camera.WorldToScreenPoint(obj.transform.position).z;
             obj.transform.position = canvasPos.ToWorldPos(camera, canvas, depth);
         }
+
+        public static Vector2 GetCanvasPos(this GameObject obj, Camera camera, Canvas canvas)
+        {
+            return obj.transform.position.ToCanvasPos(camera, canvas);
+        }
     }
 
     public static class CanvasHelper

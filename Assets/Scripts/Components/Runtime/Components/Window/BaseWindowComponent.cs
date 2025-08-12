@@ -89,7 +89,7 @@ namespace Components.Runtime.Components
             _rectMask2D = ScrollContent.gameObject.GetOrAddComponent<RectMask2D>();
         }
 
-        public ScrollViewComponent ConfigureContent()
+        public ScrollViewComponent Configure()
         {
             return ScrollContent;
         }
@@ -132,12 +132,12 @@ namespace Components.Runtime.Components
             else 
                 Minimize();
         }
-        public void Open()
+        public virtual void Open()
         {
             WindowBase.SetActive(true);
             this.BringToFront();
         }
-        public void Minimize()
+        public virtual void Minimize()
         {
             WindowBase.SetActive(false);
         }
@@ -280,11 +280,6 @@ namespace Components.Runtime.Components
             if (_paddingSide.HasFlag(PaddingSide.Bottom))
                 verticalPadding += _contentPadding;
             ScrollContent.Size(this.GetWidth() - horizontalPadding, this.GetHeight() - HeaderHeight - verticalPadding).Pos(0, _contentPadding);
-            if (!ScrollContent.contentHasBeenSizedManually)
-            {
-                Vector2 maxSize = ScrollContent.GetSize();
-                ScrollContent.SizeContent(maxSize.x, maxSize.y);
-            }
             return this;
         }
 
