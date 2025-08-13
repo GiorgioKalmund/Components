@@ -32,11 +32,12 @@ namespace Components.Runtime.Components
             return behaviour.gameObject.transform;
         }
 
-        public static void CopyFrom(this HorizontalLayoutGroup layout, HorizontalLayoutGroup other) 
+        public static void CopyFrom(this HorizontalOrVerticalLayoutGroup layout, HorizontalOrVerticalLayoutGroup other) 
         {
             if (!other)
                 return;
-            
+
+            layout.childAlignment = other.childAlignment;
             layout.spacing = other.spacing;
             layout.childForceExpandWidth = other.childForceExpandWidth;
             layout.childForceExpandHeight = other.childForceExpandHeight;
@@ -45,6 +46,16 @@ namespace Components.Runtime.Components
             layout.reverseArrangement = other.reverseArrangement;
 
             layout.padding = other.padding.Clone();
+        }
+
+        public static void CopyFrom(this Button button, Button other)
+        {
+            if (!other)
+                return;
+
+            button.transition = other.transition;
+            button.spriteState = other.spriteState;
+            button.colors = other.colors;
         }
 
         public static void ReverseArrangement(this HorizontalLayoutGroup layout, bool reverse = true)

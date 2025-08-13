@@ -41,7 +41,7 @@ namespace Components.Runtime.Components
                 .ScrollingDirection(ScrollViewDirection.Vertical)
                 .FittingDirection(ScrollViewDirection.Vertical)
                 .AddVerticalLayout(10, TextAnchor.LowerLeft)
-                .ContentPadding(PaddingSide.All, 10)
+                .ContentPadding(10, ScrollViewDirection.Vertical)
                 ;
             Configure()
                 .ClearSprite().Color(Color.black);

@@ -15,7 +15,7 @@ namespace Components.Runtime.Components
         
         // -- Button -- //
         protected Button ButtonElement;
-        protected List<UnityAction> Listeners = new List<UnityAction>();
+        public List<UnityAction> Listeners = new List<UnityAction>();
 
         // -- Subcomponents -- // 
         protected ImageComponent ForegroundImage;
@@ -76,22 +76,29 @@ namespace Components.Runtime.Components
             return this;
         }
 
-        public ButtonComponent FitToContents(PaddingSide side, int amount, float spacing)
+        public ButtonComponent FitToContents(PaddingSide side, int amount, float spacing, ScrollViewDirection direction = ScrollViewDirection.Both)
         {
             AddHorizontalLayout(spacing, childControlWidth:true, childControlHeight:true);
             
             _fitter = gameObject.GetOrAddComponent<ContentSizeFitter>();
-            _fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
-            _fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
+            if (direction.HasFlag(ScrollViewDirection.Horizontal))
+                _fitter.horizontalFit = ContentSizeFitter.FitMode.PreferredSize;
+            if (direction.HasFlag(ScrollViewDirection.Vertical))
+                _fitter.verticalFit = ContentSizeFitter.FitMode.PreferredSize;
 
-            ContentPadding(side, amount);
+            ContentPadding(side, amount, ScrollViewDirection.Horizontal);
             ContentSpacing(spacing);
             return this;
         }
-
-        public ButtonComponent FitToContents(int padding = 0, float spacing = 0f)  
+        
+        public ButtonComponent FitToContents(int padding = 0, float spacing = 0f, ScrollViewDirection direction = ScrollViewDirection.Both)  
         {
-            return FitToContents(PaddingSide.All, padding, spacing);
+            return FitToContents(PaddingSide.All, padding, spacing, direction);
+        }
+        
+        public BaseComponent ContentPadding(int amount)
+        {
+            return ContentPadding(PaddingSide.All, amount, ScrollViewDirection.Horizontal);
         }
         
         public ButtonComponent ForegroundSize(float x, float y)
@@ -122,8 +129,13 @@ namespace Components.Runtime.Components
             return ButtonText;
         }
 
-        public ButtonComponent Function(UnityAction action)
+        public ButtonComponent Function(UnityAction action, bool replaceLast = false)
         {
+            if (replaceLast)
+            {
+                var last = Listeners[-1];
+                RemoveFunction(last);
+            }
             ButtonElement.onClick.AddListener(action);
             Listeners.Add(action);
             return this;
@@ -146,9 +158,9 @@ namespace Components.Runtime.Components
         public override BaseComponent HandleSizeChanged(float x, float y)
         {
             base.HandleSizeChanged(x, y);
-            if (ForegroundImage)
+            if (ForegroundImage && HorizontalLayout && VerticalLayout &&  !(HorizontalLayout.enabled || VerticalLayout.enabled))
                 ForegroundImage.Size(x, y);
-            if (ButtonText)
+            if (ButtonText && HorizontalLayout && VerticalLayout && !(HorizontalLayout.enabled || VerticalLayout.enabled))
                 ButtonText.Size(x, y);
             return this;
         }
@@ -211,6 +223,8 @@ namespace Components.Runtime.Components
             ForegroundImage.CopyFrom(other.ForegroundImage);
             Foreground(other.ForegroundImage.GetImage().sprite);
             
+            ButtonElement.CopyFrom(other.ButtonElement);
+            
             ClearAllFunctions();
             foreach (var unityAction in other.Listeners)
             {
@@ -236,6 +250,23 @@ namespace Components.Runtime.Components
         public ImageComponent GetForeground()
         {
             return ForegroundImage;
+        }
+
+        public ButtonComponent Transition(Selectable.Transition transition)
+        {
+            ButtonElement.transition = transition;
+            return this;
+        }
+
+        public ButtonComponent SpriteSwap(Sprite highlightedSprite, Sprite pressedSprite = null, Sprite disabledSprite = null)
+        {
+            Transition(Selectable.Transition.SpriteSwap);
+            var state = ButtonElement.spriteState;
+            state.highlightedSprite = highlightedSprite;
+            state.pressedSprite = pressedSprite ?? highlightedSprite;
+            state.disabledSprite = disabledSprite;
+            ButtonElement.spriteState = state;
+            return this;
         }
     }
 }

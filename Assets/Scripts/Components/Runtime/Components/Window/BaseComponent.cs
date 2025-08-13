@@ -9,13 +9,13 @@ using UnityEngine.UI;
 
 namespace Components.Runtime.Components
 {
-    public class BaseComponent : MonoBehaviour
+    public class BaseComponent : MonoBehaviour, ICopyable<BaseComponent>
     {
         private RectTransform _rect;
         public bool paddingApplied = false;
         public bool posApplied = false;
 
-        private string _displayName = "";
+        private string _displayName = "Component";
         public string DisplayName
         {
             get => _displayName;
@@ -28,7 +28,11 @@ namespace Components.Runtime.Components
     
         protected float CanvasWidthFactor => GUIService.WidthScale;
         protected float CanvasHeightFactor => GUIService.HeightScale;
+        
 
+        protected HorizontalLayoutGroup HorizontalLayout;
+        protected VerticalLayoutGroup VerticalLayout;
+        
         public virtual void Awake()
         {
             _rect = !gameObject.GetComponent<RectTransform>() ? gameObject.AddComponent<RectTransform>() : gameObject.GetComponent<RectTransform>();
@@ -55,6 +59,20 @@ namespace Components.Runtime.Components
             this.SafeDisplayName(_displayName);
         }
         
+        
+        public static void CopyLayouts(BaseComponent other, BaseComponent copyComponent)
+        {
+            if (other.HorizontalLayout)
+            {
+                copyComponent.AddHorizontalLayout();
+                copyComponent.HorizontalLayout.CopyFrom(other.HorizontalLayout);
+            }
+            if (other.VerticalLayout)
+            {
+                copyComponent.AddVerticalLayout();
+                copyComponent.VerticalLayout.CopyFrom(other.VerticalLayout);
+            }
+        }
         
         public void CopyRect(RectTransform rect, BaseComponent component, bool copyPos = true)
         {
@@ -90,6 +108,60 @@ namespace Components.Runtime.Components
                 newLayoutElement.layoutPriority = layoutElement.layoutPriority;
             }
         }
+        
+        protected T AddLayout<T>(GameObject obj, float spacing, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false, bool reverseArrangement = false) where T : HorizontalOrVerticalLayoutGroup
+        {
+            var layout = obj.GetOrAddComponent<T>();
+            layout.spacing = spacing;
+            layout.childAlignment = childAlignment;
+            
+            layout.childControlWidth = childControlWidth;
+            layout.childControlHeight = childControlHeight;
+            layout.childForceExpandWidth = childForceExpandWidth;
+            layout.childForceExpandHeight = childForceExpandHeight;
+
+            layout.reverseArrangement = reverseArrangement;
+            return layout;
+        }
+
+        public BaseComponent AddHorizontalLayout(float spacing = 0f, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false, bool reverseArrangement = false) 
+        {
+            HorizontalLayout = AddLayout<HorizontalLayoutGroup>(gameObject, spacing, childAlignment, childControlWidth, childControlHeight, childForceExpandWidth, childForceExpandHeight, reverseArrangement);
+            return this;
+        }
+        public BaseComponent AddVerticalLayout(float spacing = 0f, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false, bool reverseArrangement = false) 
+        {
+            VerticalLayout = AddLayout<VerticalLayoutGroup>(gameObject, spacing, childAlignment, childControlWidth, childControlHeight, childForceExpandWidth, childForceExpandHeight, reverseArrangement);
+            return this;
+        }
+
+
+        public BaseComponent ContentPadding(int amount, ScrollViewDirection direction)
+        {
+            return ContentPadding(PaddingSide.All, amount, direction);
+        }
+        public BaseComponent ContentPadding(PaddingSide side, int amount, ScrollViewDirection direction)
+        {
+            if (side.HasFlag(PaddingSide.Leading)) { if (HorizontalLayout && direction.HasFlag(ScrollViewDirection.Horizontal)) HorizontalLayout.padding.left = amount; if (VerticalLayout&& direction.HasFlag(ScrollViewDirection.Vertical)) VerticalLayout.padding.left = amount;}
+            if (side.HasFlag(PaddingSide.Trailing)) { if (HorizontalLayout&& direction.HasFlag(ScrollViewDirection.Horizontal)) HorizontalLayout.padding.right = amount;  if (VerticalLayout&& direction.HasFlag(ScrollViewDirection.Vertical)) VerticalLayout.padding.right = amount;}
+            if (side.HasFlag(PaddingSide.Top)) { if (HorizontalLayout&& direction.HasFlag(ScrollViewDirection.Horizontal)) HorizontalLayout.padding.top = amount;  if (VerticalLayout&& direction.HasFlag(ScrollViewDirection.Vertical)) VerticalLayout.padding.top= amount;}
+            if (side.HasFlag(PaddingSide.Bottom)) { if (HorizontalLayout&& direction.HasFlag(ScrollViewDirection.Horizontal)) HorizontalLayout.padding.bottom = amount;  if (VerticalLayout&& direction.HasFlag(ScrollViewDirection.Vertical)) VerticalLayout.padding.bottom = amount;}
+            return this;
+        }
+
+        public BaseComponent Copy(bool fullyCopyRect = true)
+        {
+            BaseComponent copyComponent = this.BaseCopy(this);
+            return copyComponent.CopyFrom(this, fullyCopyRect);
+        }
+
+        public virtual BaseComponent CopyFrom(BaseComponent other, bool fullyCopyRect = true)
+        {
+            CopyRect(other.GetRect(), this, fullyCopyRect);
+            CopyLayoutElement(other, this);
+            CopyLayouts(other, this);
+            return this;
+        }
     }
     
     static class ComponentBuilder
@@ -118,7 +190,7 @@ namespace Components.Runtime.Components
         {
             GameObject toReturn = CreateEmptyGameObjectWithParent(parent, worldPositionStays);
             var t = toReturn.AddComponent<T>();
-            t.DisplayName = name;
+            t.DisplayName(name);
             return t;
         }
         

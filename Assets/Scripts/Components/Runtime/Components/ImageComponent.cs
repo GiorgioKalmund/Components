@@ -15,7 +15,6 @@ namespace Components.Runtime.Components
         
         private InputAction _toggleInputAction;
         
-        protected HorizontalLayoutGroup HorizontalLayout;
         private LayoutElement _foregroundLayout;
         protected SpriteAnimator Animator;
 
@@ -50,7 +49,7 @@ namespace Components.Runtime.Components
         
         public ImageComponent Sprite(string path, Image.Type? imageType = null)
         {
-            return Sprite(ImageService.GetSpriteDirectly(path), imageType);
+            return Sprite(ImageService.GetSprite(path), imageType);
         }
         
         public ImageComponent Sprite(string asset, string layerName, Image.Type? imageType = null)
@@ -146,18 +145,16 @@ namespace Components.Runtime.Components
             return _image.sprite;
         }
 
-        public virtual ImageComponent Copy(bool fullyCopyRect = true)
+        public new ImageComponent Copy(bool fullyCopyRect = true)
         {
             ImageComponent copyImage = this.BaseCopy(this);
             return copyImage.CopyFrom(this, fullyCopyRect);
         }
 
-        public virtual ImageComponent CopyFrom(ImageComponent other, bool fullyCopyRect = true)
+        public ImageComponent CopyFrom(ImageComponent other, bool fullyCopyRect = true)
         {
+            base.CopyFrom(other, fullyCopyRect);
             //DisplayName = other.DisplayName + " (Copy)";
-            CopyHorizontalLayout(other, this);
-            CopyRect(other.GetRect(), this, fullyCopyRect);
-            CopyLayoutElement(other, this);
             CopyImageProperties(other.GetImage(), this);
             CopyAnimator(other, this);
             CopyMaterial(other, this);
@@ -182,14 +179,6 @@ namespace Components.Runtime.Components
             }
         }
 
-        public static void CopyHorizontalLayout(ImageComponent other, ImageComponent copyImage)
-        {
-            if (other.HorizontalLayout)
-            {
-                copyImage.AddHorizontalLayout();
-                copyImage.HorizontalLayout.CopyFrom(other.HorizontalLayout);
-            }
-        }
 
         public ImageComponent MakeLayoutElement(float preferredWidth, float preferredHeight)
         {
@@ -228,36 +217,6 @@ namespace Components.Runtime.Components
         private void OnDisable()
         {
             _toggleInputAction?.Disable();
-        }
-        
-        protected T AddLayout<T>(GameObject obj, float spacing, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false, bool reverseArrangement = false) where T : HorizontalOrVerticalLayoutGroup
-        {
-            var layout = obj.GetOrAddComponent<T>();
-            layout.spacing = spacing;
-            layout.childAlignment = childAlignment;
-            
-            layout.childControlWidth = childControlWidth;
-            layout.childControlHeight = childControlHeight;
-            layout.childForceExpandWidth = childForceExpandWidth;
-            layout.childForceExpandHeight = childForceExpandHeight;
-
-            layout.reverseArrangement = reverseArrangement;
-            return layout;
-        }
-
-        public ImageComponent AddHorizontalLayout(float spacing = 0f, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false, bool reverseArrangement = false) 
-        {
-            HorizontalLayout = AddLayout<HorizontalLayoutGroup>(gameObject, spacing, childAlignment, childControlWidth, childControlHeight, childForceExpandWidth, childForceExpandHeight, reverseArrangement);
-            return this;
-        }
-        
-        public ImageComponent ContentPadding(PaddingSide side, int amount)
-        {
-            if (side.HasFlag(PaddingSide.Leading)) { if (HorizontalLayout) HorizontalLayout.padding.left = amount; }
-            if (side.HasFlag(PaddingSide.Trailing)) { if (HorizontalLayout) HorizontalLayout.padding.right = amount; }
-            if (side.HasFlag(PaddingSide.Top)) { if (HorizontalLayout) HorizontalLayout.padding.top = amount; }
-            if (side.HasFlag(PaddingSide.Bottom)) { if (HorizontalLayout) HorizontalLayout.padding.bottom = amount; }
-            return this;
         }
 
         // For more flexible and efficient use, allowing controlling of instances, we might want to use MaterialPropertyBlock in the future

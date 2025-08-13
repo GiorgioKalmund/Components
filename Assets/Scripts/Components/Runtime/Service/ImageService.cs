@@ -55,6 +55,7 @@ public class ImageService
         Sprite sprite = Resources.Load<Sprite>(resourceFolder + path);
         if (!sprite)
         {
+            Debug.LogWarning("Could not get image:" + resourceFolder + path);
             return GetSprite(MissingTextureLocation);
         }
         return sprite;

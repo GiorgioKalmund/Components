@@ -30,7 +30,7 @@ namespace Components.Runtime.Components
 
         public virtual void Start()
         {
-            DisplayName = NamePrefix;
+            this.SafeDisplayName(NamePrefix);
         }
 
         public TextComponent Text(string text, Color? color = null)
@@ -158,7 +158,7 @@ namespace Components.Runtime.Components
             return _textMesh;
         }
 
-        public TextComponent Copy(bool fullyCopyRect = true)
+        public new TextComponent Copy(bool fullyCopyRect = true)
         {
             TextComponent textCopy = this.BaseCopy(this);
             return textCopy.CopyFrom(this, fullyCopyRect);
@@ -166,8 +166,7 @@ namespace Components.Runtime.Components
 
         public TextComponent CopyFrom(TextComponent other, bool fullyCopyRect = true)
         {
-            CopyLayoutElement(other, this);
-            CopyRect(other.GetRect(), this, fullyCopyRect);
+            base.CopyFrom(other, fullyCopyRect);
             CopyTextProperties(other.GetTextMesh(), this);
             return this;
         }

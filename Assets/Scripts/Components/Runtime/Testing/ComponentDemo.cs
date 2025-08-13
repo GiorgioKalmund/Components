@@ -103,7 +103,8 @@ namespace Components.Runtime.Testing
                 .ScrollingDirection(ScrollViewDirection.Vertical)
                 .FittingDirection(ScrollViewDirection.Vertical)
                 .AddVerticalLayout(10, TextAnchor.UpperLeft)
-                .ContentPadding(PaddingSide.All, 10)
+                .ContentPadding(PaddingSide.All, 10, ScrollViewDirection.Vertical)
+                .Cast<ScrollViewComponent>()
                 .ScrollToTop()
                 ;
             debugWindow.Configure().content.Pivot(PivotPosition.UpperCenter, true);
@@ -119,7 +120,8 @@ namespace Components.Runtime.Testing
                 .ScrollingDirection(ScrollViewDirection.Vertical)
                 .FittingDirection(ScrollViewDirection.Vertical)
                 .AddVerticalLayout(10, TextAnchor.UpperLeft)
-                .ContentPadding(PaddingSide.All, 10)
+                .ContentPadding(PaddingSide.All, 10, ScrollViewDirection.Vertical)
+                .Cast<ScrollViewComponent>()
                 .ScrollToTop()
                 ;
             debugWindow2.Configure().content.Pivot(PivotPosition.UpperCenter, true);
@@ -127,7 +129,8 @@ namespace Components.Runtime.Testing
             var removeSlots = ComponentBuilder.N<ButtonComponent>("Remove Slots", canvasT)
                     .Create("Remove Slots", () => hotbar.RemoveSlot(0), ImageService.GetSpriteFromAsset("player", "rock"))
                     .FitToContents()
-                    .ContentPadding(PaddingSide.All, 10)
+                    .ContentPadding(10)
+                    .Cast<ButtonComponent>()
                     .Sprite("Slice/Circle Orange", Image.Type.Sliced)
                     .Cast<ButtonComponent>()
                 ;
@@ -262,8 +265,6 @@ namespace Components.Runtime.Testing
                     .Cast<ConsoleWindowComponent>();
             console.GetInputField().SubmitAction(Input.UI.Enter);
 
-            var cubePos = cube.GetCanvasPos(Camera.main, canvas);
-            
             var moveCube1 = removeSlots.Copy().Text("Move Sphere").ClearAllFunctions()
                 .Function(() => cube.MoveToCanvasPos(new Vector2(300, 500), Camera.main, canvas)).Foreground(null);
             var moveCube2 = removeSlots.Copy().Text("Move Sphere 2").ClearAllFunctions()

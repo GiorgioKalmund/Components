@@ -18,7 +18,7 @@ namespace Components.Runtime.Components
         
     }
     
-    public class ScrollViewComponent : ImageComponent , IPointerEnterHandler, IPointerExitHandler
+    public class ScrollViewComponent : ImageComponent
     {
         public ImageComponent content;
 
@@ -52,20 +52,9 @@ namespace Components.Runtime.Components
             DisplayName = "ScrollViewComponent";
         }
 
-        public ScrollViewComponent AddVerticalLayout(float spacing, TextAnchor childAlignment = TextAnchor.MiddleCenter, bool childControlWidth = false, bool childControlHeight = false, bool childForceExpandWidth = false, bool childForceExpandHeight = false, bool reverseArrangement = false) 
+        public ScrollViewComponent ContentPadding(PaddingSide side, int amount)
         {
-            _vStack = AddLayout<VerticalLayoutGroup>(content.gameObject,spacing, childAlignment, childControlWidth, childControlHeight, childForceExpandWidth, childForceExpandHeight,reverseArrangement);
-            return this;
-        }
-
-        public new ScrollViewComponent ContentPadding(PaddingSide side, int amount)
-        {
-            base.ContentPadding(side, amount);
-            if (side.HasFlag(PaddingSide.Leading)) { if (_vStack) _vStack.padding.left = amount; }
-            if (side.HasFlag(PaddingSide.Trailing)) { if (_vStack) _vStack.padding.right = amount; }
-            if (side.HasFlag(PaddingSide.Top)) { if (_vStack) _vStack.padding.top = amount; }
-            if (side.HasFlag(PaddingSide.Bottom)) { if (_vStack) _vStack.padding.bottom = amount; }
-            
+            base.ContentPadding(side, amount, ScrollViewDirection.Both);
             return this;
         }
 

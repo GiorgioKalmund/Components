@@ -198,7 +198,7 @@ namespace Components.Runtime.Components.Animation
             return this;
         }
 
-        public SpriteAnimator Copy(bool fullyCopyRect = true)
+        public new SpriteAnimator Copy(bool fullyCopyRect = true)
         {
             SpriteAnimator copyAnimator = this.BaseCopy(this);
             return copyAnimator.CopyFrom(this, fullyCopyRect);
@@ -206,8 +206,8 @@ namespace Components.Runtime.Components.Animation
 
         public SpriteAnimator CopyFrom(SpriteAnimator other, bool fullyCopyRect = true)
         {
+            base.CopyFrom(other, fullyCopyRect);
             DisplayName = other.DisplayName + " (Copy)";
-            CopyRect(other.GetRect(), this, fullyCopyRect);
             
             NativeSizeFactor = other.NativeSizeFactor;
             UseNativeSizing = other.UseNativeSizing;
